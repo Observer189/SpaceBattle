@@ -66,8 +66,7 @@ public class Battle implements Screen {
     long startTime;
     long estimatedTime;
 
-    int mapWidth;
-    int mapHeight;
+
     public Joystick joystick;
     public GasRegulator gasRegulator;
     ButtonForProcessor turnLeft;
@@ -90,8 +89,7 @@ public class Battle implements Screen {
         this.player = player;
         this.enemy=enemy;
         AspectRatio=(float)Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-        mapWidth=1000;
-        mapHeight=600;
+
         widthCamera=220;
         heightCamera=220/AspectRatio;
         getCoordIsFinished=false;
@@ -265,13 +263,7 @@ public class Battle implements Screen {
             //Отрисовка миникарты
             miniMap.draw(player.getCurrentShip(),enemy.getCurrentShip());
             /////////////////////////////////////////////////////////////
-            //Отрисовка предупреждения края карты
-            if(player.getCurrentShip().getIsShipInRedZone()){
-                batch.begin();
-                batch.draw(textureAtlas.findRegion("RedZoneAttention"),camX-widthCamera/9,camY-heightCamera/2,70,20);
-                batch.end();
-            }
-            /////////////////////////////////////////////
+
         }
         if(enemy.getCurrentShip().getCurrentHp()<=0)
         {

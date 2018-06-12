@@ -21,7 +21,7 @@ public class Ship extends GameObject {
     int cost;
     public float realw=100;
     public float realh=100;
-    private boolean isShipInRedZone;
+
     private boolean isAlive;
     private float maxHp;
     private float currentHp;
@@ -54,7 +54,7 @@ public class Ship extends GameObject {
         this.maxSpeed = maxSpeed;
         this.name = name;
         this.rotationSpeed=rotationSpeed;
-        isShipInRedZone = false;
+
         isAlive=true;
 
         speedX=0;
@@ -146,16 +146,23 @@ public class Ship extends GameObject {
             bounds.setPosition(bounds.getX() + speedX * Battle.delta, bounds.getY() + speedY * Battle.delta);
 
 
-            if ((bounds.getX() > 0 + map.getWidth() * 0.85) || (bounds.getX() < 0 + map.getWidth() * 0.15) || (bounds.getY() > 0 + map.getHeight() * 0.85) || (bounds.getY() < 0 + map.getHeight() * 0.15)) {
-                isShipInRedZone = true;
-            } else isShipInRedZone = false;
+
 
             for (int i = 0; i < fixingPoints.length; i++) {
                 fixingPoints[i].update(this,enemyShip, map);
             }
 
-            if ((bounds.getX() > 0 + map.getWidth() * 0.95) || (bounds.getX() < 0 + map.getWidth() * 0.05) || (bounds.getY() > 0 + map.getHeight() * 0.95) || (bounds.getY() < 0 + map.getHeight() * 0.05)) {
-                //currentHp = 0;
+            if (bounds.getX() >  map.getWidth()) {
+                bounds.setPosition(0,map.getHeight()-bounds.getY());
+            }
+            else if (bounds.getX() <  0) {
+                bounds.setPosition(map.getWidth(),map.getHeight()-bounds.getY());
+            }
+            if (bounds.getY() >  map.getHeight()) {
+                bounds.setPosition(map.getWidth()-bounds.getX(),0);
+            }
+            else if (bounds.getY() <  0) {
+                bounds.setPosition(map.getWidth()-bounds.getX(),map.getHeight());
             }
             if(rotationDirection==-1) bounds.rotate(rotationSpeed);
             if(rotationDirection==1) bounds.rotate(-rotationSpeed);
@@ -190,9 +197,7 @@ public class Ship extends GameObject {
         return speedY;
     }
 
-    public boolean getIsShipInRedZone() {
-        return isShipInRedZone;
-    }
+
 
 
     public boolean getIsAlive() {

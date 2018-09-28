@@ -3,6 +3,7 @@ package com.mygdx.game.utils;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.model.PhysicShip;
 import com.mygdx.game.model.Ship;
 
 /**
@@ -80,6 +81,11 @@ public class GasRegulator {
     public void setMovementPosition(int movementPosition) {
         this.movementPosition = movementPosition;
         playerShip.setMovementPosition(movementPosition);
+    }
+    public void setPhysicMovement(int movementPosition, PhysicShip ship)
+    {
+        this.movementPosition=movementPosition;
+        ship.setMovementPosition(movementPosition);
     }
 
     public int getMovementPosition() {

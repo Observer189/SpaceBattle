@@ -20,6 +20,9 @@ public class BattleProcessor implements InputProcessor {
     Ship ship;
     float convX= Gdx.graphics.getWidth()/ Battle.widthCamera;
     float convY=Gdx.graphics.getHeight()/ heightCamera;
+    float touchX;
+    float touchY;
+
 
     public static float offsetX;//переменные определяющие смещение статичной части относительно позиции камеры
     public static float offsetY;
@@ -60,17 +63,19 @@ public class BattleProcessor implements InputProcessor {
             offsetY = joystick.staticPart.getCenterY() - (Battle.camY - heightCamera / 2);
             joystickPointer=pointer;
         }*/
-        if((screenX / convX + (Battle.camX - Battle.widthCamera / 2)>=gasRegulator.getX())&&(screenX / convX + (Battle.camX - Battle.widthCamera / 2)<=gasRegulator.getX()+gasRegulator.getWidth()))
+        touchX=screenX / convX + (Battle.camX - Battle.widthCamera / 2);
+        touchY=heightCamera - screenY / convY + (Battle.camY - heightCamera / 2);
+        if((touchX>=gasRegulator.getX())&&(touchX<=gasRegulator.getX()+gasRegulator.getWidth()))
         {
-            if((heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)>=gasRegulator.getY())&&(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=gasRegulator.getY()+gasRegulator.getHeight()))
+            if((touchY>=gasRegulator.getY())&&(touchY<=gasRegulator.getY()+gasRegulator.getHeight()))
             {
             gasRegulator.setMovementPosition(-1);
-                if(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=gasRegulator.getY()+gasRegulator.getHeight()/3)
+                if(touchY<=gasRegulator.getY()+gasRegulator.getHeight()/3)
                 {
                     gasRegulator.setMovementPosition(-1);
                     gasPointer=pointer;
                 }
-                else if(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=gasRegulator.getY()+gasRegulator.getHeight()/3*2)
+                else if(touchY<=gasRegulator.getY()+gasRegulator.getHeight()/3*2)
                 {
                     gasRegulator.setMovementPosition(0);
                     gasPointer=pointer;
@@ -82,20 +87,20 @@ public class BattleProcessor implements InputProcessor {
                 }
             }
         }
-        if((screenX / convX + (Battle.camX - Battle.widthCamera / 2)>=Battle.camX+Battle.widthCamera/5)&&((screenX / convX + (Battle.camX - Battle.widthCamera / 2)<=Battle.camX+Battle.widthCamera/5+20)))//1-я кнопка x
+        if((touchX>=Battle.camX+Battle.widthCamera/5)&&((touchX<=Battle.camX+Battle.widthCamera/5+20)))//1-я кнопка x
         {
 
-            if((heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)>=Battle.camY-heightCamera/3)&&(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=Battle.camY-heightCamera/3+20))//1-я кнопка y
+            if((touchY>=Battle.camY-heightCamera/3)&&(touchY<=Battle.camY-heightCamera/3+20))//1-я кнопка y
             {
                ship.setRotationDirection(-1);
                turnPointer=pointer;
             }
 
         }
-        if((screenX / convX + (Battle.camX - Battle.widthCamera / 2)>=Battle.camX+Battle.widthCamera/5+30)&&((screenX / convX + (Battle.camX - Battle.widthCamera / 2)<=Battle.camX+Battle.widthCamera/5+20+30)))//1-я кнопка x
+        if((touchX>=Battle.camX+Battle.widthCamera/5+30)&&((touchX<=Battle.camX+Battle.widthCamera/5+20+30)))//1-я кнопка x
         {
 
-            if((heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)>=Battle.camY-heightCamera/3)&&(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=Battle.camY-heightCamera/3+20))//1-я кнопка y
+            if((touchY>=Battle.camY-heightCamera/3)&&(touchY<=Battle.camY-heightCamera/3+20))//1-я кнопка y
             {
                 ship.setRotationDirection(1);
                 turnPointer=pointer;
@@ -130,14 +135,16 @@ public class BattleProcessor implements InputProcessor {
             offsetDynamicX = joystick.dynamicPart.getCenterX() - joystick.staticPart.getCenterX();
             offsetDynamicY = joystick.dynamicPart.getCenterY() - joystick.staticPart.getCenterY();
         }*/
+        touchX=screenX / convX + (Battle.camX - Battle.widthCamera / 2);
+        touchY=heightCamera - screenY / convY + (Battle.camY - heightCamera / 2);
         if(pointer==gasPointer)
         {
-            if(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=gasRegulator.getY()+gasRegulator.getHeight()/3)
+            if(touchY<=gasRegulator.getY()+gasRegulator.getHeight()/3)
             {
                 gasRegulator.setMovementPosition(-1);
                 gasPointer=pointer;
             }
-            else if(heightCamera - screenY / convY + (Battle.camY - heightCamera / 2)<=gasRegulator.getY()+gasRegulator.getHeight()/3*2)
+            else if(touchY<=gasRegulator.getY()+gasRegulator.getHeight()/3*2)
             {
                 gasRegulator.setMovementPosition(0);
                 gasPointer=pointer;

@@ -10,7 +10,7 @@ import com.mygdx.game.model.Map;
 
 public class YellowSpace extends Map {
     public YellowSpace(SpriteBatch batch, TextureAtlas textureAtlas) {
-        super(batch, textureAtlas.findRegion("YellowSpace"), 1000, 600);
+        super(batch, textureAtlas.findRegion("YellowSpace"), 100, 60);
     }
 }
 

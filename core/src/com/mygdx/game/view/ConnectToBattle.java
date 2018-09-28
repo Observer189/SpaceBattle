@@ -65,6 +65,7 @@ public class ConnectToBattle implements Screen {
 
         //player = new Player("player", new Sudden(textureAtlas,0,0));
         //player.generateName();
+        game.setScreen(new DebugBattle(batch,game,textureAtlas));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -72,7 +73,7 @@ public class ConnectToBattle implements Screen {
         request = retrofit.create(servApi.class);
         servShip=new ServShip(player.getCurrentShip().toServ());
         processor=new ConnectToBattleProcessor();
-        Gdx.input.setInputProcessor(processor);
+        //Gdx.input.setInputProcessor(processor);
         textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         blueFont=textManager.fontInitialize(Color.BLUE,1);
         battleStatus=new BattleStatus(null,null,null,null,"add",null);

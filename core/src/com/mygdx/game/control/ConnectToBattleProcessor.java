@@ -1,12 +1,14 @@
 package com.mygdx.game.control;
 
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.game.utils.GasRegulator;
 
 /**
  * Created by Sash on 05.05.2018.
  */
 
 public class ConnectToBattleProcessor implements InputProcessor {
+
     @Override
     public boolean keyDown(int keycode) {
         return false;

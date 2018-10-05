@@ -29,6 +29,7 @@ import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.WeaponPoint;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
+import com.mygdx.game.utils.Helm;
 import com.mygdx.game.utils.Size;
 
 /**
@@ -61,6 +62,7 @@ public class DebugBattle implements Screen {
     InputProcessor processor;
 
     GasRegulator gasRegulator;
+    Helm helm;
     ButtonForProcessor turnLeft;
     ButtonForProcessor turnRight;
 
@@ -110,9 +112,10 @@ public class DebugBattle implements Screen {
         camY =camera.position.y;
         rend=new Box2DDebugRenderer();
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
+        helm=new Helm(textureAtlas,batch,camera,-4.5f,-5f,0.15f,0.15f*AspectRatio,fury);
         turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
         turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
-        processor=new DebugBattleProcessor(gasRegulator,fury);
+        processor=new DebugBattleProcessor(gasRegulator,helm,fury);
         Gdx.input.setInputProcessor(processor);
 
         //point=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),50,30, Size.Small,10,world),fury.getBodies()[0],world);
@@ -161,6 +164,7 @@ public class DebugBattle implements Screen {
         //point.draw(batch);
         //
         gasRegulator.draw();
+        helm.draw();
         /////////////////////////////
         //Отрисовка кнопок вращения
         turnLeft.draw();
@@ -170,6 +174,7 @@ public class DebugBattle implements Screen {
         //ship.move();
         //ship2.move();
         fury.move();
+        helm.updateShip();
     }
 
     @Override
@@ -208,6 +213,8 @@ public class DebugBattle implements Screen {
         shape.setAsBox(2,2);
         fDef.shape=shape;
         fDef.density=2;
+        fDef.friction=0.5f;
+        fDef.restitution=0.2f;
         body.createFixture(fDef);
     }
     public void createWall()
@@ -221,7 +228,8 @@ public class DebugBattle implements Screen {
         ChainShape shape=new ChainShape();
         shape.createChain(new float[]{0,10,3,0,7,0,10,10});
         fDef.shape=shape;
-
+        fDef.friction=0.5f;
+        fDef.restitution=0.2f;
         body.createFixture(fDef);
     }
 

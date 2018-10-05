@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.model.PhysicShip;
 import com.mygdx.game.utils.GasRegulator;
+import com.mygdx.game.utils.Helm;
 import com.mygdx.game.view.Battle;
 import com.mygdx.game.view.DebugBattle;
 
@@ -17,19 +18,24 @@ import static com.mygdx.game.view.Battle.widthCamera;
 public class DebugBattleProcessor implements InputProcessor {
     GasRegulator gasRegulator;
     PhysicShip ship;
+    Helm helm;
 
     int gasPointer;
     int turnPointer;
+    int helmPointer;
     float convX= Gdx.graphics.getWidth()/ DebugBattle.widthCamera;
     float convY=Gdx.graphics.getHeight()/ DebugBattle.heightCamera;
     float widthCamera=DebugBattle.widthCamera;
     float heightCamera=DebugBattle.heightCamera;
     float touchX;
     float touchY;
-    public DebugBattleProcessor(GasRegulator gasRegulator,PhysicShip ship)
+    public DebugBattleProcessor(GasRegulator gasRegulator,Helm helm,PhysicShip ship)
     {
         this.gasRegulator=gasRegulator;
+        this.helm=helm;
         this.ship=ship;
+        gasPointer=-1;
+        helmPointer=-1;
 
     }
     @Override
@@ -52,7 +58,7 @@ public class DebugBattleProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchX=screenX / convX + (DebugBattle.camX - DebugBattle.widthCamera / 2);
         touchY=heightCamera - screenY / convY + (DebugBattle.camY - heightCamera / 2);
-        System.out.println(screenX+" "+screenY);
+        //System.out.println(screenX+" "+screenY);
         if((touchX>=gasRegulator.getX())&&(touchX<=gasRegulator.getX()+gasRegulator.getWidth()))
         {
             if((touchY>=gasRegulator.getY())&&(touchY<=gasRegulator.getY()+gasRegulator.getHeight()))
@@ -81,7 +87,7 @@ public class DebugBattleProcessor implements InputProcessor {
             if((touchY>=DebugBattle.camY-heightCamera/3)&&(touchY<=DebugBattle.camY-heightCamera/3+heightCamera/11))//1-я кнопка y
             {
                 ship.setRotationDirection(-1);
-                System.out.println("Click");
+                //System.out.println("Click");
                 turnPointer=pointer;
             }
 
@@ -92,10 +98,15 @@ public class DebugBattleProcessor implements InputProcessor {
             if((touchY>=DebugBattle.camY-heightCamera/3)&&(touchY<=DebugBattle.camY-heightCamera/3+heightCamera/11))//1-я кнопка y
             {
                 ship.setRotationDirection(1);
-                System.out.println("Click");
+                //System.out.println("Click");
                 turnPointer=pointer;
             }
 
+        }
+        if(((touchX>=helm.getX())&&(touchX<=helm.getX()+helm.getWidth())&&((touchY>=helm.getY())&&(touchY<=helm.getY()+helm.getHeight()))))
+        {
+            helm.navigate(touchX,touchY);
+            helmPointer=pointer;
         }
         return false;
     }
@@ -109,6 +120,10 @@ public class DebugBattleProcessor implements InputProcessor {
         if(pointer==turnPointer) {
             ship.setRotationDirection(0);
             turnPointer=0;
+        }
+        if(pointer==helmPointer)
+        {
+            helmPointer=-1;
         }
         return false;
     }
@@ -135,6 +150,14 @@ public class DebugBattleProcessor implements InputProcessor {
                 gasPointer=pointer;
             }
 
+        }
+        if(pointer==helmPointer)
+        {
+            if(((touchX>=helm.getX())&&(touchX<=helm.getX()+helm.getWidth())&&((touchY>=helm.getY())&&(touchY<=helm.getY()+helm.getHeight()))))
+            {
+                helm.navigate(touchX,touchY);
+
+            }
         }
         return false;
     }

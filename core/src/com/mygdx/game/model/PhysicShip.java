@@ -47,18 +47,23 @@ public class PhysicShip extends PhysicObject {
 
             if (rotationDirection == -1)
                 //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                bodies[i].applyAngularImpulse(0.1f,true);
+                bodies[i].setAngularVelocity(5f);
             if (rotationDirection == 1)
                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                bodies[i].applyAngularImpulse(-0.1f,true);
+                bodies[i].setAngularVelocity(-5f);
+            if(rotationDirection==0)
+            {
+                bodies[i].setAngularVelocity(0);
+            }
         }
             speed = bodies[0].getLinearVelocity().len();
 
         //enginePower=100;
-         /*if(speed>=maxSpeed)
+         if(speed>=maxSpeed)
          {
-             enginePower=0;
-         }*/
+             bodies[0].getLinearVelocity().setLength(maxSpeed);
+             bodies[1].getLinearVelocity().setLength(maxSpeed);
+         }
 
 
     }

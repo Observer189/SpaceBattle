@@ -58,6 +58,8 @@ public class PhysicObject {
 
 
         fDef.density=density;
+        fDef.restitution=0.2f;
+        fDef.friction=0.5f;
         fixtures[i]=bodies[i].createFixture(fDef);
         if(i!=0) {
             WeldJointDef jointDef;
@@ -98,10 +100,7 @@ public class PhysicObject {
     {
         return bodies[0].getPosition().y;
     }
-    public float getRotation()
-    {
-        return bodies[0].getAngle();
-    }
+
     /*public Body getBody() {
         return body;
     }*/
@@ -114,5 +113,10 @@ public class PhysicObject {
 
     public Body[] getBodies() {
         return bodies;
+    }
+
+    public float getRotation()
+    {
+        return bodies[0].getAngle();
     }
 }

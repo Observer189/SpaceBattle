@@ -11,6 +11,6 @@ import com.mygdx.game.model.Map;
 
 public class ClassicSpace extends Map {
     public ClassicSpace(SpriteBatch batch, TextureAtlas textureAtlas) {
-        super(batch, textureAtlas.findRegion("ClassicSpace"), 100, 60);
+        super(batch, textureAtlas.findRegion("ClassicSpace"), 200, 120);
     }
 }

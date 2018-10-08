@@ -81,7 +81,7 @@ public class DebugBattleProcessor implements InputProcessor {
                 }
             }
         }
-        if((touchX>=DebugBattle.camX+DebugBattle.widthCamera/5)&&((touchX<=DebugBattle.camX+DebugBattle.widthCamera/5+widthCamera/11)))//1-я кнопка x
+        /*if((touchX>=DebugBattle.camX+DebugBattle.widthCamera/5)&&((touchX<=DebugBattle.camX+DebugBattle.widthCamera/5+widthCamera/11)))//1-я кнопка x
         {
 
             if((touchY>=DebugBattle.camY-heightCamera/3)&&(touchY<=DebugBattle.camY-heightCamera/3+heightCamera/11))//1-я кнопка y
@@ -102,7 +102,7 @@ public class DebugBattleProcessor implements InputProcessor {
                 turnPointer=pointer;
             }
 
-        }
+        }*/
         if(((touchX>=helm.getX())&&(touchX<=helm.getX()+helm.getWidth())&&((touchY>=helm.getY())&&(touchY<=helm.getY()+helm.getHeight()))))
         {
             helm.navigate(touchX,touchY);
@@ -153,11 +153,11 @@ public class DebugBattleProcessor implements InputProcessor {
         }
         if(pointer==helmPointer)
         {
-            if(((touchX>=helm.getX())&&(touchX<=helm.getX()+helm.getWidth())&&((touchY>=helm.getY())&&(touchY<=helm.getY()+helm.getHeight()))))
-            {
+            //if(((touchX>=helm.getX())&&(touchX<=helm.getX()+helm.getWidth())&&((touchY>=helm.getY())&&(touchY<=helm.getY()+helm.getHeight()))))
+            //{
                 helm.navigate(touchX,touchY);
 
-            }
+            //}
         }
         return false;
     }

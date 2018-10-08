@@ -63,12 +63,13 @@ public class DebugBattle implements Screen {
 
     GasRegulator gasRegulator;
     Helm helm;
-    ButtonForProcessor turnLeft;
-    ButtonForProcessor turnRight;
+    //ButtonForProcessor turnLeft;
+    //ButtonForProcessor turnRight;
 
     WeldJointDef joint;
     Joint j;
     WeaponPoint point;
+    float endMapCoef;
     public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas)
     {
         this.batch = batch;
@@ -79,7 +80,7 @@ public class DebugBattle implements Screen {
         heightCamera=20/AspectRatio;
         width =1.5f;
         height =2;
-
+        endMapCoef=0.05f;
     }
     @Override
     public void show() {
@@ -113,8 +114,8 @@ public class DebugBattle implements Screen {
         rend=new Box2DDebugRenderer();
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
         helm=new Helm(textureAtlas,batch,camera,-4.5f,-5f,0.15f,0.15f*AspectRatio,fury);
-        turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
-        turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
+        //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
+        //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
         processor=new DebugBattleProcessor(gasRegulator,helm,fury);
         Gdx.input.setInputProcessor(processor);
 
@@ -146,10 +147,10 @@ public class DebugBattle implements Screen {
         gasRegulator.setY(camY-heightCamera*0.45f);
 
         //обновление позиции кнопок вращения
-        turnLeft.setX(camX+widthCamera/5);
-        turnLeft.setY(camY-heightCamera/3);
-        turnRight.setX(camX+widthCamera/5+widthCamera/9);
-        turnRight.setY(camY-heightCamera/3);
+        //turnLeft.setX(camX+widthCamera/5);
+        //turnLeft.setY(camY-heightCamera/3);
+        //turnRight.setX(camX+widthCamera/5+widthCamera/9);
+        //turnRight.setY(camY-heightCamera/3);
         //////////////////////////////////
 
         camera.update();
@@ -167,8 +168,8 @@ public class DebugBattle implements Screen {
         helm.draw();
         /////////////////////////////
         //Отрисовка кнопок вращения
-        turnLeft.draw();
-        turnRight.draw();
+        //turnLeft.draw();
+        //turnRight.draw();
         rend.render(world,camera.combined);
         world.step(1/60f,4,4);
         //ship.move();
@@ -221,15 +222,18 @@ public class DebugBattle implements Screen {
     {
         BodyDef bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.StaticBody;
-        bDef.position.set(50,33);
+        bDef.position.set(0,0);
         Body body=world.createBody(bDef);
 
         FixtureDef fDef=new FixtureDef();
         ChainShape shape=new ChainShape();
-        shape.createChain(new float[]{0,10,3,0,7,0,10,10});
+        shape.createLoop(new float[]{map.getWidth()*endMapCoef,map.getHeight()*endMapCoef,
+                map.getWidth()*(1-endMapCoef),map.getHeight()*endMapCoef,
+                map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef),
+                map.getWidth()*endMapCoef,map.getHeight()*(1-endMapCoef)});
         fDef.shape=shape;
-        fDef.friction=0.5f;
-        fDef.restitution=0.2f;
+        fDef.friction=0.2f;
+        fDef.restitution=0.5f;
         body.createFixture(fDef);
     }
 

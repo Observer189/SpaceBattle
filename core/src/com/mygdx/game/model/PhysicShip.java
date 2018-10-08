@@ -15,7 +15,7 @@ public class PhysicShip extends PhysicObject {
     private int rotationDirection;//-1-влево 1-вправо 0-без вращения
     private float enginePower;
     private WeaponPoint[] weapons;
-    private float maxSpeed=10;
+    private float maxSpeed=20;
     private float speed;
     private int weaponNumbers;
     Vector2 movementVector;
@@ -44,13 +44,14 @@ public class PhysicShip extends PhysicObject {
         }
         for(int i=0;i<bodies.length;i++) {
             bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
-
+            speed = bodies[0].getLinearVelocity().len();
+            bodies[i].setLinearDamping(0.01f);
             if (rotationDirection == -1)
                 //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                bodies[i].setAngularVelocity(5f);
+                bodies[i].setAngularVelocity(-2f);
             if (rotationDirection == 1)
                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                bodies[i].setAngularVelocity(-5f);
+                bodies[i].setAngularVelocity(2f);
             if(rotationDirection==0)
             {
                 bodies[i].setAngularVelocity(0);
@@ -61,9 +62,9 @@ public class PhysicShip extends PhysicObject {
         //enginePower=100;
          if(speed>=maxSpeed)
          {
-             bodies[0].getLinearVelocity().setLength(maxSpeed);
-             bodies[1].getLinearVelocity().setLength(maxSpeed);
+            enginePower=0;
          }
+         else enginePower=50;
 
 
     }

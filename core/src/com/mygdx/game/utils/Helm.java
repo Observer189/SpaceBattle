@@ -58,8 +58,21 @@ public class Helm {
         //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
 
          //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
-         shipRotation=(Math.toDegrees(ship.getRotation())>0)?(float)Math.toDegrees(ship.getRotation()):360+(float)Math.toDegrees(ship.getRotation());
-         spriteRotation=(sprite.getRotation()>0)?sprite.getRotation():360+sprite.getRotation();
+         shipRotation=(float)Math.toDegrees(ship.getRotation());
+
+         while (shipRotation>=360) {
+             shipRotation -= 360;
+         }
+        while (shipRotation<=0) {
+            shipRotation += 360;
+        }
+         spriteRotation=sprite.getRotation();
+        while (spriteRotation>=360) {
+            spriteRotation -= 360;
+        }
+        while (spriteRotation<=0) {
+            spriteRotation += 360;
+        }
         //shipRotation=(Math.toDegrees(ship.getRotation())>360)?(float)Math.toDegrees(ship.getRotation())-360:(float)Math.toDegrees(ship.getRotation());
         //spriteRotation=(sprite.getRotation()>360)?sprite.getRotation()-360:sprite.getRotation();
          internalArc=Math.abs(shipRotation-spriteRotation);
@@ -73,12 +86,28 @@ public class Helm {
              ship.setRotationDirection(-1);
          }
          else ship.setRotationDirection(0);*/
+            if(Math.abs(shipRotation-spriteRotation)>5) {
+                if (internalArc < externalArc) {
+                    if (shipRotation > spriteRotation) {
+                        ship.setRotationDirection(-1);
+                    } else if (shipRotation < spriteRotation) {
+                        ship.setRotationDirection(1);
+                    } else {
+                        ship.setRotationDirection(0);
+                    }
 
-             if (Math.abs(Math.toDegrees(ship.getRotation())) < Math.abs(sprite.getRotation())) {
-                 ship.setRotationDirection(1);
-             } else if (Math.abs(Math.toDegrees(ship.getRotation())) > Math.abs(sprite.getRotation())) {
-                 ship.setRotationDirection(-1);
-             } else ship.setRotationDirection(0);
+                } else {
+                    if (shipRotation > spriteRotation) {
+                        ship.setRotationDirection(1);
+                    } else if (shipRotation < spriteRotation) {
+                        ship.setRotationDirection(-1);
+                    } else {
+                        ship.setRotationDirection(0);
+                    }
+                }
+            }
+            else
+                ship.setRotationDirection(0);
 
 
         /*if(Math.abs(ship.getRotation()-sprite.getRotation())<360-Math.abs(ship.getRotation()-sprite.getRotation()))
@@ -90,7 +119,7 @@ public class Helm {
             ship.setRotationDirection(-1);
         }
         else ship.setRotationDirection(0);*/
-        System.out.println(Math.toDegrees(ship.getRotation())+" "+sprite.getRotation());
+        System.out.println(shipRotation+"!!!"+spriteRotation);
     }
     public float getX()
     {

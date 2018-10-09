@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.Modules.Engine;
 
 /**
  * Created by Sash on 15.06.2018.
@@ -15,11 +16,15 @@ public class PhysicShip extends PhysicObject {
     private int rotationDirection;//-1-влево 1-вправо 0-без вращения
     private float enginePower;
     private WeaponPoint[] weapons;
+    private EnginePoint[] engines;
     private float maxSpeed=20;
     private float speed;
     private int weaponNumbers;
+    private int engineNumbers;
     Vector2 movementVector;
-    public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,float density,int bodyNumber,int weaponNumbers,float rotationSpeed,float[][] shape, World world) {
+    public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
+                      float density,int bodyNumber,int weaponNumbers,int engineNumbers,float rotationSpeed,
+                      float[][] shape, World world) {
         super(textureRegion, x, y, width, height,density,bodyNumber,shape, world);
         this.rotationSpeed=rotationSpeed;
         movementPosition=0;
@@ -27,7 +32,9 @@ public class PhysicShip extends PhysicObject {
         movementVector = new Vector2(0, 0);
         speed=0;
         this.weaponNumbers=weaponNumbers;
+        this.engineNumbers=engineNumbers;
         weapons=new WeaponPoint[weaponNumbers];
+        engines= new EnginePoint[engineNumbers];
     }
 
     public void move()
@@ -43,7 +50,12 @@ public class PhysicShip extends PhysicObject {
             movementVector.set((float)(Math.sin(getRotation()))*0.15f,(float)(-Math.cos(getRotation()))*0.15f);
         }
         for(int i=0;i<bodies.length;i++) {
-            bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
+            if(!(speed>=maxSpeed))
+            {
+                //bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
+                engines[i].move(movementVector);
+            }
+
             speed = bodies[0].getLinearVelocity().len();
             bodies[i].setLinearDamping(0.01f);
             if (rotationDirection == -1)
@@ -59,22 +71,21 @@ public class PhysicShip extends PhysicObject {
         }
             speed = bodies[0].getLinearVelocity().len();
 
-        //enginePower=100;
-         if(speed>=maxSpeed)
-         {
-            enginePower=0;
-         }
-         else enginePower=50;
 
 
+        //System.out.println(speed);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
+        for (int i=0;i<engines.length;i++) {
+            engines[i].draw(batch);
+        }
         super.draw(batch);
         for (int i=0;i<weapons.length;i++) {
             weapons[i].draw(batch);
         }
+
     }
 
     public void setMovementPosition(int movementPosition) {
@@ -95,5 +106,9 @@ public class PhysicShip extends PhysicObject {
 
     public WeaponPoint[] getWeapons() {
         return weapons;
+    }
+
+    public EnginePoint[] getEngines() {
+        return engines;
     }
 }

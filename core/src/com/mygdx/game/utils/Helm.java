@@ -119,7 +119,7 @@ public class Helm {
             ship.setRotationDirection(-1);
         }
         else ship.setRotationDirection(0);*/
-        System.out.println(shipRotation+"!!!"+spriteRotation);
+
     }
     public float getX()
     {

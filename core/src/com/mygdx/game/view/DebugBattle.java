@@ -107,6 +107,8 @@ public class DebugBattle implements Screen {
                 -width/2+width*0.67f,height/2,
                 -width/2+width*0.33f,height/2},world);*/
         fury= new Fury(textureAtlas,50,30,world);
+        fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
+        fury.getBodies()[1].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         camera=new OrthographicCamera(widthCamera,heightCamera);
         camera.position.set(new Vector3(500,500,0));
         camX =camera.position.x;
@@ -129,8 +131,11 @@ public class DebugBattle implements Screen {
         joint.initialize(fury.getBodies()[0],fury.getBodies()[1],new Vector2(50,30));
         j=world.createJoint(joint);*/
 
+        for(int i=0;i<=10;i++)
+        {
+            createRect();
+        }
 
-        createRect();
         createWall();
     }
 
@@ -174,8 +179,9 @@ public class DebugBattle implements Screen {
         world.step(1/60f,4,4);
         //ship.move();
         //ship2.move();
-        fury.move();
         helm.updateShip();
+        fury.move();
+
     }
 
     @Override
@@ -206,17 +212,18 @@ public class DebugBattle implements Screen {
     {
         BodyDef bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
-        bDef.position.set(55,32);
+        bDef.position.set((float)(Math.random()*150),(float)(Math.random()*100));
         Body body=world.createBody(bDef);
 
         FixtureDef fDef=new FixtureDef();
         PolygonShape shape=new PolygonShape();
-        shape.setAsBox(2,2);
+        shape.setAsBox((float)(Math.random()*3),(float)(Math.random()*3));
         fDef.shape=shape;
         fDef.density=2;
         fDef.friction=0.5f;
         fDef.restitution=0.2f;
         body.createFixture(fDef);
+        body.setAngularVelocity(1);
     }
     public void createWall()
     {

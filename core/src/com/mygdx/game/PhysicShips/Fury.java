@@ -21,27 +21,28 @@ public class Fury extends PhysicShip{
     static final float height=1;
 
     public Fury(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("Dashing"), x, y, width, height,30,2,2,2, 0.05f, new float[][]{
+        super(textureAtlas.findRegion("Dashing"), x, y, width, height,30,2,2,3, 0.05f, new float[][]{
                 {-width /2,-height /2+ height *0.26f,
                 -width /2,-height /2+ height *0.135f,
                 -width /2+ width *0.18f,-height /2,
-                -width /2+ width *0.81f,-height /2,
+                -width /2+ width *0.82f,-height /2,
                 width /2,-height /2+ height *0.135f,
                 width /2,-height /2+ height *0.26f,
-                -width /2+ width *0.83f,-height /2+ height *0.41f,
-                -width /2+ width *0.157f,-height /2+ height *0.41f
+                -width /2+ width *0.82f,-height /2+ height *0.41f,
+                -width /2+ width *0.18f,-height /2+ height *0.41f
         },
                 {
                         -width /2+ width *0.1f,-height /2+ height *0.567f,
                         -width /2+ width *0.83f,-height /2+ height *0.41f,
-                        -width /2+ width *0.157f,-height /2+ height *0.41f,
-                        -width /2+ width *0.89f,-height /2+ height *0.567f,
+                        -width /2+ width *0.17f,-height /2+ height *0.41f,
+                        -width /2+ width *0.9f,-height /2+ height *0.567f,
                         -width /2+ width *0.67f, height /2,
                         -width /2+ width *0.33f, height /2}
         }, world);
         getWeapons()[0]=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),x,y, Size.Small,10,world),getBodies()[1],new Vector2(-0.2f,-0.1f),world);
         getWeapons()[1]=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),x,y, Size.Small,10,world),getBodies()[1],new Vector2(0.2f,-0.1f),world);
-        getEngines()[0]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(-0.1f,-0.1f),world);
-        getEngines()[1]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(0.1f,-0.1f),world);
+        getEngines()[0]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(0f,-0.1f),world);
+        getEngines()[1]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(0.2f,-0.1f),world);
+        getEngines()[2]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(-0.2f,-0.1f),world);
     }
 }

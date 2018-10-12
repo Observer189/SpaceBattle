@@ -15,17 +15,37 @@ public class Engine extends Module {
     private float power;
     private float angularVelocity;
     private float maxSpeed;
+    private Type type;
 
-    public Engine(TextureRegion textureRegion, float x, float y, Size size, float density,float power,float angularVelocity,float maxSpeed, World world) {
+    public Engine(TextureRegion textureRegion, float x, float y, Size size, float density,float power,float angularVelocity,float maxSpeed,Type type, World world) {
         super(textureRegion, x, y, size, ModuleType.Engine, density, world);
         this.power=power;
         this.angularVelocity=angularVelocity;
         this.maxSpeed=maxSpeed;
+        this.type=type;
+
     }
     public void move(Vector2 movementVector)
     {
         getBody().applyForceToCenter(power*movementVector.x,power*movementVector.y,true);
 
 
+    }
+    public enum  Type
+    {
+        Cruising,Thruster
+    }
+
+
+    public Type getEngineType() {
+        return type;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public float getPower() {
+        return power;
     }
 }

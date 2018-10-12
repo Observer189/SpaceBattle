@@ -63,4 +63,8 @@ public class EnginePoint {
             engine.draw(batch);
         }
     }
+
+    public Engine getEngine() {
+        return engine;
+    }
 }

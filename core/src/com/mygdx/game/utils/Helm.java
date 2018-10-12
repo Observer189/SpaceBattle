@@ -20,10 +20,13 @@ public class Helm {
     private float widthCoeff;
     private float heightCoeff;
     private double pointAngle;//угол между вводимой точкой и центром штурвала
-    float shipRotation;
-    float spriteRotation;
+    int shipRotation;
+    int spriteRotation;
     float internalArc;
     float externalArc;
+    int tempShip;
+    int tempSprite;
+    private boolean isChanged;
     public Helm(TextureAtlas textureAtlas,SpriteBatch batch, OrthographicCamera camera, float offsetX, float offsetY, float widthCoeff, float heightCoeff,PhysicShip ship)
     {
         this.batch=batch;
@@ -49,7 +52,7 @@ public class Helm {
     {
        pointAngle=Math.toDegrees(Math.atan2(touchX-(sprite.getX()+sprite.getWidth()/2),touchY-(sprite.getY()+sprite.getHeight()/2)));
        sprite.setRotation(-(float)pointAngle);
-
+       isChanged=true;
 
     }
 
@@ -58,7 +61,7 @@ public class Helm {
         //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
 
          //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
-         shipRotation=(float)Math.toDegrees(ship.getRotation());
+         shipRotation=(int) Math.toDegrees(ship.getRotation());
 
          while (shipRotation>=360) {
              shipRotation -= 360;
@@ -66,7 +69,7 @@ public class Helm {
         while (shipRotation<=0) {
             shipRotation += 360;
         }
-         spriteRotation=sprite.getRotation();
+         spriteRotation=(int)sprite.getRotation();
         while (spriteRotation>=360) {
             spriteRotation -= 360;
         }
@@ -86,28 +89,52 @@ public class Helm {
              ship.setRotationDirection(-1);
          }
          else ship.setRotationDirection(0);*/
-            if(Math.abs(shipRotation-spriteRotation)>5) {
+         tempShip=(shipRotation<180)?shipRotation+360:shipRotation;
+         tempSprite=(spriteRotation<180)?spriteRotation+360:spriteRotation;
+
+            if((Math.abs(tempShip-tempSprite)>5f)||(false)) {
                 if (internalArc < externalArc) {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(-1);
+                        //ship.getBodies()[0].setAngularVelocity(-2f);
+                        //ship.getBodies()[1].setAngularVelocity(-2f);
                     } else if (shipRotation < spriteRotation) {
                         ship.setRotationDirection(1);
+                        //ship.getBodies()[0].setAngularVelocity(2f);
+                        //ship.getBodies()[1].setAngularVelocity(2f);
                     } else {
                         ship.setRotationDirection(0);
+                        //ship.getBodies()[0].setAngularVelocity(0f);
+                        //ship.getBodies()[1].setAngularVelocity(0f);
+                        isChanged=false;
                     }
 
                 } else {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(1);
+                        //ship.getBodies()[0].setAngularVelocity(2f);
+                        //ship.getBodies()[1].setAngularVelocity(2f);
                     } else if (shipRotation < spriteRotation) {
                         ship.setRotationDirection(-1);
+                        //ship.getBodies()[0].setAngularVelocity(-2f);
+                        //ship.getBodies()[1].setAngularVelocity(-2f);
                     } else {
                         ship.setRotationDirection(0);
+                        //ship.getBodies()[0].setAngularVelocity(0f);
+                        //ship.getBodies()[1].setAngularVelocity(0f);
+                        isChanged=false;
                     }
                 }
             }
             else
+            {
                 ship.setRotationDirection(0);
+                //ship.getBodies()[0].setAngularVelocity(0f);
+                //ship.getBodies()[1].setAngularVelocity(0f);
+                isChanged=false;
+            }
+        System.out.println(Math.abs(tempShip-tempSprite)+" "+ship.getRotationDirection()+" "+ship.getBodies()[0].getAngularVelocity());
+
 
 
         /*if(Math.abs(ship.getRotation()-sprite.getRotation())<360-Math.abs(ship.getRotation()-sprite.getRotation()))

@@ -17,7 +17,7 @@ public class PhysicShip extends PhysicObject {
     private float enginePower;
     private WeaponPoint[] weapons;
     private EnginePoint[] engines;
-    private float maxSpeed=20;
+    private float maxSpeed;
     private float speed;
     private int weaponNumbers;
     private int engineNumbers;
@@ -35,10 +35,12 @@ public class PhysicShip extends PhysicObject {
         this.engineNumbers=engineNumbers;
         weapons=new WeaponPoint[weaponNumbers];
         engines= new EnginePoint[engineNumbers];
+        rotationDirection=0;
     }
 
     public void move()
     {
+        maxSpeed=findMaxSpeed();
         if(movementPosition==0)
             movementVector.set(0,0);
         else if(movementPosition==1)
@@ -60,20 +62,21 @@ public class PhysicShip extends PhysicObject {
             bodies[i].setLinearDamping(0.01f);
             if (rotationDirection == -1)
                 //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                bodies[i].setAngularVelocity(-2f);
-            if (rotationDirection == 1)
+                bodies[i].setAngularVelocity(-1f);
+            else if (rotationDirection == 1)
                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                bodies[i].setAngularVelocity(2f);
-            if(rotationDirection==0)
+                bodies[i].setAngularVelocity(1f);
+            else if(rotationDirection==0)
             {
                 bodies[i].setAngularVelocity(0);
             }
+
         }
             speed = bodies[0].getLinearVelocity().len();
 
 
 
-        //System.out.println(speed);
+        //System.out.println(Math.toDegrees(bodies[0].getAngle()));
     }
 
     @Override
@@ -111,4 +114,19 @@ public class PhysicShip extends PhysicObject {
     public EnginePoint[] getEngines() {
         return engines;
     }
+    public float findMaxSpeed()
+    {
+        float amountSpeed=0;
+        int engineNumber=0;
+        for(int i=0;i<engines.length;i++)
+        {
+           if(!engines[i].getEngine().getEngineType().equals(Engine.Type.Thruster))
+           {
+               amountSpeed+=engines[i].getEngine().getMaxSpeed();
+               engineNumber++;
+           }
+        }
+        return amountSpeed/engineNumber;
+    }
+
 }

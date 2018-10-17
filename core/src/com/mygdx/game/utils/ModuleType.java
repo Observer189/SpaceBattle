@@ -5,5 +5,5 @@ package com.mygdx.game.utils;
  */
 
 public enum ModuleType {
-    Weapon,Engine,Generator
+    Weapon,Engine,EnergyModule
 }

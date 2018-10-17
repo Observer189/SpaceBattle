@@ -63,13 +63,13 @@ public class Helm {
          //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
          shipRotation=(int) Math.toDegrees(ship.getRotation());
 
-         while (shipRotation>=360) {
-             shipRotation -= 360;
-         }
-        while (shipRotation<=0) {
-            shipRotation += 360;
-        }
-         spriteRotation=(int)sprite.getRotation();
+         while (shipRotation>=360) {                 //
+             shipRotation -= 360;                    //
+         }                                            //Установление градусной меры корабля в рамки 0 до 360
+        while (shipRotation<=0) {                     //
+            shipRotation += 360;                      //
+        }                                            //
+         spriteRotation=(int)sprite.getRotation();   // Обрезаем значение до целого с помощью преобразование до Int
         while (spriteRotation>=360) {
             spriteRotation -= 360;
         }
@@ -78,8 +78,8 @@ public class Helm {
         }
         //shipRotation=(Math.toDegrees(ship.getRotation())>360)?(float)Math.toDegrees(ship.getRotation())-360:(float)Math.toDegrees(ship.getRotation());
         //spriteRotation=(sprite.getRotation()>360)?sprite.getRotation()-360:sprite.getRotation();
-         internalArc=Math.abs(shipRotation-spriteRotation);
-         externalArc=360-internalArc;
+         internalArc=Math.abs(shipRotation-spriteRotation);     //Находим внешнее и внутренне растояние в градусах между
+         externalArc=360-internalArc;                           // фазой корабля и штурвала
          /*if(internalArc<externalArc)
          {
              ship.setRotationDirection(1);
@@ -89,21 +89,24 @@ public class Helm {
              ship.setRotationDirection(-1);
          }
          else ship.setRotationDirection(0);*/
-         tempShip=(shipRotation<180)?shipRotation+360:shipRotation;
+         tempShip=(shipRotation<180)?shipRotation+360:shipRotation;// Увеличиваем половину градусной окружности на 360 для того чтобы избежать проблемы при вычитании перехода через 0
          tempSprite=(spriteRotation<180)?spriteRotation+360:spriteRotation;
 
-            if((Math.abs(tempShip-tempSprite)>5f)||(false)) {
+            if((Math.abs(tempShip-tempSprite)>0.5f)||(false)) {
                 if (internalArc < externalArc) {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(-1);
+
                         //ship.getBodies()[0].setAngularVelocity(-2f);
                         //ship.getBodies()[1].setAngularVelocity(-2f);
                     } else if (shipRotation < spriteRotation) {
                         ship.setRotationDirection(1);
+
                         //ship.getBodies()[0].setAngularVelocity(2f);
                         //ship.getBodies()[1].setAngularVelocity(2f);
                     } else {
                         ship.setRotationDirection(0);
+
                         //ship.getBodies()[0].setAngularVelocity(0f);
                         //ship.getBodies()[1].setAngularVelocity(0f);
                         isChanged=false;
@@ -112,14 +115,17 @@ public class Helm {
                 } else {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(1);
+
                         //ship.getBodies()[0].setAngularVelocity(2f);
                         //ship.getBodies()[1].setAngularVelocity(2f);
                     } else if (shipRotation < spriteRotation) {
                         ship.setRotationDirection(-1);
+
                         //ship.getBodies()[0].setAngularVelocity(-2f);
                         //ship.getBodies()[1].setAngularVelocity(-2f);
                     } else {
                         ship.setRotationDirection(0);
+
                         //ship.getBodies()[0].setAngularVelocity(0f);
                         //ship.getBodies()[1].setAngularVelocity(0f);
                         isChanged=false;
@@ -129,6 +135,8 @@ public class Helm {
             else
             {
                 ship.setRotationDirection(0);
+                ship.setAngularVelocity(0f);
+                ship.setAngle((float) Math.toRadians(sprite.getRotation()));
                 //ship.getBodies()[0].setAngularVelocity(0f);
                 //ship.getBodies()[1].setAngularVelocity(0f);
                 isChanged=false;

@@ -37,7 +37,7 @@ public class Module {
         if(size.equals(Size.Small))
         {
             width=0.2f;
-            height=0.3f;
+            height=0.2f;
         }
         else if(size.equals(Size.Medium))
         {

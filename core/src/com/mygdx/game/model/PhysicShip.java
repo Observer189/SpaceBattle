@@ -3,6 +3,7 @@ package com.mygdx.game.model;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Modules.Engine;
 
@@ -13,17 +14,19 @@ import com.mygdx.game.Modules.Engine;
 public class PhysicShip extends PhysicObject {
     private int movementPosition;
     private float rotationSpeed;
+    private float linearDamping;//не ниже 0.01
     private int rotationDirection;//-1-влево 1-вправо 0-без вращения
     private float enginePower;
     private WeaponPoint[] weapons;
     private EnginePoint[] engines;
+    private EnergyPoint[] energyPoints;
     private float maxSpeed;
     private float speed;
     private int weaponNumbers;
     private int engineNumbers;
     Vector2 movementVector;
     public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
-                      float density,int bodyNumber,int weaponNumbers,int engineNumbers,float rotationSpeed,
+                      float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float rotationSpeed,
                       float[][] shape, World world) {
         super(textureRegion, x, y, width, height,density,bodyNumber,shape, world);
         this.rotationSpeed=rotationSpeed;
@@ -35,7 +38,13 @@ public class PhysicShip extends PhysicObject {
         this.engineNumbers=engineNumbers;
         weapons=new WeaponPoint[weaponNumbers];
         engines= new EnginePoint[engineNumbers];
+        energyPoints=new EnergyPoint[energyNumbers];
         rotationDirection=0;
+        this.linearDamping=linearDamping;
+        for (Body i:bodies)
+        {
+            i.setLinearDamping(this.linearDamping);
+        }
     }
 
     public void move()
@@ -59,13 +68,13 @@ public class PhysicShip extends PhysicObject {
             }
 
             speed = bodies[0].getLinearVelocity().len();
-            bodies[i].setLinearDamping(0.01f);
+
             if (rotationDirection == -1)
                 //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                bodies[i].setAngularVelocity(-1f);
+                bodies[i].setAngularVelocity(-2f);
             else if (rotationDirection == 1)
                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                bodies[i].setAngularVelocity(1f);
+                bodies[i].setAngularVelocity(2f);
             else if(rotationDirection==0)
             {
                 bodies[i].setAngularVelocity(0);
@@ -87,6 +96,10 @@ public class PhysicShip extends PhysicObject {
         super.draw(batch);
         for (int i=0;i<weapons.length;i++) {
             weapons[i].draw(batch);
+        }
+        for (int i=0;i<energyPoints.length;i++) {
+            if(energyPoints[i]!=null)
+            energyPoints[i].draw(batch);
         }
 
     }
@@ -128,5 +141,30 @@ public class PhysicShip extends PhysicObject {
         }
         return amountSpeed/engineNumber;
     }
+    public void setAngle(float angle)
+    {
+        for (Body i:bodies)
+        {
+            i.setTransform(i.getPosition().x,i.getPosition().y,angle);
+        }
+    }
+    public void setAngularVelocity(float angularVelocity)
+    {
+        for (Body i:bodies)
+        {
+            i.setAngularVelocity(angularVelocity);
+        }
+    }
 
+    public int getWeaponNumbers() {
+        return weaponNumbers;
+    }
+
+    public int getEngineNumbers() {
+        return engineNumbers;
+    }
+
+    public EnergyPoint[] getEnergyPoints() {
+        return energyPoints;
+    }
 }

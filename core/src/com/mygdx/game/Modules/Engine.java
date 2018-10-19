@@ -13,27 +13,31 @@ import com.mygdx.game.utils.Size;
 
 public class Engine extends Module {
     private float power;
-    private float angularVelocity;
+    private float angularPower;
     private float maxSpeed;
     private Type type;
 
-    public Engine(TextureRegion textureRegion, float x, float y, Size size, float density,float power,float angularVelocity,float maxSpeed,Type type, World world) {
+    private float energyConsumption;
+    public Engine(TextureRegion textureRegion, float x, float y, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type, World world) {
         super(textureRegion, x, y, size, ModuleType.Engine, density, world);
         this.power=power;
-        this.angularVelocity=angularVelocity;
+        this.angularPower=angularPower;
         this.maxSpeed=maxSpeed;
+        this.energyConsumption=energyConsumption;
         this.type=type;
 
     }
     public void move(Vector2 movementVector)
     {
-        getBody().applyForceToCenter(power*movementVector.x,power*movementVector.y,true);
+        if(type.equals(Type.Cruising)) {
+            getBody().applyForceToCenter(power * movementVector.x, power * movementVector.y, true);
+        }
 
 
     }
     public enum  Type
     {
-        Cruising,Thruster
+        Cruising
     }
 
 
@@ -47,5 +51,13 @@ public class Engine extends Module {
 
     public float getPower() {
         return power;
+    }
+
+    public float getAngularPower() {
+        return angularPower;
+    }
+
+    public float getEnergyConsumption() {
+        return energyConsumption;
     }
 }

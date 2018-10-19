@@ -13,6 +13,6 @@ import com.mygdx.game.utils.Size;
 
 public class IonEngine extends Engine {
     public IonEngine(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("IonEngine"), x, y, Size.Small, 1f, 50, 5f, 10, Type.Cruising, world);
+        super(textureAtlas.findRegion("IonEngine"), x, y, Size.Small, 1f, 5000, 500f, 10,1f, Type.Cruising, world);
     }
 }

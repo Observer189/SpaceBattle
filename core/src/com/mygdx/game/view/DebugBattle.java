@@ -30,6 +30,7 @@ import com.mygdx.game.model.WeaponPoint;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
 import com.mygdx.game.utils.Helm;
+import com.mygdx.game.utils.ProgressBar;
 import com.mygdx.game.utils.Size;
 
 /**
@@ -63,6 +64,7 @@ public class DebugBattle implements Screen {
 
     GasRegulator gasRegulator;
     Helm helm;
+    ProgressBar energyBar;
     //ButtonForProcessor turnLeft;
     //ButtonForProcessor turnRight;
 
@@ -107,6 +109,7 @@ public class DebugBattle implements Screen {
                 -width/2+width*0.67f,height/2,
                 -width/2+width*0.33f,height/2},world);*/
         fury= new Fury(textureAtlas,50,30,world);
+        fury.create();
         fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         fury.getBodies()[1].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         camera=new OrthographicCamera(widthCamera,heightCamera);
@@ -116,6 +119,8 @@ public class DebugBattle implements Screen {
         rend=new Box2DDebugRenderer();
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
         helm=new Helm(textureAtlas,batch,camera,-4.5f,-5f,0.15f,0.15f*AspectRatio,fury);
+        energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
+                camX-widthCamera*0.45f,camY+heightCamera*0.45f,-widthCamera*0.45f,heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,fury.getMaxEnergy(),camera);
         //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
         //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
         processor=new DebugBattleProcessor(gasRegulator,helm,fury);
@@ -171,17 +176,18 @@ public class DebugBattle implements Screen {
         //
         gasRegulator.draw();
         helm.draw();
+        energyBar.draw(fury.getEnergy());
         /////////////////////////////
         //Отрисовка кнопок вращения
         //turnLeft.draw();
         //turnRight.draw();
-        rend.render(world,camera.combined);
+        //rend.render(world,camera.combined);
         world.step(1/60f,4,4);
         //ship.move();
         //ship2.move();
         helm.updateShip();
         fury.move();
-
+        energyBar.update();
     }
 
     @Override

@@ -13,11 +13,21 @@ import com.mygdx.game.utils.Size;
 public class EnergyModule extends Module {
     private float energyStorage;
     private float energyGeneration;
-    private float reloadTime;
-    public EnergyModule(TextureRegion textureRegion, float x, float y, Size size, float density,float energyStorage,float energyGeneration,float reloadTime, World world) {
+
+    public EnergyModule(TextureRegion textureRegion, float x, float y, Size size, float density,float energyStorage,float energyGeneration, World world) {
         super(textureRegion, x, y, size, ModuleType.EnergyModule, density, world);
         this.energyGeneration=energyGeneration;
         this.energyStorage=energyStorage;
-        this.reloadTime=reloadTime;
+
     }
+
+    public float getEnergyGeneration() {
+        return energyGeneration;
+    }
+
+    public float getEnergyStorage() {
+        return energyStorage;
+    }
+
+
 }

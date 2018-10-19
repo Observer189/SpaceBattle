@@ -25,6 +25,11 @@ public class PhysicShip extends PhysicObject {
     private int weaponNumbers;
     private int engineNumbers;
     Vector2 movementVector;
+
+    private float energy;
+    private float maxEnergy;
+    private long energyConsLastTime;
+    private int consumptionReload;
     public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
                       float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float rotationSpeed,
                       float[][] shape, World world) {
@@ -45,6 +50,20 @@ public class PhysicShip extends PhysicObject {
         {
             i.setLinearDamping(this.linearDamping);
         }
+
+    }
+    public void create()
+    {
+        rotationSpeed=findRotationSpeed();
+        maxEnergy=0;
+        for(int i=0;i<energyPoints.length;i++)
+        {
+            maxEnergy+=energyPoints[i].getEnergyModule().getEnergyStorage();
+        }
+
+        energy=maxEnergy;
+        energyConsLastTime=System.currentTimeMillis();
+        consumptionReload=100;
     }
 
     public void move()
@@ -60,32 +79,45 @@ public class PhysicShip extends PhysicObject {
         {
             movementVector.set((float)(Math.sin(getRotation()))*0.15f,(float)(-Math.cos(getRotation()))*0.15f);
         }
-        for(int i=0;i<bodies.length;i++) {
-            if(!(speed>=maxSpeed))
-            {
-                //bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
-                engines[i].move(movementVector);
+        if(energy>0) {
+            for (int i = 0; i < bodies.length; i++) {
+                if (!(speed >= maxSpeed)) {
+                    //bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
+                    engines[i].move(movementVector);
+                }
+
+                speed = bodies[0].getLinearVelocity().len();
+
+                if (rotationDirection == -1)
+                    //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
+                    bodies[i].setAngularVelocity(-rotationSpeed);
+                else if (rotationDirection == 1)
+                    //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
+                    bodies[i].setAngularVelocity(rotationSpeed);
+                else if (rotationDirection == 0) {
+                    bodies[i].setAngularVelocity(0);
+                }
+
+
             }
-
-            speed = bodies[0].getLinearVelocity().len();
-
-            if (rotationDirection == -1)
-                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                bodies[i].setAngularVelocity(-2f);
-            else if (rotationDirection == 1)
-               //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                bodies[i].setAngularVelocity(2f);
-            else if(rotationDirection==0)
-            {
-                bodies[i].setAngularVelocity(0);
-            }
-
         }
             speed = bodies[0].getLinearVelocity().len();
+       if(System.currentTimeMillis()-energyConsLastTime>consumptionReload) {
+           for (int i = 0; i < engines.length; i++) {
+               energy -= engines[i].getEngine().getEnergyConsumption();
 
+           }
+           for (int i = 0; i < energyPoints.length; i++) {
+               energy += energyPoints[i].getEnergyModule().getEnergyGeneration();
 
-
-        //System.out.println(Math.toDegrees(bodies[0].getAngle()));
+           }
+           energyConsLastTime=System.currentTimeMillis();
+       }
+        if(energy<0)
+            energy=0;
+       else if(energy>maxEnergy)
+           energy=maxEnergy;
+        System.out.println(energy);
     }
 
     @Override
@@ -133,13 +165,21 @@ public class PhysicShip extends PhysicObject {
         int engineNumber=0;
         for(int i=0;i<engines.length;i++)
         {
-           if(!engines[i].getEngine().getEngineType().equals(Engine.Type.Thruster))
-           {
+
                amountSpeed+=engines[i].getEngine().getMaxSpeed();
                engineNumber++;
-           }
+
         }
         return amountSpeed/engineNumber;
+    }
+    public float findRotationSpeed()
+    {
+        float rotationPower=0;
+        for(int i=0;i<engines.length;i++)
+        {
+            rotationPower+=engines[i].getAngularPower();
+        }
+        return rotationPower/getMass();
     }
     public void setAngle(float angle)
     {
@@ -166,5 +206,22 @@ public class PhysicShip extends PhysicObject {
 
     public EnergyPoint[] getEnergyPoints() {
         return energyPoints;
+    }
+    public float getMass()
+    {
+        float mass=0;
+        for(int i=0;i<bodies.length;i++)
+        {
+            mass+=bodies[i].getMass();
+        }
+        return mass;
+    }
+
+    public float getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public float getEnergy() {
+        return energy;
     }
 }

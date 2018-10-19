@@ -12,6 +12,6 @@ import com.mygdx.game.utils.Size;
 
 public class UnknownReactor extends EnergyModule {
     public UnknownReactor(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("Reactor"), x, y, Size.Small, 1,100,10,1, world);
+        super(textureAtlas.findRegion("Reactor"), x, y, Size.Small, 1,100,10, world);
     }
 }

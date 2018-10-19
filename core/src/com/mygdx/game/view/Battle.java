@@ -18,12 +18,10 @@ import com.mygdx.game.control.BattleProcessor;
 import com.mygdx.game.model.BattleStatus;
 import com.mygdx.game.model.Coord;
 import com.mygdx.game.model.Map;
-import com.mygdx.game.model.Maps.ClassicSpace;
 import com.mygdx.game.model.MiniMap;
 import com.mygdx.game.model.Player;
 
-import com.mygdx.game.model.ProgressBar;
-import com.mygdx.game.model.Ships.Pulsate;
+import com.mygdx.game.utils.ProgressBar;
 import com.mygdx.game.requests.servApi;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;

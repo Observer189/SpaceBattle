@@ -23,7 +23,7 @@ public class Fury extends PhysicShip{
     static final float height=1;
 
     public Fury(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("Dashing"), x, y, width, height,30,2,2,3,1,0.01f, 0.05f, new float[][]{
+        super(textureAtlas.findRegion("Dashing"), x, y, width, height,3000,2,2,3,1,0.9f, 0.05f, new float[][]{
                 {-width /2,-height /2+ height *0.26f,
                 -width /2,-height /2+ height *0.135f,
                 -width /2+ width *0.18f,-height /2,

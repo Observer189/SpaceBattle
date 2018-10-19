@@ -63,6 +63,10 @@ public class EnginePoint {
             engine.draw(batch);
         }
     }
+    public float getAngularPower()
+    {
+        return engine.getAngularPower();
+    }
 
     public Engine getEngine() {
         return engine;

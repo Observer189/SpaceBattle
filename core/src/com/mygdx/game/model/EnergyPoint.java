@@ -59,4 +59,8 @@ public class EnergyPoint {
             energyModule.draw(batch);
         }
     }
+
+    public EnergyModule getEnergyModule() {
+        return energyModule;
+    }
 }

@@ -30,9 +30,11 @@ public class PhysicShip extends PhysicObject {
     private float maxEnergy;
     private long energyConsLastTime;
     private int consumptionReload;
+
+    private float hp;
     public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
                       float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float rotationSpeed,
-                      float[][] shape, World world) {
+                      float[][] shape,float hp, World world) {
         super(textureRegion, x, y, width, height,density,bodyNumber,shape, world);
         this.rotationSpeed=rotationSpeed;
         movementPosition=0;
@@ -45,6 +47,9 @@ public class PhysicShip extends PhysicObject {
         engines= new EnginePoint[engineNumbers];
         energyPoints=new EnergyPoint[energyNumbers];
         rotationDirection=0;
+
+        this.hp=hp;
+
         this.linearDamping=linearDamping;
         for (Body i:bodies)
         {
@@ -79,6 +84,7 @@ public class PhysicShip extends PhysicObject {
         {
             movementVector.set((float)(Math.sin(getRotation()))*0.15f,(float)(-Math.cos(getRotation()))*0.15f);
         }
+        shot();
         if(energy>0) {
             for (int i = 0; i < bodies.length; i++) {
                 if (!(speed >= maxSpeed)) {
@@ -117,7 +123,14 @@ public class PhysicShip extends PhysicObject {
             energy=0;
        else if(energy>maxEnergy)
            energy=maxEnergy;
-        System.out.println(energy);
+
+        //System.out.println(getBodies()[0].getPosition().y+" "+getBodies()[1].getPosition().y);
+    }
+    public void shot()
+    {
+        for (WeaponPoint i:weapons) {
+            i.shot(getHeight()/2-i.getLocalAnchor().y);
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ public class WeaponPoint {
     Joint joint;
     WeaponModule weapon;
     World world;
+    Vector2 localAnchor;
 
     public WeaponPoint(World world)
     {
@@ -28,11 +29,12 @@ public class WeaponPoint {
     {
         this.world=world;
         this.weapon=weapon;
+        this.localAnchor=localAnchor;
         jointDef = new WeldJointDef();
         jointDef.bodyA = shipBody;
         jointDef.bodyB = weapon.getBody();
-        jointDef.localAnchorA.set(shipBody.getLocalCenter().x+localAnchor.x,shipBody.getLocalCenter().y+localAnchor.y);
-
+        jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
+        jointDef.localAnchorB.set(0,0);
         jointDef.collideConnected = false;
         joint=world.createJoint(jointDef);
     }
@@ -41,10 +43,11 @@ public class WeaponPoint {
         if(weapon.getType().equals(ModuleType.Weapon))
         {
             this.weapon=weapon;
+            this.localAnchor=localAnchor;
             jointDef = new WeldJointDef();
             jointDef.bodyA = shipBody;
             jointDef.bodyB = weapon.getBody();
-            jointDef.localAnchorA.set(shipBody.getLocalCenter().x+localAnchor.x,shipBody.getLocalCenter().y+localAnchor.y);
+            jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
             jointDef.collideConnected = false;
             joint=world.createJoint(jointDef);
 
@@ -52,11 +55,19 @@ public class WeaponPoint {
         }
         else return false;
     }
+    public void shot(float l)
+    {
+        weapon.shot(l);
+    }
     public void draw(SpriteBatch batch)
     {
         if(weapon!=null)
         {
             weapon.draw(batch);
         }
+    }
+
+    public Vector2 getLocalAnchor() {
+        return localAnchor;
     }
 }

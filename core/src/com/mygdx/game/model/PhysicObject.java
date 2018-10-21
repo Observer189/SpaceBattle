@@ -29,6 +29,7 @@ public class PhysicObject {
     //FixtureDef fDef;
     PolygonShape shape;
 
+
     private float width;
     private float height;
     public PhysicObject(TextureRegion textureRegion, float x, float y, float width, float height,float density,int bodiesNumber,float[][] shape, World world)
@@ -36,6 +37,7 @@ public class PhysicObject {
         this.width=width;
         this.height=height;
         bodies = new Body[bodiesNumber];
+
         fixtures= new Fixture[bodiesNumber];
         for(int i=0;i<bodies.length;i++) {
         bDef=new BodyDef();
@@ -118,5 +120,13 @@ public class PhysicObject {
     public float getRotation()
     {
         return bodies[0].getAngle();
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
     }
 }

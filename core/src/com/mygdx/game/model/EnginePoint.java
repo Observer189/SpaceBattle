@@ -31,7 +31,7 @@ public class EnginePoint {
         jointDef = new WeldJointDef();
         jointDef.bodyA = shipBody;
         jointDef.bodyB = engine.getBody();
-        jointDef.localAnchorA.set(shipBody.getLocalCenter().x+localAnchor.x,shipBody.getLocalCenter().y+localAnchor.y);
+        jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
 
         jointDef.collideConnected = false;
         joint=world.createJoint(jointDef);
@@ -44,7 +44,7 @@ public class EnginePoint {
             jointDef = new WeldJointDef();
             jointDef.bodyA = shipBody;
             jointDef.bodyB = engine.getBody();
-            jointDef.localAnchorA.set(shipBody.getLocalCenter().x+localAnchor.x,shipBody.getLocalCenter().y+localAnchor.y);
+            jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
             jointDef.collideConnected = false;
             joint=world.createJoint(jointDef);
 

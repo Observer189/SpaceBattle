@@ -141,7 +141,7 @@ public class Helm {
                 //ship.getBodies()[1].setAngularVelocity(0f);
                 isChanged=false;
             }
-        System.out.println(Math.abs(tempShip-tempSprite)+" "+ship.getRotationDirection()+" "+ship.getBodies()[0].getAngularVelocity());
+        //System.out.println(Math.abs(tempShip-tempSprite)+" "+ship.getRotationDirection()+" "+ship.getBodies()[0].getAngularVelocity());
 
 
 

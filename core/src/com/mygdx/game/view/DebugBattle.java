@@ -140,7 +140,7 @@ public class DebugBattle implements Screen {
         {
             createRect();
         }
-
+        createRectJoint();
         createWall();
     }
 
@@ -181,7 +181,7 @@ public class DebugBattle implements Screen {
         //Отрисовка кнопок вращения
         //turnLeft.draw();
         //turnRight.draw();
-        //rend.render(world,camera.combined);
+        rend.render(world,camera.combined);
         world.step(1/60f,4,4);
         //ship.move();
         //ship2.move();
@@ -230,6 +230,45 @@ public class DebugBattle implements Screen {
         fDef.restitution=0.2f;
         body.createFixture(fDef);
         body.setAngularVelocity(1);
+    }
+    public void createRectJoint()
+    {
+        BodyDef bDef1=new BodyDef();
+        bDef1.type= BodyDef.BodyType.DynamicBody;
+        bDef1.position.set(47,30);
+        Body body=world.createBody(bDef1);
+
+        FixtureDef fDef1=new FixtureDef();
+        PolygonShape shape=new PolygonShape();
+        shape.setAsBox(2,2);
+        fDef1.shape=shape;
+        fDef1.density=2;
+        fDef1.friction=0.5f;
+        fDef1.restitution=0.2f;
+        body.createFixture(fDef1);
+        body.setAngularVelocity(0);
+
+        BodyDef bDef2=new BodyDef();
+        bDef2.type= BodyDef.BodyType.DynamicBody;
+        bDef2.position.set(47,30);
+        Body body2=world.createBody(bDef2);
+
+        FixtureDef fDef2=new FixtureDef();
+        PolygonShape shape2=new PolygonShape();
+        shape2.setAsBox(1,1);
+        fDef2.shape=shape2;
+        fDef2.density=2;
+        fDef2.friction=0.5f;
+        fDef2.restitution=0.2f;
+        body2.createFixture(fDef2);
+        body2.setAngularVelocity(0);
+
+        WeldJointDef jointDef=new WeldJointDef();
+        jointDef.bodyA=body;
+        jointDef.bodyB=body2;
+        jointDef.localAnchorA.set(2,2);
+        jointDef.localAnchorB.set(-1,-1);
+        world.createJoint(jointDef);
     }
     public void createWall()
     {

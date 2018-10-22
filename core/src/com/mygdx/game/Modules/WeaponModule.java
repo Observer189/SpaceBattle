@@ -2,6 +2,7 @@ package com.mygdx.game.Modules;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.model.Ammo;
 import com.mygdx.game.model.Module;
@@ -31,9 +32,9 @@ public class WeaponModule extends Module {
         ammos=new ArrayList<PhysicAmmo>();
     }
 
-    public void shot(float l) //l - это расстояние от центра пушки до конца корабля
+    public boolean shot(float l,Vector2 speedVector) //l - это расстояние от центра пушки до конца корабля
     {
-
+        return false;
     }
 
     @Override

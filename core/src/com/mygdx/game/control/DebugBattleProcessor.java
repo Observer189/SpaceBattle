@@ -3,6 +3,7 @@ package com.mygdx.game.control;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.model.PhysicShip;
+import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
 import com.mygdx.game.utils.Helm;
 import com.mygdx.game.view.Battle;
@@ -19,20 +20,23 @@ public class DebugBattleProcessor implements InputProcessor {
     GasRegulator gasRegulator;
     PhysicShip ship;
     Helm helm;
+    ButtonForProcessor fireButton;
 
     int gasPointer;
     int turnPointer;
     int helmPointer;
+    int firePointer;
     float convX= Gdx.graphics.getWidth()/ DebugBattle.widthCamera;
     float convY=Gdx.graphics.getHeight()/ DebugBattle.heightCamera;
     float widthCamera=DebugBattle.widthCamera;
     float heightCamera=DebugBattle.heightCamera;
     float touchX;
     float touchY;
-    public DebugBattleProcessor(GasRegulator gasRegulator,Helm helm,PhysicShip ship)
+    public DebugBattleProcessor(GasRegulator gasRegulator,Helm helm,ButtonForProcessor fireButton,PhysicShip ship)
     {
         this.gasRegulator=gasRegulator;
         this.helm=helm;
+        this.fireButton=fireButton;
         this.ship=ship;
         gasPointer=-1;
         helmPointer=-1;
@@ -108,6 +112,11 @@ public class DebugBattleProcessor implements InputProcessor {
             helm.navigate(touchX,touchY);
             helmPointer=pointer;
         }
+        if(((touchX>=fireButton.getX())&&(touchX<=fireButton.getX()+fireButton.getWidth())&&((touchY>=fireButton.getY())&&(touchY<=fireButton.getY()+fireButton.getHeight()))))
+        {
+            ship.setShooting(true);
+            firePointer=pointer;
+        }
         return false;
     }
 
@@ -125,6 +134,12 @@ public class DebugBattleProcessor implements InputProcessor {
         {
             helmPointer=-1;
         }
+        if(pointer==firePointer)
+        {
+            firePointer=-1;
+            ship.setShooting(false);
+        }
+
         return false;
     }
 
@@ -158,6 +173,10 @@ public class DebugBattleProcessor implements InputProcessor {
                 helm.navigate(touchX,touchY);
 
             //}
+        }
+        if((pointer==firePointer)&&((touchX>=fireButton.getX())&&(touchX<=fireButton.getX()+fireButton.getWidth())&&((touchY>=fireButton.getY())&&(touchY<=fireButton.getY()+fireButton.getHeight()))))
+        {
+            ship.shot();
         }
         return false;
     }

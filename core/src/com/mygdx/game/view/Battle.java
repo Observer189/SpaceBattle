@@ -131,8 +131,8 @@ public class Battle implements Screen {
         counter = 0;
         joystick=new Joystick(batch,0,10,textureAtlas.findRegion("Dj1p1"),textureAtlas.findRegion("Dj1p2"));
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,player.getCurrentShip());
-        turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,20,20,textureAtlas.findRegion("TurnLeft"));
-        turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+30,camY,20,20,textureAtlas.findRegion("TurnRight"));
+        //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,20,20,textureAtlas.findRegion("TurnLeft"));
+        //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+30,camY,20,20,textureAtlas.findRegion("TurnRight"));
         hpBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),camX-widthCamera*0.45f,camY+heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,player.getCurrentShip().getMaxHp());
         miniMap=new MiniMap(batch,textureAtlas,camX-widthCamera*0.1f,camY+heightCamera*0.3f,widthCamera*0.6f,heightCamera*0.2f,player.getCurrentShip(),enemy.getCurrentShip(),classicMap);
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -199,10 +199,10 @@ public class Battle implements Screen {
         gasRegulator.setY(camY-heightCamera*0.45f);
         ///////////////////////////////////
         //обновление позиции кнопок вращения
-        turnLeft.setX(camX+widthCamera/5);
-        turnLeft.setY(camY-heightCamera/3);
-        turnRight.setX(camX+widthCamera/5+30);
-        turnRight.setY(camY-heightCamera/3);
+        //turnLeft.setX(camX+widthCamera/5);
+        //turnLeft.setY(camY-heightCamera/3);
+        //turnRight.setX(camX+widthCamera/5+30);
+        //turnRight.setY(camY-heightCamera/3);
         //////////////////////////////////
         //Обновление позиции прогресс бара
         hpBar.setX(camX-widthCamera*0.45f);
@@ -252,8 +252,8 @@ public class Battle implements Screen {
             gasRegulator.draw();
             /////////////////////////////
             //Отрисовка кнопок вращения
-            turnLeft.draw();
-            turnRight.draw();
+            //turnLeft.draw();
+            //turnRight.draw();
             ////////////////////////////////////
             //Отрисовка прогресс бара
             hpBar.draw(player.getCurrentShip().getCurrentHp());

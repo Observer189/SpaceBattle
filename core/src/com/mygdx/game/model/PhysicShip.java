@@ -30,6 +30,7 @@ public class PhysicShip extends PhysicObject {
     private float maxEnergy;
     private long energyConsLastTime;
     private int consumptionReload;
+    private boolean isShooting;
 
     private float hp;
     public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
@@ -84,7 +85,9 @@ public class PhysicShip extends PhysicObject {
         {
             movementVector.set((float)(Math.sin(getRotation()))*0.15f,(float)(-Math.cos(getRotation()))*0.15f);
         }
-        shot();
+        if(isShooting) {
+            shot();
+        }
         if(energy>0) {
             for (int i = 0; i < bodies.length; i++) {
                 if (!(speed >= maxSpeed)) {
@@ -129,7 +132,12 @@ public class PhysicShip extends PhysicObject {
     public void shot()
     {
         for (WeaponPoint i:weapons) {
-            i.shot(getHeight()/2-i.getLocalAnchor().y);
+            if(energy>i.weapon.getEnergyCost()) {
+
+                if(i.shot(getHeight() / 2 - i.getLocalAnchor().y, bodies[0].getLinearVelocity())) {
+                    energy -= i.weapon.getEnergyCost();
+                }
+            }
         }
     }
 
@@ -236,5 +244,9 @@ public class PhysicShip extends PhysicObject {
 
     public float getEnergy() {
         return energy;
+    }
+    public void setShooting(boolean a)
+    {
+        isShooting=a;
     }
 }

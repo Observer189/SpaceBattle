@@ -55,9 +55,9 @@ public class WeaponPoint {
         }
         else return false;
     }
-    public void shot(float l)
+    public boolean shot(float l,Vector2 speedVector)
     {
-        weapon.shot(l);
+        return weapon.shot(l,speedVector);
     }
     public void draw(SpriteBatch batch)
     {

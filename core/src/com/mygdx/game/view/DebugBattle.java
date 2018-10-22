@@ -65,6 +65,7 @@ public class DebugBattle implements Screen {
     GasRegulator gasRegulator;
     Helm helm;
     ProgressBar energyBar;
+    ButtonForProcessor fireButton;
     //ButtonForProcessor turnLeft;
     //ButtonForProcessor turnRight;
 
@@ -119,11 +120,12 @@ public class DebugBattle implements Screen {
         rend=new Box2DDebugRenderer();
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
         helm=new Helm(textureAtlas,batch,camera,-4.5f,-5f,0.15f,0.15f*AspectRatio,fury);
+        fireButton=new ButtonForProcessor(batch,camera,4.5f,-5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
         energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
                 camX-widthCamera*0.45f,camY+heightCamera*0.45f,-widthCamera*0.45f,heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,fury.getMaxEnergy(),camera);
         //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
         //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
-        processor=new DebugBattleProcessor(gasRegulator,helm,fury);
+        processor=new DebugBattleProcessor(gasRegulator,helm,fireButton,fury);
         Gdx.input.setInputProcessor(processor);
 
         //point=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),50,30, Size.Small,10,world),fury.getBodies()[0],world);
@@ -176,6 +178,7 @@ public class DebugBattle implements Screen {
         //
         gasRegulator.draw();
         helm.draw();
+        fireButton.draw();
         energyBar.draw(fury.getEnergy());
         /////////////////////////////
         //Отрисовка кнопок вращения
@@ -225,7 +228,7 @@ public class DebugBattle implements Screen {
         PolygonShape shape=new PolygonShape();
         shape.setAsBox((float)(Math.random()*3),(float)(Math.random()*3));
         fDef.shape=shape;
-        fDef.density=2;
+        fDef.density=1000;
         fDef.friction=0.5f;
         fDef.restitution=0.2f;
         body.createFixture(fDef);
@@ -257,7 +260,7 @@ public class DebugBattle implements Screen {
         PolygonShape shape2=new PolygonShape();
         shape2.setAsBox(1,1);
         fDef2.shape=shape2;
-        fDef2.density=2;
+        fDef2.density=2000;
         fDef2.friction=0.5f;
         fDef2.restitution=0.2f;
         body2.createFixture(fDef2);

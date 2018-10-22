@@ -1,5 +1,6 @@
 package com.mygdx.game.utils;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -10,23 +11,35 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class ButtonForProcessor {
     private float x;
     private float y;
-
     private float width;
     private float height;
-
+    private OrthographicCamera camera;
+    private float offsetX;
+    private float offsetY;
+    private float widthCoeff;
+    private float heightCoeff;
     SpriteBatch batch;
     TextureRegion vision;
-    public ButtonForProcessor(SpriteBatch batch,float x,float y,float width,float height,TextureRegion vision)
+    public ButtonForProcessor(SpriteBatch batch, OrthographicCamera camera, float offsetX, float offsetY, float widthCoeff, float heightCoeff, TextureRegion vision)
     {
-        this.x=x;
-        this.y=y;
-        this.width=width;
-        this.height=height;
+        x=camera.position.x+offsetX;
+        y=camera.position.y+offsetY;
+        width=camera.viewportWidth*widthCoeff;
+        height=camera.viewportHeight*heightCoeff;
+        this.camera=camera;
+        this.offsetX=offsetX;
+        this.offsetY=offsetY;
+        this.widthCoeff=widthCoeff;
+        this.heightCoeff=heightCoeff;
         this.batch=batch;
         this.vision=vision;
     }
     public void draw()
     {
+        x=camera.position.x+offsetX;
+        y=camera.position.y+offsetY;
+        width=camera.viewportWidth*widthCoeff;
+        height=camera.viewportHeight*heightCoeff;
         batch.begin();
         batch.draw(vision,x,y,width,height);
         batch.end();
@@ -40,6 +53,14 @@ public class ButtonForProcessor {
         return y;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
     public void setX(float x) {
         this.x = x;
     }
@@ -47,4 +68,5 @@ public class ButtonForProcessor {
     public void setY(float y) {
         this.y = y;
     }
+
 }

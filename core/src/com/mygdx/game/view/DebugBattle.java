@@ -79,8 +79,8 @@ public class DebugBattle implements Screen {
         this.game = game;
         this.textureAtlas = textureAtlas;
         AspectRatio=(float) Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-        widthCamera=20;
-        heightCamera=20/AspectRatio;
+        widthCamera=30;
+        heightCamera=30/AspectRatio;
         width =1.5f;
         height =2;
         endMapCoef=0.05f;
@@ -119,8 +119,8 @@ public class DebugBattle implements Screen {
         camY =camera.position.y;
         rend=new Box2DDebugRenderer();
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
-        helm=new Helm(textureAtlas,batch,camera,-4.5f,-5f,0.15f,0.15f*AspectRatio,fury);
-        fireButton=new ButtonForProcessor(batch,camera,4.5f,-5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
+        helm=new Helm(textureAtlas,batch,camera,-6.5f,-7.5f,0.15f,0.15f*AspectRatio,fury);
+        fireButton=new ButtonForProcessor(batch,camera,6.5f,-7.5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
         energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
                 camX-widthCamera*0.45f,camY+heightCamera*0.45f,-widthCamera*0.45f,heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,fury.getMaxEnergy(),camera);
         //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));

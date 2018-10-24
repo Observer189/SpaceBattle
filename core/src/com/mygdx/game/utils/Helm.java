@@ -92,7 +92,7 @@ public class Helm {
          tempShip=(shipRotation<180)?shipRotation+360:shipRotation;// Увеличиваем половину градусной окружности на 360 для того чтобы избежать проблемы при вычитании перехода через 0
          tempSprite=(spriteRotation<180)?spriteRotation+360:spriteRotation;
 
-            if((Math.abs(tempShip-tempSprite)>0.5f)||(false)) {
+            if(Math.abs(tempShip-tempSprite)>0.5f) {
                 if (internalArc < externalArc) {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(-1);

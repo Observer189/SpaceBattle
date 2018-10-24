@@ -1,5 +1,6 @@
 package com.mygdx.game.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +26,7 @@ public class PhysicShip extends PhysicObject {
     private int weaponNumbers;
     private int engineNumbers;
     Vector2 movementVector;
+    Vector2 tempVelocity;
 
     private float energy;
     private float maxEnergy;
@@ -41,6 +43,7 @@ public class PhysicShip extends PhysicObject {
         movementPosition=0;
         enginePower=50;
         movementVector = new Vector2(0, 0);
+        tempVelocity=new Vector2(0,0);
         speed=0;
         this.weaponNumbers=weaponNumbers;
         this.engineNumbers=engineNumbers;
@@ -52,10 +55,10 @@ public class PhysicShip extends PhysicObject {
         this.hp=hp;
 
         this.linearDamping=linearDamping;
-        for (Body i:bodies)
+        /*for (Body i:bodies)
         {
             i.setLinearDamping(this.linearDamping);
-        }
+        }*/
 
     }
     public void create()
@@ -89,26 +92,38 @@ public class PhysicShip extends PhysicObject {
             shot();
         }
         if(energy>0) {
-            for (int i = 0; i < bodies.length; i++) {
+            for (int i = 0; i < engines.length; i++) {
                 if (!(speed >= maxSpeed)) {
+                    for (int j = 0; i < bodies.length; i++) {
+                        //bodies[j].setLinearDamping(0.f);
+                    }
                     //bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
                     engines[i].move(movementVector);
+                } else {
+                    tempVelocity.set(bodies[i].getLinearVelocity());
+                    tempVelocity.nor();
+                    tempVelocity.x*=maxSpeed*0.99f;
+                    tempVelocity.y*=maxSpeed*0.99f;
+                    for (int j = 0; i < bodies.length; i++) {
+                        //bodies[j].setLinearDamping(0.1f);
+                        bodies[j].setLinearVelocity(tempVelocity);
+                    }
+                    //bodies[i].setLinearVelocity((float)-Math.sin(getRotation())*maxSpeed*0.98f,(float)Math.cos(getRotation())*maxSpeed*0.98f);
                 }
-
-                speed = bodies[0].getLinearVelocity().len();
-
-                if (rotationDirection == -1)
-                    //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                    bodies[i].setAngularVelocity(-rotationSpeed);
-                else if (rotationDirection == 1)
-                    //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                    bodies[i].setAngularVelocity(rotationSpeed);
-                else if (rotationDirection == 0) {
-                    bodies[i].setAngularVelocity(0);
-                }
-
-
             }
+                for (int i = 0; i < bodies.length; i++) {
+                    if (rotationDirection == -1)
+                        //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
+                        bodies[i].setAngularVelocity(-rotationSpeed);
+                    else if (rotationDirection == 1)
+                        //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
+                        bodies[i].setAngularVelocity(rotationSpeed);
+                    else if (rotationDirection == 0) {
+                        bodies[i].setAngularVelocity(0);
+                    }
+
+                }
+
         }
             speed = bodies[0].getLinearVelocity().len();
        if(System.currentTimeMillis()-energyConsLastTime>consumptionReload) {
@@ -127,7 +142,8 @@ public class PhysicShip extends PhysicObject {
        else if(energy>maxEnergy)
            energy=maxEnergy;
 
-        //System.out.println(getBodies()[0].getPosition().y+" "+getBodies()[1].getPosition().y);
+        System.out.println(getBodies()[0].getLinearVelocity().len());
+        //System.out.println(Gdx.graphics.getFramesPerSecond());
     }
     public void shot()
     {

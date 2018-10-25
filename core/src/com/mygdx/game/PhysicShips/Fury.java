@@ -42,11 +42,11 @@ public class Fury extends PhysicShip{
                         -width /2+ width *0.67f, height /2,
                         -width /2+ width *0.33f, height /2}
         },300, world);
-        getWeapons()[0]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBodies()[0],new Vector2(-0.1f,0.2f),world);
-        getWeapons()[1]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBodies()[0],new Vector2(0.1f,0.2f),world);
-        getEngines()[0]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(0f,-0.4f),world);
-        getEngines()[1]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(0.2f,-0.4f),world);
-        getEngines()[2]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBodies()[0],new Vector2(-0.2f,-0.4f),world);
-        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(textureAtlas,x,y,world),getBodies()[1],new Vector2(0f,0.f),world);
+        getWeapons()[0]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBody(),new Vector2(-0.1f,0.2f),world);
+        getWeapons()[1]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBody(),new Vector2(0.1f,0.2f),world);
+        getEngines()[0]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBody(),new Vector2(0f,-0.4f),world);
+        getEngines()[1]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBody(),new Vector2(0.2f,-0.4f),world);
+        getEngines()[2]=new EnginePoint(new IonEngine(textureAtlas,x,y,world),getBody(),new Vector2(-0.2f,-0.4f),world);
+        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(textureAtlas,x,y,world),getBody(),new Vector2(0f,0.f),world);
     }
 }

@@ -22,7 +22,7 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 
 public class PhysicObject {
     Sprite sprite;
-    Body[] bodies;
+    Body body;
     Fixture[] fixtures;
     Joint[] joints;
     BodyDef bDef;
@@ -36,15 +36,15 @@ public class PhysicObject {
     {
         this.width=width;
         this.height=height;
-        bodies = new Body[bodiesNumber];
 
-        fixtures= new Fixture[bodiesNumber];
-        for(int i=0;i<bodies.length;i++) {
         bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
 
-        bodies[i]=world.createBody(bDef);
+        body=world.createBody(bDef);
+        fixtures= new Fixture[bodiesNumber];
+        for(int i=0;i<bodiesNumber;i++) {
+
 
 
         FixtureDef fDef=new FixtureDef();
@@ -62,8 +62,8 @@ public class PhysicObject {
         fDef.density=density;
         fDef.restitution=0.2f;
         fDef.friction=0.5f;
-        fixtures[i]=bodies[i].createFixture(fDef);
-        if(i!=0) {
+        fixtures[i]=body.createFixture(fDef);
+        /*if(i!=0) {
             WeldJointDef jointDef;
             jointDef = new WeldJointDef();
             jointDef.bodyA = bodies[i-1];
@@ -74,7 +74,7 @@ public class PhysicObject {
             joints = new WeldJoint[bodies.length-1];
 
             joints[i-1] = world.createJoint(jointDef);
-        }
+        }*/
 
 
         }
@@ -88,19 +88,19 @@ public class PhysicObject {
     }
     public void draw(SpriteBatch batch)
     {
-        sprite.setPosition(bodies[0].getPosition().x-width/2,bodies[0].getPosition().y-height/2);
-        sprite.setRotation((float)Math.toDegrees(bodies[0].getAngle()));
+        sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
+        sprite.setRotation((float)Math.toDegrees(body.getAngle()));
         batch.begin();
         sprite.draw(batch);
         batch.end();
     }
     public float getX()
     {
-        return bodies[0].getPosition().x;
+        return body.getPosition().x;
     }
     public float getY()
     {
-        return bodies[0].getPosition().y;
+        return body.getPosition().y;
     }
 
     /*public Body getBody() {
@@ -113,13 +113,13 @@ public class PhysicObject {
 
 
 
-    public Body[] getBodies() {
-        return bodies;
+    public Body getBody() {
+        return body;
     }
 
     public float getRotation()
     {
-        return bodies[0].getAngle();
+        return body.getAngle();
     }
 
     public float getWidth() {

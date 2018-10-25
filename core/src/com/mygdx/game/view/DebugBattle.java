@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -23,6 +24,8 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.mygdx.game.Modules.WeaponModule;
 import com.mygdx.game.PhysicShips.Fury;
 import com.mygdx.game.control.DebugBattleProcessor;
+import com.mygdx.game.model.Asteroid;
+import com.mygdx.game.model.Asteroids.Asteroid1;
 import com.mygdx.game.model.Map;
 import com.mygdx.game.model.PhysicShip;
 import com.mygdx.game.model.Ships.Rock;
@@ -56,6 +59,7 @@ public class DebugBattle implements Screen {
     Fury fury;
 
     Map map;
+    Asteroid1 asteroid;
     PhysicShip ship;
     PhysicShip ship2;
     World world;
@@ -111,8 +115,8 @@ public class DebugBattle implements Screen {
                 -width/2+width*0.33f,height/2},world);*/
         fury= new Fury(textureAtlas,50,30,world);
         fury.create();
-        fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
-        fury.getBodies()[1].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
+        //fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
+        //fury.getBodies()[1].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         camera=new OrthographicCamera(widthCamera,heightCamera);
         camera.position.set(new Vector3(500,500,0));
         camX =camera.position.x;
@@ -127,7 +131,7 @@ public class DebugBattle implements Screen {
         //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
         processor=new DebugBattleProcessor(gasRegulator,helm,fireButton,fury);
         Gdx.input.setInputProcessor(processor);
-
+        asteroid=new Asteroid1(textureAtlas,52,30,2,2,new Vector2(0f,0f),world);
         //point=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),50,30, Size.Small,10,world),fury.getBodies()[0],world);
         //point.installModule(new WeaponModule(textureAtlas.findRegion("Machinegun"),51,31, Size.Small,10,world),fury.getBodies()[0]);
         /*joint = new WeldJointDef();
@@ -174,6 +178,7 @@ public class DebugBattle implements Screen {
         //ship.draw(batch);
         //ship2.draw(batch);
         fury.draw(batch);
+        asteroid.draw(batch);
         //point.draw(batch);
         //
         gasRegulator.draw();
@@ -245,7 +250,7 @@ public class DebugBattle implements Screen {
         PolygonShape shape=new PolygonShape();
         shape.setAsBox(2,2);
         fDef1.shape=shape;
-        fDef1.density=2;
+        fDef1.density=2000;
         fDef1.friction=0.5f;
         fDef1.restitution=0.2f;
         body.createFixture(fDef1);
@@ -258,12 +263,20 @@ public class DebugBattle implements Screen {
 
         FixtureDef fDef2=new FixtureDef();
         PolygonShape shape2=new PolygonShape();
-        shape2.setAsBox(1,1);
+        shape2.set(new float[]{-1f,-1f,1f,-1f,0f,0f});
         fDef2.shape=shape2;
         fDef2.density=2000;
         fDef2.friction=0.5f;
         fDef2.restitution=0.2f;
         body2.createFixture(fDef2);
+        FixtureDef fDef3=new FixtureDef();
+        PolygonShape shape3=new PolygonShape();
+        shape3.set(new float[]{0.f,0.f,1f,1f,-1f,1f});
+        fDef3.shape=shape3;
+        fDef3.density=2000;
+        fDef3.friction=0.5f;
+        fDef3.restitution=0.2f;
+        body2.createFixture(fDef3);
         body2.setAngularVelocity(0);
 
         WeldJointDef jointDef=new WeldJointDef();
@@ -290,6 +303,10 @@ public class DebugBattle implements Screen {
         fDef.friction=0.2f;
         fDef.restitution=0.5f;
         body.createFixture(fDef);
+    }
+    public void createAsteroid()
+    {
+        Asteroid[] asteroids=new Asteroid[10];
     }
 
 }

@@ -20,11 +20,10 @@ public class Bullet extends PhysicAmmo {
                 width/2,-height/2,
                 width/2,height/2,
                 -width/2,height/2}}, damage, world);
-        for(Body i:getBodies())
-        {
-            i.setTransform(x,y,startAngle);
-            i.setLinearVelocity((float)(-Math.sin(getRotation()))*speed+shipSpeedVector.x,(float)(Math.cos(getRotation()))*speed+shipSpeedVector.y);
-        }
+
+            getBody().setTransform(x,y,startAngle);
+            getBody().setLinearVelocity((float)(-Math.sin(getRotation()))*speed+shipSpeedVector.x,(float)(Math.cos(getRotation()))*speed+shipSpeedVector.y);
+
     }
 
     @Override

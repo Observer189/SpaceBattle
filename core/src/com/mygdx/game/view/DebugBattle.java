@@ -21,10 +21,13 @@ import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Modules.WeaponModule;
 import com.mygdx.game.PhysicShips.Fury;
+import com.mygdx.game.control.BattleContactListener;
 import com.mygdx.game.control.DebugBattleProcessor;
 import com.mygdx.game.model.Asteroid;
+import com.mygdx.game.model.AsteroidField;
 import com.mygdx.game.model.Asteroids.Asteroid1;
 import com.mygdx.game.model.Map;
 import com.mygdx.game.model.PhysicShip;
@@ -59,11 +62,13 @@ public class DebugBattle implements Screen {
     Fury fury;
 
     Map map;
+    AsteroidField asteroidField;
     Asteroid1 asteroid;
     PhysicShip ship;
     PhysicShip ship2;
     World world;
     Box2DDebugRenderer rend;
+    BattleContactListener battleContactListener;
     InputProcessor processor;
 
     GasRegulator gasRegulator;
@@ -115,6 +120,8 @@ public class DebugBattle implements Screen {
                 -width/2+width*0.33f,height/2},world);*/
         fury= new Fury(textureAtlas,50,30,world);
         fury.create();
+        asteroidField=new AsteroidField(textureAtlas,15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef),world);
+        asteroidField.generate();
         //fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         //fury.getBodies()[1].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
         camera=new OrthographicCamera(widthCamera,heightCamera);
@@ -129,9 +136,11 @@ public class DebugBattle implements Screen {
                 camX-widthCamera*0.45f,camY+heightCamera*0.45f,-widthCamera*0.45f,heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,fury.getMaxEnergy(),camera);
         //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
         //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
+        battleContactListener=new BattleContactListener();
         processor=new DebugBattleProcessor(gasRegulator,helm,fireButton,fury);
         Gdx.input.setInputProcessor(processor);
-        asteroid=new Asteroid1(textureAtlas,52,30,2,2,new Vector2(0f,0f),world);
+
+
         //point=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),50,30, Size.Small,10,world),fury.getBodies()[0],world);
         //point.installModule(new WeaponModule(textureAtlas.findRegion("Machinegun"),51,31, Size.Small,10,world),fury.getBodies()[0]);
         /*joint = new WeldJointDef();
@@ -142,12 +151,14 @@ public class DebugBattle implements Screen {
         joint.initialize(fury.getBodies()[0],fury.getBodies()[1],new Vector2(50,30));
         j=world.createJoint(joint);*/
 
-        for(int i=0;i<=10;i++)
+        /*for(int i=0;i<=10;i++)
         {
             createRect();
-        }
+        }*/
         createRectJoint();
         createWall();
+        world.setContactListener(battleContactListener);
+
     }
 
     @Override
@@ -178,7 +189,8 @@ public class DebugBattle implements Screen {
         //ship.draw(batch);
         //ship2.draw(batch);
         fury.draw(batch);
-        asteroid.draw(batch);
+        asteroidField.draw(batch);
+        //asteroid.draw(batch);
         //point.draw(batch);
         //
         gasRegulator.draw();
@@ -193,9 +205,14 @@ public class DebugBattle implements Screen {
         world.step(1/60f,4,4);
         //ship.move();
         //ship2.move();
-        helm.updateShip();
+        helm.updateShip(fury.findRotationSpeed());
         fury.move();
+        //asteroid.update();
+        asteroidField.update();
         energyBar.update();
+
+        //ury.setRotationDirection(1);
+        System.out.println(asteroidField.getAsteroids().size);
     }
 
     @Override

@@ -13,7 +13,7 @@ import com.mygdx.game.model.Asteroid;
 public class Asteroid1 extends Asteroid {
     //static float width=2f;
     //static float height=2f;
-    public Asteroid1(TextureAtlas textureAtlas, float x, float y, float width, float height, Vector2 startVelocity, World world) {
+    public Asteroid1(TextureAtlas textureAtlas, float x, float y, float width, float height, Vector2 startVelocity,float maxHp, World world) {
         super(textureAtlas.findRegion("Asteroid"), x, y, width, height, 2000, 2, new float[][]
                 {
                         {
@@ -35,6 +35,6 @@ public class Asteroid1 extends Asteroid {
                                 -width/2,0f,
                         }
 
-                        }, startVelocity, world);
+                        }, startVelocity,maxHp, world);
     }
 }

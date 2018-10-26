@@ -28,15 +28,18 @@ public class PhysicObject {
     BodyDef bDef;
     //FixtureDef fDef;
     PolygonShape shape;
+    World world;
 
 
     private float width;
     private float height;
+
+    boolean mustDestroyed;
     public PhysicObject(TextureRegion textureRegion, float x, float y, float width, float height,float density,int bodiesNumber,float[][] shape, World world)
     {
         this.width=width;
         this.height=height;
-
+        this.world=world;
         bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
@@ -85,6 +88,8 @@ public class PhysicObject {
         sprite.setSize(width,height);
         sprite.setOrigin(width/2,height/2);
         sprite.setPosition(x-width/2,y-height/2);
+
+        mustDestroyed=false;
     }
     public void draw(SpriteBatch batch)
     {
@@ -128,5 +133,17 @@ public class PhysicObject {
 
     public float getHeight() {
         return height;
+    }
+
+    public void setMustDestroyed(boolean mustDestroyed) {
+        this.mustDestroyed = mustDestroyed;
+    }
+    public boolean getMustDestroyed() {
+        return mustDestroyed;
+    }
+
+    public void destroy()
+    {
+        world.destroyBody(body);
     }
 }

@@ -56,7 +56,7 @@ public class Helm {
 
     }
 
-    public void updateShip()
+    public void updateShip(float angularSpeed)
     {
         //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
 
@@ -92,7 +92,7 @@ public class Helm {
          tempShip=(shipRotation<180)?shipRotation+360:shipRotation;// Увеличиваем половину градусной окружности на 360 для того чтобы избежать проблемы при вычитании перехода через 0
          tempSprite=(spriteRotation<180)?spriteRotation+360:spriteRotation;
 
-            if(Math.abs(tempShip-tempSprite)>0.5f) {
+            if(Math.abs(tempShip-tempSprite)>angularSpeed) {
                 if (internalArc < externalArc) {
                     if (shipRotation > spriteRotation) {
                         ship.setRotationDirection(-1);

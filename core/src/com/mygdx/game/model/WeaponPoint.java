@@ -66,6 +66,10 @@ public class WeaponPoint {
             weapon.draw(batch);
         }
     }
+    public void destroyAmmo()
+    {
+        weapon.destroyAmmo();
+    }
 
     public Vector2 getLocalAnchor() {
         return localAnchor;

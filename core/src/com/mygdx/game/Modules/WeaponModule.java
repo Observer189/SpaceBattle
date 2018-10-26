@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.model.Ammo;
 import com.mygdx.game.model.Module;
 import com.mygdx.game.model.PhysicAmmo;
@@ -22,14 +23,14 @@ public class WeaponModule extends Module {
     private float basicDamage;
     private float damage;
 
-    private ArrayList<PhysicAmmo> ammos;
+    private Array<PhysicAmmo> ammos;
     public WeaponModule(TextureRegion textureRegion, float x, float y, Size size,  float density,float basicDamage,float energyCost,float reloadTime, World world) {
         super(textureRegion, x, y, size,ModuleType.Weapon, density, world);
         this.basicDamage=basicDamage;
         this.energyCost=energyCost;
         this.reloadTime=reloadTime;
         this.damage=basicDamage;
-        ammos=new ArrayList<PhysicAmmo>();
+        ammos=new Array <PhysicAmmo>();
     }
 
     public boolean shot(float l,Vector2 speedVector) //l - это расстояние от центра пушки до конца корабля
@@ -43,6 +44,16 @@ public class WeaponModule extends Module {
         for (PhysicAmmo i:ammos)
         {
             i.draw(batch);
+        }
+    }
+    public void destroyAmmo()
+    {
+        for(int i=0;i<ammos.size;i++)
+        {
+            if(ammos.get(i).getMustDestroyed()) {
+                ammos.get(i).destroy();
+                ammos.removeIndex(i);
+            }
         }
     }
 
@@ -62,7 +73,7 @@ public class WeaponModule extends Module {
         return energyCost;
     }
 
-    public ArrayList<PhysicAmmo> getAmmos() {
+    public Array<PhysicAmmo> getAmmos() {
         return ammos;
     }
 }

@@ -13,9 +13,19 @@ public class PhysicAmmo extends PhysicObject {
     public PhysicAmmo(TextureRegion textureRegion, float x, float y, float width, float height, float density, int bodiesNumber, float[][] shape,float damage, World world) {
         super(textureRegion, x, y, width, height, density, bodiesNumber, shape, world);
         this.damage=damage;
+        getBody().setUserData(this);
     }
     public void update()
     {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Ammo";
+    }
+
+    public float getDamage() {
+        return damage;
     }
 }

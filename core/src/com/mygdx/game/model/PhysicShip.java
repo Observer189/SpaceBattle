@@ -55,6 +55,8 @@ public class PhysicShip extends PhysicObject {
         this.hp=hp;
 
         this.linearDamping=linearDamping;
+
+        body.setUserData(this);
         /*for (Body i:bodies)
         {
             i.setLinearDamping(this.linearDamping);
@@ -113,11 +115,14 @@ public class PhysicShip extends PhysicObject {
             }
 
                     if (rotationDirection == -1)
+
                         //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
                         body.setAngularVelocity(-rotationSpeed);
-                    else if (rotationDirection == 1)
+                    else if (rotationDirection == 1) {
                         //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
                         body.setAngularVelocity(rotationSpeed);
+                        //body.setAngularVelocity(2);
+                    }
                     else if (rotationDirection == 0) {
                         body.setAngularVelocity(0);
 
@@ -142,8 +147,12 @@ public class PhysicShip extends PhysicObject {
        else if(energy>maxEnergy)
            energy=maxEnergy;
 
-        System.out.println(body.getFixtureList().size);
+        //System.out.println(body.getFixtureList().size);
         //System.out.println(Gdx.graphics.getFramesPerSecond());
+        for(WeaponPoint i:weapons)
+        {
+            i.destroyAmmo();
+        }
     }
     public void shot()
     {
@@ -259,5 +268,10 @@ public class PhysicShip extends PhysicObject {
     public void setShooting(boolean a)
     {
         isShooting=a;
+    }
+
+    @Override
+    public String toString() {
+        return "Ship";
     }
 }

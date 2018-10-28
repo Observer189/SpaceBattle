@@ -20,7 +20,7 @@ public class Machinegun extends WeaponModule {
 
     long lastShotTime;
     public Machinegun(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("Machinegun"), x, y, Size.Small, 10,10,100,0.5f, world);
+        super(textureAtlas.findRegion("Machinegun"), x, y, Size.Small, 10,10,0,0.5f, world);
         this.textureAtlas=textureAtlas;
         this.world=world;
         lastShotTime=0;
@@ -38,7 +38,7 @@ public class Machinegun extends WeaponModule {
             return true;
         }
         else
-        super.shot(l,speedVector);
+            super.shot(l,speedVector);
         return false;
     }
 }

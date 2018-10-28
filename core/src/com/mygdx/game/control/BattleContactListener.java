@@ -68,7 +68,7 @@ public class BattleContactListener implements ContactListener {
                 }
 
             }
-            System.out.println(a.toString()+" "+b.toString());
+            //System.out.println(a.toString()+" "+b.toString());
         }
 
     }

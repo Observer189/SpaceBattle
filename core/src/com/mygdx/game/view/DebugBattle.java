@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Modules.WeaponModule;
 import com.mygdx.game.PhysicShips.Fury;
+import com.mygdx.game.PhysicShips.StarFighter;
 import com.mygdx.game.control.BattleContactListener;
 import com.mygdx.game.control.DebugBattleProcessor;
 import com.mygdx.game.model.Asteroid;
@@ -33,6 +34,7 @@ import com.mygdx.game.model.Map;
 import com.mygdx.game.model.PhysicShip;
 import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.WeaponPoint;
+import com.mygdx.game.utils.BattleInfoPanel;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
 import com.mygdx.game.utils.Helm;
@@ -59,13 +61,13 @@ public class DebugBattle implements Screen {
     public static float heightCamera;
 
     final public float AspectRatio;
-    Fury fury;
+    PhysicShip fury;
+    PhysicShip enemyShip;
 
     Map map;
     AsteroidField asteroidField;
     Asteroid1 asteroid;
-    PhysicShip ship;
-    PhysicShip ship2;
+
     World world;
     Box2DDebugRenderer rend;
     BattleContactListener battleContactListener;
@@ -74,6 +76,7 @@ public class DebugBattle implements Screen {
     GasRegulator gasRegulator;
     Helm helm;
     ProgressBar energyBar;
+    BattleInfoPanel battleInfoPanel;
     ButtonForProcessor fireButton;
     //ButtonForProcessor turnLeft;
     //ButtonForProcessor turnRight;
@@ -120,6 +123,8 @@ public class DebugBattle implements Screen {
                 -width/2+width*0.33f,height/2},world);*/
         fury= new Fury(textureAtlas,50,30,world);
         fury.create();
+        enemyShip=new StarFighter(textureAtlas,55,30,world);
+        enemyShip.create();
         asteroidField=new AsteroidField(textureAtlas,15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef),world);
         asteroidField.generate();
         //fury.getBodies()[0].setTransform(fury.getBodies()[0].getPosition(), (float) Math.toRadians(0));
@@ -132,8 +137,9 @@ public class DebugBattle implements Screen {
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
         helm=new Helm(textureAtlas,batch,camera,-6.5f,-7.5f,0.15f,0.15f*AspectRatio,fury);
         fireButton=new ButtonForProcessor(batch,camera,6.5f,-7.5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
-        energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
-                camX-widthCamera*0.45f,camY+heightCamera*0.45f,-widthCamera*0.45f,heightCamera*0.45f,widthCamera*0.3f,heightCamera*0.05f,fury.getMaxEnergy(),camera);
+        //energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
+          //      -0.45f,0.45f,0.3f,0.05f,fury.getMaxEnergy(),camera);
+        battleInfoPanel=new BattleInfoPanel(batch,textureAtlas,-0.45f,0.4f,0.3f,0.1f,fury.getMaxHP(),fury.getMaxEnergy(),camera);
         //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
         //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
         battleContactListener=new BattleContactListener();
@@ -172,7 +178,8 @@ public class DebugBattle implements Screen {
         camY =camera.position.y;
         gasRegulator.setX(camX-widthCamera*0.45f);
         gasRegulator.setY(camY-heightCamera*0.45f);
-
+        //energyBar.update();
+        battleInfoPanel.update();
         //обновление позиции кнопок вращения
         //turnLeft.setX(camX+widthCamera/5);
         //turnLeft.setY(camY-heightCamera/3);
@@ -189,6 +196,7 @@ public class DebugBattle implements Screen {
         //ship.draw(batch);
         //ship2.draw(batch);
         fury.draw(batch);
+        enemyShip.draw(batch);
         asteroidField.draw(batch);
         //asteroid.draw(batch);
         //point.draw(batch);
@@ -196,7 +204,8 @@ public class DebugBattle implements Screen {
         gasRegulator.draw();
         helm.draw();
         fireButton.draw();
-        energyBar.draw(fury.getEnergy());
+        //energyBar.draw(fury.getEnergy());
+        battleInfoPanel.draw(fury.getHp(),fury.getEnergy());
         /////////////////////////////
         //Отрисовка кнопок вращения
         //turnLeft.draw();
@@ -209,10 +218,10 @@ public class DebugBattle implements Screen {
         fury.move();
         //asteroid.update();
         asteroidField.update();
-        energyBar.update();
+
 
         //ury.setRotationDirection(1);
-        System.out.println(asteroidField.getAsteroids().size);
+        //System.out.println(battleInfoPanel.getHPBar().getX()-camera.position.x);
     }
 
     @Override

@@ -28,18 +28,21 @@ public class PhysicShip extends PhysicObject {
     Vector2 movementVector;
     Vector2 tempVelocity;
 
+    private float maxHP;
+    private float hp;
+
     private float energy;
     private float maxEnergy;
     private long energyConsLastTime;
     private int consumptionReload;
     private boolean isShooting;
 
-    private float hp;
+
     public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
-                      float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float rotationSpeed,
-                      float[][] shape,float hp, World world) {
+                      float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float maxHP,
+                      float[][] shape, World world) {
         super(textureRegion, x, y, width, height,density,bodyNumber,shape, world);
-        this.rotationSpeed=rotationSpeed;
+        this.rotationSpeed=0;
         movementPosition=0;
         enginePower=50;
         movementVector = new Vector2(0, 0);
@@ -51,8 +54,8 @@ public class PhysicShip extends PhysicObject {
         engines= new EnginePoint[engineNumbers];
         energyPoints=new EnergyPoint[energyNumbers];
         rotationDirection=0;
-
-        this.hp=hp;
+        this.maxHP=maxHP;
+        this.hp=maxHP;
 
         this.linearDamping=linearDamping;
 
@@ -133,7 +136,9 @@ public class PhysicShip extends PhysicObject {
             speed = body.getLinearVelocity().len();
        if(System.currentTimeMillis()-energyConsLastTime>consumptionReload) {
            for (int i = 0; i < engines.length; i++) {
-               energy -= engines[i].getEngine().getEnergyConsumption();
+               if(engines[i].getEngine()!=null) {
+                   energy -= engines[i].getEngine().getEnergyConsumption();
+               }
 
            }
            for (int i = 0; i < energyPoints.length; i++) {
@@ -211,9 +216,10 @@ public class PhysicShip extends PhysicObject {
         int engineNumber=0;
         for(int i=0;i<engines.length;i++)
         {
-
-               amountSpeed+=engines[i].getEngine().getMaxSpeed();
-               engineNumber++;
+            if(engines[i].getEngine()!=null) {
+                amountSpeed += engines[i].getEngine().getMaxSpeed();
+                engineNumber++;
+            }
 
         }
         return amountSpeed/engineNumber;
@@ -223,7 +229,9 @@ public class PhysicShip extends PhysicObject {
         float rotationPower=0;
         for(int i=0;i<engines.length;i++)
         {
-            rotationPower+=engines[i].getAngularPower();
+            if(engines[i].getEngine()!=null) {
+                rotationPower += engines[i].getAngularPower();
+            }
         }
         return rotationPower/getMass();
     }
@@ -273,5 +281,13 @@ public class PhysicShip extends PhysicObject {
     @Override
     public String toString() {
         return "Ship";
+    }
+
+    public float getMaxHP() {
+        return maxHP;
+    }
+
+    public float getHp() {
+        return hp;
     }
 }

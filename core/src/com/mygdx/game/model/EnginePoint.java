@@ -52,9 +52,16 @@ public class EnginePoint {
         }
         else return false;
     }
+    public void uninstallModule()
+    {
+        world.destroyJoint(joint);
+        engine=null;
+    }
     public void move(Vector2 movementVector)
     {
-        engine.move(movementVector);
+        if(engine!=null) {
+            engine.move(movementVector);
+        }
     }
     public void draw(SpriteBatch batch)
     {
@@ -69,6 +76,8 @@ public class EnginePoint {
     }
 
     public Engine getEngine() {
+        if(engine!=null)
         return engine;
+        else return null;
     }
 }

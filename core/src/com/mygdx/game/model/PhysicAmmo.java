@@ -1,5 +1,6 @@
 package com.mygdx.game.model;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -10,11 +11,18 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PhysicAmmo extends PhysicObject {
     private float damage;
 
-    public PhysicAmmo(TextureRegion textureRegion, float x, float y, float width, float height, float density, int bodiesNumber, float[][] shape,float damage, World world) {
-        super(textureRegion, x, y, width, height, density, bodiesNumber, shape, world);
+    public PhysicAmmo(String spriteName, float x, float y, float width, float height, float density, int bodiesNumber, float[][] shape,float damage) {
+        super(spriteName, x, y, width, height, density, bodiesNumber, shape);
         this.damage=damage;
+
+    }
+
+    @Override
+    public void create(TextureAtlas textureAtlas, World world) {
+        super.create(textureAtlas, world);
         getBody().setUserData(this);
     }
+
     public void update()
     {
 

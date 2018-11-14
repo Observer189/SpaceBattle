@@ -28,12 +28,16 @@ public class Module {
     PolygonShape shape;
     float width;
     float height;
-
+    World world;
+    TextureAtlas textureAtlas;
 
     Sprite sprite;
-    public Module(TextureRegion textureRegion,float x, float y, Size size,ModuleType type, float density, World world)
+    String spriteName;
+
+    public Module(String spriteName,float x, float y, Size size,ModuleType type, float density)
     {
         this.size=size;
+        this.spriteName=spriteName;
         if(size.equals(Size.Small))
         {
             width=0.2f;
@@ -50,26 +54,29 @@ public class Module {
             width=1;
             height=1;
         }
+
         this.type=type;
         bDef=new BodyDef();
         fDef= new FixtureDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
-        body=world.createBody(bDef);
+
         shape= new PolygonShape();
         shape.setAsBox(width/2,height/2);
         fDef.shape=this.shape;
         fDef.density=density;
+    }
+    public void create(TextureAtlas textureAtlas,World world)
+    {
+        this.world=world;
+        this.textureAtlas=textureAtlas;
+        body=world.createBody(bDef);
         fixture=body.createFixture(fDef);
-
-
-        sprite = new Sprite(textureRegion);
+        sprite=new Sprite(textureAtlas.findRegion(spriteName));
         sprite.setSize(width,height);
         sprite.setOrigin(width/2,height/2);
-        sprite.setPosition(x-width/2,y-height/2);
-
+        sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
     }
-
 
     public void draw(SpriteBatch batch)
     {
@@ -79,12 +86,23 @@ public class Module {
         sprite.draw(batch);
         batch.end();
     }
-
+    public void destroy()
+    {
+        world.destroyBody(body);
+    }
     public ModuleType getType() {
         return type;
     }
 
     public Body getBody() {
         return body;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public TextureAtlas getTextureAtlas() {
+        return textureAtlas;
     }
 }

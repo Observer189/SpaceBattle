@@ -16,6 +16,7 @@ public class BattleContactListener implements ContactListener {
     Object a;
     Object b;
     PhysicShip ship1;
+    PhysicShip ship2;
     PhysicAmmo ammo1;
     PhysicAmmo ammo2;
     Asteroid asteroid1;
@@ -44,7 +45,12 @@ public class BattleContactListener implements ContactListener {
             if (a.toString() != null){
                 if(a.toString().equals("Ship")) {
                 ship1 = (PhysicShip) a;
-
+                if(b.toString().equals("Ammo"))
+                {
+                    ammo2=(PhysicAmmo)b;
+                    ammo2.setMustDestroyed(true);
+                    ship1.hurt(ammo2);
+                }
             }
                 else if (a.toString().equals("Ammo"))
                 {
@@ -55,6 +61,15 @@ public class BattleContactListener implements ContactListener {
                         ammo1.setMustDestroyed(true);
                         asteroid2.hurt(ammo1);
                     }
+                    else if(b.toString().equals("EndMap"))
+                    {
+                        ammo1.setMustDestroyed(true);
+                    }
+                    else if(b.toString().equals("Ship"))
+                    {
+                        ship2=(PhysicShip)b;
+                        ship2.hurt(ammo1);
+                    }
                 }
                 else if(a.toString().equals("Asteroid"))
                 {
@@ -64,6 +79,14 @@ public class BattleContactListener implements ContactListener {
                         ammo2=(PhysicAmmo)b;
                         ammo2.setMustDestroyed(true);
                         asteroid1.hurt(ammo2);
+                    }
+                }
+                else if (a.toString().equals("EndMap"))
+                {
+                    if(b.toString().equals("Ammo"))
+                    {
+                        ammo2=(PhysicAmmo)b;
+                        ammo2.setMustDestroyed(true);
                     }
                 }
 

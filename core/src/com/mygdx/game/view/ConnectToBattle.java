@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.ServModels.ServShip;
 import com.mygdx.game.control.ConnectToBattleProcessor;
 import com.mygdx.game.model.BattleStatus;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Player;
 import com.mygdx.game.model.Ship;
 import com.mygdx.game.model.Ships.Axe;
@@ -43,7 +45,7 @@ public class ConnectToBattle implements Screen {
     TextureAtlas textureAtlas;
     servApi request;
     BattleStatus battleStatus;
-    Player player;
+    OldPlayer oldPlayer;
     ServShip servShip;
     TextManager textManager;
     int counter;
@@ -51,27 +53,27 @@ public class ConnectToBattle implements Screen {
     InputProcessor processor;
     BitmapFont blueFont;
     public final String baseURL = "https://star-project-serv.herokuapp.com/";
-    public ConnectToBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Player player,MainMenu mainMenu) {
+    public ConnectToBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas, OldPlayer oldPlayer, MainMenu mainMenu) {
         this.mainMenu=mainMenu;
         this.batch = batch;
         this.game = game;
         this.textureAtlas = textureAtlas;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
 
 
     }
     @Override
     public void show() {
 
-        //player = new Player("player", new Sudden(textureAtlas,0,0));
-        //player.generateName();
-        game.setScreen(new DebugBattle(batch,game,textureAtlas));
+        //oldPlayer = new OldPlayer("oldPlayer", new Sudden(textureAtlas,0,0));
+        //oldPlayer.generateName();
+        game.setScreen(new DebugBattle(batch,game,textureAtlas,new Client(),true,1,new Player(),new Player()));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(servApi.class);
-        servShip=new ServShip(player.getCurrentShip().toServ());
+        servShip=new ServShip(oldPlayer.getCurrentShip().toServ());
         processor=new ConnectToBattleProcessor();
         //Gdx.input.setInputProcessor(processor);
         textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -84,7 +86,7 @@ public class ConnectToBattle implements Screen {
 
         /*if((battleStatus.getNumber()!=null)&&(battleStatus.getStatus().equals("ready"))) {
 
-            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus,player,mainMenu));
+            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus,oldPlayer,mainMenu));
         }*/
     }
 
@@ -117,10 +119,10 @@ public class ConnectToBattle implements Screen {
         if((battleStatus.getNumber()!=null)&&(battleStatus.getStatus().equals("ready"))&&(battleStatus.getShip()!=null)) {
 
 
-            Player enemy=new Player(battleStatus.getName(), setShipByServ(battleStatus.getShip()));
+            OldPlayer enemy=new OldPlayer(battleStatus.getName(), setShipByServ(battleStatus.getShip()));
 
 
-            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus,player,enemy,mainMenu));
+            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus, oldPlayer,enemy,mainMenu));
         }
     }
 
@@ -152,7 +154,7 @@ public class ConnectToBattle implements Screen {
     }
     private void getBattleNumber() {
 
-        /*Call<BattleStatus> call = request.getBattleNumber(player.getName(),battleStatus.getStatus());
+        /*Call<BattleStatus> call = request.getBattleNumber(oldPlayer.getName(),battleStatus.getStatus());
         try {
             battleStatus.setBattleStatus(call.execute().body());
 
@@ -161,7 +163,7 @@ public class ConnectToBattle implements Screen {
             e.printStackTrace();
         }*/
 
-        Call<BattleStatus> call = request.getBattleNumber(player.getName(),servShip,battleStatus.getStatus());
+        Call<BattleStatus> call = request.getBattleNumber(oldPlayer.getName(),servShip,battleStatus.getStatus());
         System.out.println("!"+servShip+"!");
         call.enqueue(new Callback<BattleStatus>() {
             @Override

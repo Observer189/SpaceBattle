@@ -22,7 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mygdx.game.ServModels.ServPlayer;
 import com.mygdx.game.model.Map;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
+import com.mygdx.game.model.Ships.Axe;
 import com.mygdx.game.model.Ships.Dakkar;
 import com.mygdx.game.requests.servApi;
 import com.mygdx.game.utils.Assets;
@@ -41,7 +42,7 @@ public class LoginView implements Screen {
     public static Music music;
     Game game;
     SpriteBatch batch;
-    Player player;
+    OldPlayer oldPlayer;
     BitmapFont font,font1;
     TextManager textManager;
     TextField.TextFieldStyle txtStyle;
@@ -192,11 +193,12 @@ public class LoginView implements Screen {
                         ){
                              save();
 
-                             signPlayer=getPlayer();
+                             signPlayer= getOldPlayer();
                              if((signPlayer!=null)&&(signPlayer.getPassword().equals(textFieldPass.getText())))
                              {
-                             player=new Player(signPlayer);
-                             game.setScreen(new MainMenu(batch,game,player));
+                             oldPlayer =new OldPlayer(signPlayer);
+
+                             game.setScreen(new MainMenu(batch,game, oldPlayer));
                              }
                              else{
                                  System.out.println("Вы ввели неверное имя пользователя или пароль!");
@@ -239,8 +241,8 @@ public class LoginView implements Screen {
                         save();
                         createResult=createPlayer();
                         if (createResult==1) {
-                            player = new Player(textFieldLog.getText(), new Dakkar(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")), 0, 0));
-                            game.setScreen(new MainMenu(batch, game, player));
+                            oldPlayer = new OldPlayer(textFieldLog.getText(), new Dakkar(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")), 0, 0));
+                            game.setScreen(new MainMenu(batch, game, oldPlayer));
                         }
                         else if(createResult==0)
                         {
@@ -277,7 +279,8 @@ public class LoginView implements Screen {
         Gdx.input.setInputProcessor(in);
         star=new StarGen(textureAtlas,batch);
 
-
+        oldPlayer=new OldPlayer("sash",new Axe(textureAtlas,0,0));
+        game.setScreen(new MainMenu(batch,game, oldPlayer));
     }
 
     @Override
@@ -398,7 +401,7 @@ public class LoginView implements Screen {
         }
         return result;
     }
-    private ServPlayer getPlayer()
+    private ServPlayer getOldPlayer()
     {
 
          ServPlayer servPlayer=new ServPlayer();

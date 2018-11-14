@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.utils.TextManager;
 
 public class Angar implements Screen {
@@ -30,7 +30,7 @@ public class Angar implements Screen {
     Image[] guns;
     MainMenu menu;
     BitmapFont font,font1;
-    Player player;
+    OldPlayer oldPlayer;
     DrawOneShip dos1,dos2,dos3,dos4,dos5,dos6,dos7,dos8,dos9;
 
   //  DrawStageForGuns DSFG;
@@ -49,11 +49,11 @@ public class Angar implements Screen {
 
 
 
-    public Angar(Game game, SpriteBatch batch, MainMenu menu, Player player){
+    public Angar(Game game, SpriteBatch batch, MainMenu menu, OldPlayer oldPlayer){
         this.game=game;
         this.batch = batch;
         this.menu=menu;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
 
 
     }
@@ -94,11 +94,11 @@ public class Angar implements Screen {
 
             }
         });
-        station1=new StationAnim(textureAtlas,batch,(float) (Gdx.graphics.getWidth()/2-Gdx.graphics.getWidth()/1.86/2),Gdx.graphics.getHeight()/2-(float) (Gdx.graphics.getWidth()/1.86/2),player);
+        station1=new StationAnim(textureAtlas,batch,(float) (Gdx.graphics.getWidth()/2-Gdx.graphics.getWidth()/1.86/2),Gdx.graphics.getHeight()/2-(float) (Gdx.graphics.getWidth()/1.86/2), oldPlayer);
         ClickListener cl=new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                AngarView angarView=new AngarView(game,batch,menu,player);
+                AngarView angarView=new AngarView(game,batch,menu, oldPlayer);
                 game.setScreen(angarView);
 
 
@@ -140,32 +140,32 @@ public class Angar implements Screen {
 */
 
         //crating ships image
-        if (player.resources.shipList.size()>0){
-            String name=player.resources.shipList.get(0).getName();
+        if (oldPlayer.resources.shipList.size()>0){
+            String name= oldPlayer.resources.shipList.get(0).getName();
             if (name.equals("1"))name="Pulsate";
          //   dos1=new DrawOneShip(name,0,station1.img.getX()+station1.img.getWidth()/2,station1.img.getY());
 
         }
-        if (player.resources.shipList.size()>1){
-            String name=player.resources.shipList.get(1).getName();
+        if (oldPlayer.resources.shipList.size()>1){
+            String name= oldPlayer.resources.shipList.get(1).getName();
             if (name.equals("1"))name="Pulsate";
             dos2=new DrawOneShip(name,station1.img.getX()+station1.img.getWidth()/2,station1.img.getY());
 
         }
-        if (player.resources.shipList.size()>2){
-            String name=player.resources.shipList.get(2).getName();
+        if (oldPlayer.resources.shipList.size()>2){
+            String name= oldPlayer.resources.shipList.get(2).getName();
             if (name.equals("1"))name="Pulsate";
             dos3=new DrawOneShip(name,station1.img.getX()+station1.img.getWidth()/2,station1.img.getY());
 
         }
-        if (player.resources.shipList.size()>3){
-            String name=player.resources.shipList.get(3).getName();
+        if (oldPlayer.resources.shipList.size()>3){
+            String name= oldPlayer.resources.shipList.get(3).getName();
             if (name.equals("1"))name="Pulsate";
             dos3=new DrawOneShip(name,station1.img.getX()+station1.img.getWidth()/2,station1.img.getY());
 
         }
-        if (player.resources.shipList.size()>4){
-            String name=player.resources.shipList.get(4).getName();
+        if (oldPlayer.resources.shipList.size()>4){
+            String name= oldPlayer.resources.shipList.get(4).getName();
             if (name.equals("1"))name="Pulsate";
             dos4=new DrawOneShip(name,station1.img.getX()+station1.img.getWidth()/2,station1.img.getY());
 
@@ -194,11 +194,11 @@ public class Angar implements Screen {
         Back.draw(); station1.draw();
         stage.act(delta);
         stage.draw();
-       // textManager.displayMessage(batch,font,"HP: "+player.getCurrentShip().getMaxHp(), (hp.getX()*xX), (float) (hp.getY()+hp.getHeight()/yY));
-       // textManager.displayMessage(batch,font,"Speed: "+player.getCurrentShip().getMaxSpeed(), (float) (speed.getX()*xX*2.2),speed.getY()+speed.getHeight()/yY);
-       // textManager.displayMessage(batch,font,"Velocity: "+player.getCurrentShip().getVelocity(), (float) (velocity.getX()*xX/1.12),velocity.getY()+speed.getHeight()/yY);
-      ///  textManager.displayMessage(batch,font1,"Attack speed:"+player.getCurrentShip().getFixingPoints()[1].getWeapon().getAttackSpeed(), (float) (attackSpeed.getX()*xX*2.2),attackSpeed.getY()+attackSpeed.getHeight()/yY);
-      //  textManager.displayMessage(batch,font,"Dmg: "+player.getCurrentShip().getFixingPoints()[0].getWeapon().getAmmo().getDamage(),dmg.getX()*xX,dmg.getY()+dmg.getHeight()/yY);
+       // textManager.displayMessage(batch,font,"HP: "+oldPlayer.getCurrentShip().getMaxHp(), (hp.getX()*xX), (float) (hp.getY()+hp.getHeight()/yY));
+       // textManager.displayMessage(batch,font,"Speed: "+oldPlayer.getCurrentShip().getMaxSpeed(), (float) (speed.getX()*xX*2.2),speed.getY()+speed.getHeight()/yY);
+       // textManager.displayMessage(batch,font,"Velocity: "+oldPlayer.getCurrentShip().getVelocity(), (float) (velocity.getX()*xX/1.12),velocity.getY()+speed.getHeight()/yY);
+      ///  textManager.displayMessage(batch,font1,"Attack speed:"+oldPlayer.getCurrentShip().getFixingPoints()[1].getWeapon().getAttackSpeed(), (float) (attackSpeed.getX()*xX*2.2),attackSpeed.getY()+attackSpeed.getHeight()/yY);
+      //  textManager.displayMessage(batch,font,"Dmg: "+oldPlayer.getCurrentShip().getFixingPoints()[0].getWeapon().getAmmo().getDamage(),dmg.getX()*xX,dmg.getY()+dmg.getHeight()/yY);
 
 
 //        DrawDrawStage(dos1);

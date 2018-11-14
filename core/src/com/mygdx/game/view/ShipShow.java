@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Ship;
 import com.mygdx.game.requests.servApi;
 import com.mygdx.game.utils.TextManager;
@@ -25,8 +25,6 @@ import com.mygdx.game.utils.Toast;
 import java.io.IOException;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -54,7 +52,7 @@ public class ShipShow implements Screen {
     Screen ShList;
     Toast toast,toast1,toast2;
     MainMenu menu;
-    Player player;
+    OldPlayer oldPlayer;
     //for ship's params
     Image Shipimg;
     String name;
@@ -67,12 +65,12 @@ public class ShipShow implements Screen {
 
     servApi request;
     public final String baseURL = "https://star-project-serv.herokuapp.com/";
-    public ShipShow(Ship ship, Game game, MainMenu menu, Player player,float width,float height) {
+    public ShipShow(Ship ship, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
 
         this.ship=ship;
         this.game=game;
         this.menu=menu;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
         this.width=width;
         this.height=height;
     }
@@ -106,7 +104,7 @@ public class ShipShow implements Screen {
         camera = new OrthographicCamera();
 
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ShList=new ShopList(game,batch,textureAtlas,menu,player);
+        ShList=new ShopList(game,batch,textureAtlas,menu, oldPlayer);
         font = textManager.fontInitialize(Color.WHITE, 1);
         font1 = textManager.fontInitialize(Color.WHITE, 1);
         Toast.ToastFactory toastFactory = new Toast.ToastFactory.Builder()
@@ -127,16 +125,16 @@ public class ShipShow implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-               // ShList=new ShopList(game,batch,textureAtlas,menu,player);
-                if (player.resources.shipList.contains(ship)) {
+               // ShList=new ShopList(game,batch,textureAtlas,menu,oldPlayer);
+                if (oldPlayer.resources.shipList.contains(ship)) {
                     MakeToast1=true;
                 } else {
-                    if (!player.resources.shipList.contains(ship)&& (menu.player.resources.getMoney()>=ship.getCost())){
+                    if (!oldPlayer.resources.shipList.contains(ship)&& (menu.oldPlayer.resources.getMoney()>=ship.getCost())){
                 MakeToast=true;
-                int mon=menu.player.getMoney()-ship.getCost();
-                menu.player.setMoney(mon);
+                int mon=menu.oldPlayer.getMoney()-ship.getCost();
+                menu.oldPlayer.setMoney(mon);
                 updatePlayerMoney();
-                player.resources.shipList.add(ship);
+                oldPlayer.resources.shipList.add(ship);
 
                     }else MakeToast2=true;
 
@@ -156,7 +154,7 @@ public class ShipShow implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 game.setScreen(ShList);
-                System.out.println( player.resources.shipList);
+                System.out.println( oldPlayer.resources.shipList);
 
             }
         });
@@ -283,7 +281,7 @@ public class ShipShow implements Screen {
     }
     private void updatePlayerMoney()
     {
-        Call<Integer> call=request.updateMoney(player.getName(),player.getMoney());
+        Call<Integer> call=request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
         try {
             call.execute();
         } catch (IOException e) {

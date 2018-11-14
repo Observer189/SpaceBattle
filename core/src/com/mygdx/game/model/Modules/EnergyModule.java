@@ -1,4 +1,4 @@
-package com.mygdx.game.Modules;
+package com.mygdx.game.model.Modules;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
@@ -14,8 +14,8 @@ public class EnergyModule extends Module {
     private float energyStorage;
     private float energyGeneration;
 
-    public EnergyModule(TextureRegion textureRegion, float x, float y, Size size, float density,float energyStorage,float energyGeneration, World world) {
-        super(textureRegion, x, y, size, ModuleType.EnergyModule, density, world);
+    public EnergyModule(String spriteName, float x, float y, Size size, float density,float energyStorage,float energyGeneration) {
+        super(spriteName, x, y, size, ModuleType.EnergyModule, density);
         this.energyGeneration=energyGeneration;
         this.energyStorage=energyStorage;
 

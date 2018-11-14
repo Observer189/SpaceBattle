@@ -17,13 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.utils.Confirmation;
 import com.mygdx.game.utils.LogListener;
 import com.mygdx.game.utils.PassListener;
 import com.mygdx.game.utils.TextManager;
-
-import java.awt.Image;
 
 /**
  * Created by Sash on 24.04.2018.
@@ -35,7 +33,7 @@ public class MainMenu implements Screen {
     StageForButton sfplaybutton, sfshop, sfangar;
     SpriteBatch batch;
     Game game;
-    public Player player;
+    public OldPlayer oldPlayer;
     public TextureAtlas textureAtlas;
     TextManager textManager;
     public Button.ButtonStyle p_button, sh_button, ang_button;
@@ -53,10 +51,10 @@ public class MainMenu implements Screen {
     OrthographicCamera camera = new OrthographicCamera();
     AngarView angar2;
     Confirmation confirmation;
-    public MainMenu(SpriteBatch batch, Game game,Player player) {
+    public MainMenu(SpriteBatch batch, Game game,OldPlayer oldPlayer) {
         this.batch = batch;
         this.game = game;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
     }
 
 
@@ -71,12 +69,12 @@ public class MainMenu implements Screen {
 
         //PreShop=new PreShop(game,batch,textureAtlas);
         batch = new SpriteBatch();
-        CTB=new ConnectToBattle(batch,game,textureAtlas,player,this);
+        CTB=new ConnectToBattle(batch,game,textureAtlas, oldPlayer,this);
 
-        PreShop=new PreShop(game,batch,textureAtlas,this,player);
+        PreShop=new PreShop(game,batch,textureAtlas,this, oldPlayer);
 
-        angar=new Angar(game,batch,this,player);
-        angar2=new AngarView(game,batch,this,player);
+        angar=new Angar(game,batch,this, oldPlayer);
+        angar2=new AngarView(game,batch,this, oldPlayer);
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font=textManager.fontInitialize(Color.WHITE,1f);
         //game.setScreen(battle);
@@ -97,8 +95,8 @@ public class MainMenu implements Screen {
                 ForLogCounter++;
 
                 music.stop();
-                game.setScreen(CTB);
-
+                //game.setScreen(CTB);
+                game.setScreen(new PreparingToBattle(batch,game,textureAtlas));
             }
         });
 

@@ -2,6 +2,7 @@ package com.mygdx.game.model;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.WeldJoint;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
+import com.mygdx.game.ServModels.ServObject;
 
 /**
  * Created by Sash on 15.06.2018.
@@ -26,27 +28,37 @@ public class PhysicObject {
     Fixture[] fixtures;
     Joint[] joints;
     BodyDef bDef;
+    FixtureDef[] fDefs;
     //FixtureDef fDef;
     PolygonShape shape;
     World world;
 
-
+    String spriteName;
+    private float x;
+    private float y;
+    private float rotation;
     private float width;
     private float height;
 
     boolean mustDestroyed;
-    public PhysicObject(TextureRegion textureRegion, float x, float y, float width, float height,float density,int bodiesNumber,float[][] shape, World world)
+    int fixturesNumber;
+    public PhysicObject(String spriteName, float x, float y, float width, float height,float density,int fixturesNumber,float[][] shape)
     {
+        this.x=x;
+        this.y=y;
+        this.rotation=0;
         this.width=width;
         this.height=height;
-        this.world=world;
+        this.spriteName=spriteName;
+        this.fixturesNumber=fixturesNumber;
         bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
 
-        body=world.createBody(bDef);
-        fixtures= new Fixture[bodiesNumber];
-        for(int i=0;i<bodiesNumber;i++) {
+
+        fDefs=new FixtureDef[fixturesNumber];
+        fixtures= new Fixture[fixturesNumber];
+        for(int i=0;i<fixturesNumber;i++) {
 
 
 
@@ -65,7 +77,8 @@ public class PhysicObject {
         fDef.density=density;
         fDef.restitution=0.2f;
         fDef.friction=0.5f;
-        fixtures[i]=body.createFixture(fDef);
+        fDefs[i]=fDef;
+
         /*if(i!=0) {
             WeldJointDef jointDef;
             jointDef = new WeldJointDef();
@@ -78,13 +91,21 @@ public class PhysicObject {
 
             joints[i-1] = world.createJoint(jointDef);
         }*/
-
-
         }
 
 
+    }
+    public PhysicObject()
+    {
 
-        sprite = new Sprite(textureRegion);
+    }
+    public void create(TextureAtlas textureAtlas,World world) {
+        this.world = world;
+        body = world.createBody(bDef);
+        for (int i = 0; i < fixturesNumber; i++) {
+            fixtures[i]=body.createFixture(fDefs[i]);
+        }
+        sprite=new Sprite(textureAtlas.findRegion(spriteName));
         sprite.setSize(width,height);
         sprite.setOrigin(width/2,height/2);
         sprite.setPosition(x-width/2,y-height/2);
@@ -93,6 +114,9 @@ public class PhysicObject {
     }
     public void draw(SpriteBatch batch)
     {
+        x=body.getPosition().x;
+        y=body.getPosition().y;
+        rotation=body.getAngle();
         sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
         sprite.setRotation((float)Math.toDegrees(body.getAngle()));
         batch.begin();
@@ -101,11 +125,15 @@ public class PhysicObject {
     }
     public float getX()
     {
+        if(body!=null)
         return body.getPosition().x;
+        else return bDef.position.x;
     }
     public float getY()
     {
-        return body.getPosition().y;
+        if(body!=null)
+            return body.getPosition().y;
+        else return bDef.position.y;
     }
 
     /*public Body getBody() {
@@ -124,7 +152,9 @@ public class PhysicObject {
 
     public float getRotation()
     {
-        return body.getAngle();
+        if(body!=null)
+            return body.getAngle();
+        else return bDef.angle;
     }
 
     public float getWidth() {
@@ -145,5 +175,11 @@ public class PhysicObject {
     public void destroy()
     {
         world.destroyBody(body);
+
+    }
+
+    public ServObject toServ()
+    {
+        return new ServObject(spriteName,x,y,height,width,body.getAngle());
     }
 }

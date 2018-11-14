@@ -12,17 +12,31 @@ import com.mygdx.game.model.PhysicAmmo;
  */
 
 public class Bullet extends PhysicAmmo {
-
-    public Bullet(TextureAtlas textureAtlas, float x, float y, float startAngle, float width, float height, float speed, Vector2 shipSpeedVector, float damage, World world) {
-        super(textureAtlas.findRegion("Bullet"), x, y, width, height, 1000, 1, new float[][]{{
+    float x;
+    float y;
+    float startAngle;
+    float speed;
+    Vector2 shipSpeedVector;
+    public Bullet( float x, float y, float startAngle, float width, float height, float speed, Vector2 shipSpeedVector, float damage) {
+        super("Bullet", x, y, width, height, 1000, 1, new float[][]{{
                 -width/2,-height/2,
                 width/2,-height/2,
                 width/2,height/2,
-                -width/2,height/2}}, damage, world);
+                -width/2,height/2}}, damage);
+             this.x=x;
+             this.y=y;
+             this.startAngle=startAngle;
+             this.speed=speed;
+             this.shipSpeedVector=shipSpeedVector;
 
-            getBody().setTransform(x,y,startAngle);
-            getBody().setLinearVelocity((float)(-Math.sin(getRotation()))*speed+shipSpeedVector.x,(float)(Math.cos(getRotation()))*speed+shipSpeedVector.y);
 
+    }
+
+    @Override
+    public void create(TextureAtlas textureAtlas, World world) {
+        super.create(textureAtlas, world);
+        getBody().setTransform(x,y,startAngle);
+        getBody().setLinearVelocity((float)(-Math.sin(getRotation()))*speed+shipSpeedVector.x,(float)(Math.cos(getRotation()))*speed+shipSpeedVector.y);
     }
 
     @Override

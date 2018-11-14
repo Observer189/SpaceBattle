@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Weapons.BlueImpulseLaser;
 import com.mygdx.game.model.Weapons.Machinegun;
 import com.mygdx.game.model.Weapons.RocketLauncher;
@@ -34,7 +34,7 @@ public class ShopList2 implements Screen{
     Skin skin;
     Screen ShList;
     MainMenu menu;
-    Player player;
+    OldPlayer oldPlayer;
     CellStage g1,g2,g3,g4;
     Image Money,InformationTube;
     BitmapFont font,font1;
@@ -54,12 +54,12 @@ public class ShopList2 implements Screen{
 
     GunShow GuShow;
     OrthographicCamera camera = new OrthographicCamera();
-    public ShopList2(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, Player player){
+    public ShopList2(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, OldPlayer oldPlayer){
         this.game=game;
         this.batch = batch;
         this.textureAtlas=textureAtlas;
         this.menu=menu;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
 
 
     }
@@ -72,7 +72,7 @@ public class ShopList2 implements Screen{
         skin=new Skin();
         batch=new SpriteBatch();
         skin.addRegions(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")));
-        ShList=new ShopList(game,batch,textureAtlas,menu,player);
+        ShList=new ShopList(game,batch,textureAtlas,menu, oldPlayer);
         Gstyle = new Button.ButtonStyle();
         Gstyle.up = skin.getDrawable("UnSelectGun");
         Gstyle.down = skin.getDrawable("UnSelectGun");
@@ -119,7 +119,7 @@ public class ShopList2 implements Screen{
         Money.setSize((float) (Gdx.graphics.getWidth() / 8.8), (float) (Gdx.graphics.getHeight() / 4.96));
         Money.setPosition(Gdx.graphics.getWidth() / Gdx.graphics.getWidth(), (float) (Gdx.graphics.getHeight() -Money.getHeight()-(int) (Gdx.graphics.getHeight() / 14.4)));
 
-        Integer mon=menu.player.getMoney();
+        Integer mon=menu.oldPlayer.getMoney();
         int heightOfTube=0;
         digits=new int[mon.toString().length()];
         int restDigits=mon;
@@ -147,7 +147,7 @@ public class ShopList2 implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                GuShow = new GunShow(Laser, game, menu, player,(float) (g1.width*1.7),(float) (g1.height*1.7));
+                GuShow = new GunShow(Laser, game, menu, oldPlayer,(float) (g1.width*1.7),(float) (g1.height*1.7));
 
                 game.setScreen(GuShow);
 
@@ -160,7 +160,7 @@ public class ShopList2 implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                GuShow = new GunShow(multigun, game, menu, player, (float) (g2.width*1.7), (float) (g2.height*1.7));
+                GuShow = new GunShow(multigun, game, menu, oldPlayer, (float) (g2.width*1.7), (float) (g2.height*1.7));
 
                 game.setScreen(GuShow);
 
@@ -173,7 +173,7 @@ public class ShopList2 implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                GuShow = new GunShow(shotgun, game, menu, player, (float) (g3.width*1.7), (float) (g3.height*1.7));
+                GuShow = new GunShow(shotgun, game, menu, oldPlayer, (float) (g3.width*1.7), (float) (g3.height*1.7));
 
                 game.setScreen(GuShow);
 
@@ -186,7 +186,7 @@ public class ShopList2 implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                GuShow = new GunShow(rocketLauncher, game, menu, player, (float) (g4.width*1.7), (float) (g4.height*1.7));
+                GuShow = new GunShow(rocketLauncher, game, menu, oldPlayer, (float) (g4.width*1.7), (float) (g4.height*1.7));
 
                 game.setScreen(GuShow);
 

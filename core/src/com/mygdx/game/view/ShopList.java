@@ -18,13 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Ship;
 import com.mygdx.game.model.Ships.Axe;
-import com.mygdx.game.model.Ships.Dakkar;
 import com.mygdx.game.model.Ships.Dashing;
-import com.mygdx.game.model.Ships.Mite;
-import com.mygdx.game.model.Ships.Pulsate;
 import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.Ships.Sudden;
 import com.mygdx.game.utils.TextManager;
@@ -55,15 +52,15 @@ public class ShopList implements Screen {
 
     //ships
     Ship pulsate, bat, rock, hunter, mite,axe,dashing,sudden;
-    Player player;
+    OldPlayer oldPlayer;
 
 
-    public ShopList(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, Player player) {
+    public ShopList(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, OldPlayer oldPlayer) {
         this.game = game;
         this.batch = batch;
         this.textureAtlas = textureAtlas;
         this.menu = menu;
-        this.player = player;
+        this.oldPlayer = oldPlayer;
     }
 
     @Override
@@ -211,11 +208,11 @@ public class ShopList implements Screen {
 
         //  VP=new FillViewport((float)(camera.position.x*3.2),camera.position.y*3,camera) ;
 
-        ShList2 = new ShopList2(game, batch, textureAtlas, menu, player);
-        batch = new SpriteBatch();    //Battle.player.getMoney();
+        ShList2 = new ShopList2(game, batch, textureAtlas, menu, oldPlayer);
+        batch = new SpriteBatch();    //Battle.oldPlayer.getMoney();
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        System.out.println(player.resources.shipList);
+        System.out.println(oldPlayer.resources.shipList);
 
         skin = new Skin();
         skin.addRegions(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")));
@@ -292,7 +289,7 @@ public class ShopList implements Screen {
             }
         });
         //-----------------------end
-        //Creating frame, where player can see his money (Information Bar)
+        //Creating frame, where oldPlayer can see his money (Information Bar)
 
         Money = new Image(skin.getDrawable("Money"));
 
@@ -301,7 +298,7 @@ public class ShopList implements Screen {
         Money.setSize((float) (Gdx.graphics.getWidth() / 8.8), (float) (Gdx.graphics.getHeight() / 4.96));
         Money.setPosition(Gdx.graphics.getWidth() / Gdx.graphics.getWidth(), (float) (Gdx.graphics.getHeight() -Money.getHeight()-(int) (Gdx.graphics.getHeight() / 14.4)));
 
-        Integer mon=menu.player.getMoney();
+        Integer mon=menu.oldPlayer.getMoney();
         int heightOfTube=0;
         digits=new int[mon.toString().length()];
         int restDigits=mon;
@@ -340,7 +337,7 @@ public class ShopList implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                ShShow = new ShipShow(sudden, game, menu, player,ct1.width,ct1.height);
+                ShShow = new ShipShow(sudden, game, menu, oldPlayer,ct1.width,ct1.height);
 
                 game.setScreen(ShShow);
 
@@ -357,7 +354,7 @@ public class ShopList implements Screen {
         ct2.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ShShow = new ShipShow(dashing, game, menu, player,ct2.width,ct2.height);
+                ShShow = new ShipShow(dashing, game, menu, oldPlayer,ct2.width,ct2.height);
                 game.setScreen(ShShow);
 
             }
@@ -371,7 +368,7 @@ public class ShopList implements Screen {
         ct3.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ShShow = new ShipShow(rock, game, menu, player,ct3.width,ct3.height);
+                ShShow = new ShipShow(rock, game, menu, oldPlayer,ct3.width,ct3.height);
 
                 game.setScreen(ShShow);
 
@@ -386,7 +383,7 @@ public class ShopList implements Screen {
         ct4.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               // ShShow = new ShipShow(mite, game, menu, player,ct4.width,ct4.height);
+               // ShShow = new ShipShow(mite, game, menu, oldPlayer,ct4.width,ct4.height);
                 //  game.setScreen(ShShow);
                 // Gdx.input.setInputProcessor(null);
 
@@ -404,7 +401,7 @@ public class ShopList implements Screen {
         ct5.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ShShow = new ShipShow(axe, game, menu, player,ct5.width,ct5.height);
+                ShShow = new ShipShow(axe, game, menu, oldPlayer,ct5.width,ct5.height);
 
                 game.setScreen(ShShow);
 

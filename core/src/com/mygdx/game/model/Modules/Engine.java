@@ -1,4 +1,4 @@
-package com.mygdx.game.Modules;
+package com.mygdx.game.model.Modules;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -18,8 +18,8 @@ public class Engine extends Module {
     private Type type;
 
     private float energyConsumption;
-    public Engine(TextureRegion textureRegion, float x, float y, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type, World world) {
-        super(textureRegion, x, y, size, ModuleType.Engine, density, world);
+    public Engine(String spriteName, float x, float y, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type) {
+        super(spriteName, x, y, size, ModuleType.Engine, density);
         this.power=power;
         this.angularPower=angularPower;
         this.maxSpeed=maxSpeed;

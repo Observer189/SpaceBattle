@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.model.Map;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.requests.servApi;
 import com.mygdx.game.utils.TextManager;
 
@@ -35,7 +35,7 @@ public class EndBattle implements Screen {
     MainMenu mainMenu;
     Game game;
     OrthographicCamera camera;
-    Player player;
+    OldPlayer oldPlayer;
     Stage stage;
     Button.ButtonStyle btnStyle;
     Button btn;
@@ -54,18 +54,18 @@ public class EndBattle implements Screen {
     BitmapFont smallBlueFont;
     BitmapFont smallRedFont;
 
-    public EndBattle(Player player, SpriteBatch batch, Game game, MainMenu mainMenu, Map map, String status)
+    public EndBattle(OldPlayer oldPlayer, SpriteBatch batch, Game game, MainMenu mainMenu, Map map, String status)
         {
             this.mainMenu=mainMenu;
             this.batch=batch;
             this.game=game;
-            this.player=player;
+            this.oldPlayer = oldPlayer;
             this.map=map;
             this.map.setWidth(Gdx.graphics.getWidth());
             this.map.setHeight(Gdx.graphics.getHeight());
             this.status=status;
-            this.appliedDamage=player.getCurrentShip().getAppliedDamage();
-            player.getCurrentShip().setAppliedDamage(0);
+            this.appliedDamage= oldPlayer.getCurrentShip().getAppliedDamage();
+            oldPlayer.getCurrentShip().setAppliedDamage(0);
         }
     @Override
     public void show() {
@@ -106,7 +106,7 @@ public class EndBattle implements Screen {
         stage.addActor(btn);
         Gdx.input.setInputProcessor(stage);
         reward=generateReward(status);
-        player.setMoney(player.getMoney()+reward);
+        oldPlayer.setMoney(oldPlayer.getMoney()+reward);
         updatePlayerMoney();
     }
 
@@ -176,7 +176,7 @@ public class EndBattle implements Screen {
     }
     private void updatePlayerMoney()
     {
-        Call<Integer> call=request.updateMoney(player.getName(),player.getMoney());
+        Call<Integer> call=request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
         try {
             call.execute();
         } catch (IOException e) {

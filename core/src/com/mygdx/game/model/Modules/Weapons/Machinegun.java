@@ -1,10 +1,9 @@
-package com.mygdx.game.Modules.Weapons;
+package com.mygdx.game.model.Modules.Weapons;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.Modules.WeaponModule;
+import com.mygdx.game.model.Modules.WeaponModule;
 
 
 import com.mygdx.game.model.PhysicAmmos.Bullet;
@@ -15,14 +14,12 @@ import com.mygdx.game.utils.Size;
  */
 
 public class Machinegun extends WeaponModule {
-    TextureAtlas textureAtlas;
-    World world;
+
 
     long lastShotTime;
-    public Machinegun(TextureAtlas textureAtlas, float x, float y, World world) {
-        super(textureAtlas.findRegion("Machinegun"), x, y, Size.Small, 10,10,0,0.5f, world);
-        this.textureAtlas=textureAtlas;
-        this.world=world;
+    public Machinegun( float x, float y) {
+        super("Machinegun", x, y, Size.Small, 10,10,0,0.5f);
+
         lastShotTime=0;
     }
 
@@ -30,10 +27,11 @@ public class Machinegun extends WeaponModule {
     public boolean shot(float l, Vector2 speedVector) {
         if(System.currentTimeMillis()-lastShotTime>getReloadTime()*1000) {
 
-            getAmmos().add(new Bullet(textureAtlas, getBody().getPosition().x - (float) Math.sin(getBody().getAngle())*l-(float) Math.sin(getBody().getAngle())*0.05f,
+            getAmmos().add(new Bullet( getBody().getPosition().x - (float) Math.sin(getBody().getAngle())*l-(float) Math.sin(getBody().getAngle())*0.05f,
                     getBody().getPosition().y + (float) Math.cos(getBody().getAngle())*l+(float) Math.cos(getBody().getAngle())*0.125f,
                     getBody().getAngle(), 0.1f, 0.25f,
-                    10,speedVector, getDamage(), world));
+                    10,speedVector, getDamage()));
+            getAmmos().get(getAmmos().size-1).create(getTextureAtlas(),getWorld());
             lastShotTime=System.currentTimeMillis();
             return true;
         }

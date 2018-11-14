@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 
 
 public class StationAnim {
@@ -19,7 +19,7 @@ public class StationAnim {
     Image img,img2;
     float x;
     float y;
-    public StationAnim(TextureAtlas textureAtlas, SpriteBatch batch, float x, float y, Player player){
+    public StationAnim(TextureAtlas textureAtlas, SpriteBatch batch, float x, float y, OldPlayer oldPlayer){
         this.textureAtlas=textureAtlas;
         this.x=x;
         this.y=y;
@@ -27,10 +27,10 @@ public class StationAnim {
         img=new Image(textureAtlas.findRegion("WB_baseu2_d0"));
         img.setSize((float) (Gdx.graphics.getWidth()/1.86),(float) (Gdx.graphics.getWidth()/1.86));
         img.setPosition(x,y);
-        if (player.getCurrentShip().getName().equals("1"))
+        if (oldPlayer.getCurrentShip().getName().equals("1"))
         img2=new Image(textureAtlas.findRegion("Pulsate"));
         else
-            img2=new Image((textureAtlas.findRegion(player.getCurrentShip().getName())));
+            img2=new Image((textureAtlas.findRegion(oldPlayer.getCurrentShip().getName())));
         img2.setSize((float) (Gdx.graphics.getHeight()/5.2),(float) (Gdx.graphics.getHeight()/4.8));
         img2.setPosition(img.getX()+img.getWidth()/2-img2.getWidth()/2, img.getY()+img.getHeight()/2-img2.getHeight()/2);
         }

@@ -1,12 +1,11 @@
 package com.mygdx.game.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.Modules.Engine;
+import com.mygdx.game.model.Modules.Engine;
 
 /**
  * Created by Sash on 15.06.2018.
@@ -38,10 +37,10 @@ public class PhysicShip extends PhysicObject {
     private boolean isShooting;
 
 
-    public PhysicShip(TextureRegion textureRegion, float x, float y, float width, float height,
+    public PhysicShip(String spriteName, float x, float y, float width, float height,
                       float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float maxHP,
-                      float[][] shape, World world) {
-        super(textureRegion, x, y, width, height,density,bodyNumber,shape, world);
+                      float[][] shape) {
+        super(spriteName, x, y, width, height,density,bodyNumber,shape);
         this.rotationSpeed=0;
         movementPosition=0;
         enginePower=50;
@@ -59,15 +58,29 @@ public class PhysicShip extends PhysicObject {
 
         this.linearDamping=linearDamping;
 
-        body.setUserData(this);
+
         /*for (Body i:bodies)
         {
             i.setLinearDamping(this.linearDamping);
         }*/
 
     }
-    public void create()
+    @Override
+    public void create(TextureAtlas textureAtlas, World world)
     {
+        super.create(textureAtlas,world);
+        for(WeaponPoint i:weapons)
+        {
+            i.create(textureAtlas,world,getBody());
+        }
+        for(EnginePoint i:engines)
+        {
+            i.create(textureAtlas,world,getBody());
+        }
+        for(EnergyPoint i:energyPoints)
+        {
+            i.create(textureAtlas,world,getBody());
+        }
         rotationSpeed=findRotationSpeed();
         maxEnergy=0;
         for(int i=0;i<energyPoints.length;i++)
@@ -78,6 +91,7 @@ public class PhysicShip extends PhysicObject {
         energy=maxEnergy;
         energyConsLastTime=System.currentTimeMillis();
         consumptionReload=100;
+        body.setUserData(this);
     }
 
     public void move()
@@ -168,6 +182,27 @@ public class PhysicShip extends PhysicObject {
                     energy -= i.weapon.getEnergyCost();
                 }
             }
+        }
+    }
+    public void hurt(PhysicAmmo ammo)
+    {
+        hp-=ammo.getDamage();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        for(WeaponPoint i:weapons)
+        {
+            i.destroy();
+        }
+        for(EnginePoint i:engines)
+        {
+            i.destroy();
+        }
+        for(EnergyPoint i:energyPoints)
+        {
+            i.destroy();
         }
     }
 

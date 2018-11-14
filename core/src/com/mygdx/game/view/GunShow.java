@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,9 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Weapon;
-import com.mygdx.game.model.Weapons.BlueImpulseLaser;
 import com.mygdx.game.requests.servApi;
 import com.mygdx.game.utils.TextManager;
 import com.mygdx.game.utils.Toast;
@@ -54,7 +52,7 @@ public class GunShow implements Screen {
     Screen ShList;
     Toast toast,toast1,toast2;
     MainMenu menu;
-    Player player;
+    OldPlayer oldPlayer;
     //for ship's params
     Image Gunimg;
     String name;
@@ -68,13 +66,13 @@ public class GunShow implements Screen {
     servApi request;
     public final String baseURL = "https://star-project-serv.herokuapp.com/";
 
-    public GunShow(Weapon weapon, Game game, MainMenu menu, Player player, float width, float height) {
+    public GunShow(Weapon weapon, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
         this.width=width;
         this.height=height;
         this.weapon=weapon;
         this.game=game;
         this.menu=menu;
-        this.player=player;
+        this.oldPlayer = oldPlayer;
 
     }
 
@@ -109,7 +107,7 @@ public class GunShow implements Screen {
         camera = new OrthographicCamera();
 
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ShList=new ShopList2(game,batch,textureAtlas,menu,player);
+        ShList=new ShopList2(game,batch,textureAtlas,menu, oldPlayer);
         if (weapon.getName().equals("BlueImpulseLaser")||weapon.getName().equals("RocketLauncher"))
         font = textManager.fontInitialize(Color.WHITE, (float) 0.7);
         else
@@ -133,16 +131,16 @@ public class GunShow implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                // ShList=new ShopList(game,batch,textureAtlas,menu,player);
-                if (menu.player.resources.weaponList.contains(weapon)) {
+                // ShList=new ShopList(game,batch,textureAtlas,menu,oldPlayer);
+                if (menu.oldPlayer.resources.weaponList.contains(weapon)) {
                     MakeToast1=true;
                 } else {
-                    if (!menu.player.resources.weaponList.contains(weapon)&& (menu.player.resources.getMoney()>=weapon.getCost())){
+                    if (!menu.oldPlayer.resources.weaponList.contains(weapon)&& (menu.oldPlayer.resources.getMoney()>=weapon.getCost())){
                         MakeToast=true;
-                        int mon=menu.player.getMoney()-weapon.getCost();
-                        menu.player.setMoney(mon);
+                        int mon=menu.oldPlayer.getMoney()-weapon.getCost();
+                        menu.oldPlayer.setMoney(mon);
                         updatePlayerMoney();
-                        player.resources.weaponList.add(weapon);
+                        oldPlayer.resources.weaponList.add(weapon);
 
                     }else MakeToast2=true;
 
@@ -162,7 +160,7 @@ public class GunShow implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 game.setScreen(ShList);
-                System.out.println( player.resources.shipList);
+                System.out.println( oldPlayer.resources.shipList);
 
             }
         });
@@ -293,7 +291,7 @@ public class GunShow implements Screen {
     }
     private void updatePlayerMoney()
     {
-        Call<Integer> call=request.updateMoney(player.getName(),player.getMoney());
+        Call<Integer> call=request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
         try {
             call.execute();
         } catch (IOException e) {

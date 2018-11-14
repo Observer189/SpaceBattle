@@ -1,13 +1,13 @@
 package com.mygdx.game.model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
-import com.mygdx.game.Modules.EnergyModule;
-import com.mygdx.game.Modules.WeaponModule;
+import com.mygdx.game.model.Modules.EnergyModule;
 import com.mygdx.game.utils.ModuleType;
 
 /**
@@ -24,17 +24,16 @@ public class EnergyPoint {
     {
         this.world=world;
     }
-    public EnergyPoint(EnergyModule energyModule, Body shipBody, Vector2 localAnchor, World world)
+    public EnergyPoint(EnergyModule energyModule, Vector2 localAnchor)
     {
-        this.world=world;
+
         this.energyModule=energyModule;
         jointDef = new WeldJointDef();
-        jointDef.bodyA = shipBody;
-        jointDef.bodyB = energyModule.getBody();
+
         jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
 
         jointDef.collideConnected = false;
-        joint=world.createJoint(jointDef);
+
     }
     public boolean installModule(EnergyModule energyModule, Body shipBody,Vector2 localAnchor)
     {
@@ -51,6 +50,19 @@ public class EnergyPoint {
             return true;
         }
         else return false;
+    }
+    public void create(TextureAtlas textureAtlas, World world,Body shipBody)
+    {
+        energyModule.create(textureAtlas,world);
+        jointDef.bodyA = shipBody;
+        jointDef.bodyB = energyModule.getBody();
+        joint=world.createJoint(jointDef);
+        this.world=world;
+    }
+    public void destroy()
+    {
+        //world.destroyJoint(joint);
+        energyModule.destroy();
     }
     public void draw(SpriteBatch batch)
     {

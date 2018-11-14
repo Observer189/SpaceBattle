@@ -65,7 +65,7 @@ public class BattleInfoPanel {
     {
         HPBar.draw(valueHp);
         energyBar.draw(valueEnergy);
-        System.out.println("draw");
+
     }
 
     public ProgressBar getEnergyBar() {

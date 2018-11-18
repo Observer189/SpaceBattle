@@ -42,11 +42,11 @@ public class PhysicObject {
 
     boolean mustDestroyed;
     int fixturesNumber;
-    public PhysicObject(String spriteName, float x, float y, float width, float height,float density,int fixturesNumber,float[][] shape)
+    public PhysicObject(String spriteName, float x, float y,float rotation, float width, float height,float density,int fixturesNumber,float[][] shape)
     {
         this.x=x;
         this.y=y;
-        this.rotation=0;
+        this.rotation=rotation;
         this.width=width;
         this.height=height;
         this.spriteName=spriteName;
@@ -54,7 +54,7 @@ public class PhysicObject {
         bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
-
+        bDef.angle=(float) Math.toRadians(rotation);
 
         fDefs=new FixtureDef[fixturesNumber];
         fixtures= new Fixture[fixturesNumber];
@@ -153,8 +153,8 @@ public class PhysicObject {
     public float getRotation()
     {
         if(body!=null)
-            return body.getAngle();
-        else return bDef.angle;
+            return (float) Math.toDegrees(body.getAngle());
+        else return (float) Math.toDegrees(bDef.angle);
     }
 
     public float getWidth() {

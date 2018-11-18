@@ -13,8 +13,8 @@ import com.mygdx.game.model.Asteroid;
 public class Asteroid1 extends Asteroid {
     //static float width=2f;
     //static float height=2f;
-    public Asteroid1( float x, float y, float width, float height, Vector2 startVelocity,float maxHp) {
-        super("Asteroid", x, y, width, height, 2000, 2, new float[][]
+    public Asteroid1( float x, float y,float rotation, float width, float height, Vector2 startVelocity,float maxHp) {
+        super("Asteroid", x, y,rotation, width, height, 2000, 2, new float[][]
                 {
                         {
                                 -width /2,0f,

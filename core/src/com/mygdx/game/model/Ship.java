@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.mygdx.game.ServModels.ServFixingPoint;
-import com.mygdx.game.ServModels.ServShip;
+import com.mygdx.game.ServModels.OldServShip;
 import com.mygdx.game.view.Battle;
 
 /**
@@ -310,7 +309,7 @@ public void nullify()
 
 
     }
-    public ServShip toServ()
+    public OldServShip toServ()
     {
         /*ServFixingPoint[] servFixingPoints =new ServFixingPoint[fixingPoints.length];
         for(int i=0;i<fixingPoints.length;i++)
@@ -318,7 +317,7 @@ public void nullify()
             servFixingPoints[i]=fixingPoints[i].toServ();
         }*/
 
-        return new ServShip(getName()/*,servFixingPoints*/);
+        return new OldServShip(getName()/*,servFixingPoints*/);
     }
 
     public float getRealh() {

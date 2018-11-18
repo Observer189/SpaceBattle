@@ -23,6 +23,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.ServModels.ServAsteroid;
 import com.mygdx.game.ServModels.ServAsteroidField;
 import com.mygdx.game.ServModels.ServObject;
+import com.mygdx.game.ServModels.ServShip;
 import com.mygdx.game.control.ConnectToBattleProcessor;
 import com.mygdx.game.control.ServerListener;
 import com.mygdx.game.model.Asteroid;
@@ -31,6 +32,7 @@ import com.mygdx.game.model.Asteroids.Asteroid1;
 import com.mygdx.game.requests.BattleInfo;
 import com.mygdx.game.model.PhysicObject;
 import com.mygdx.game.model.Player;
+import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
 import com.mygdx.game.utils.TextManager;
 
@@ -97,6 +99,8 @@ public class PreparingToBattle implements Screen {
         kryo.register(ServAsteroid.class);
         kryo.register(ServAsteroidField.class);
         kryo.register(ServAsteroid[].class);
+        kryo.register(ServShip.class);
+        kryo.register(ClientStartInfo.class);
         client.start();
 
 

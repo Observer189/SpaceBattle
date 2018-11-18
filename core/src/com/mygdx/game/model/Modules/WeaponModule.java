@@ -24,8 +24,8 @@ public class WeaponModule extends Module {
     private Array<PhysicAmmo> ammos;
 
     World world;
-    public WeaponModule(String spriteName, float x, float y, Size size,  float density,float basicDamage,float energyCost,float reloadTime) {
-        super(spriteName, x, y, size,ModuleType.Weapon, density);
+    public WeaponModule(String spriteName, float x, float y,float rotation, Size size,  float density,float basicDamage,float energyCost,float reloadTime) {
+        super(spriteName, x, y,rotation, size,ModuleType.Weapon, density);
         this.basicDamage=basicDamage;
         this.energyCost=energyCost;
         this.reloadTime=reloadTime;

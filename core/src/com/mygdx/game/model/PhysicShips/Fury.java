@@ -20,8 +20,8 @@ public class Fury extends PhysicShip{
     static final float width=0.75f;
     static final float height=1;
 
-    public Fury(float x, float y) {
-        super("Dashing", x, y, width, height,3000,2,2,3,1,
+    public Fury(float x, float y,float rotation) {
+        super("Dashing", x, y,rotation, width, height,3000,2,2,3,1,
                  0.05f,400f,
                 new float[][]{
                 {-width /2,-height /2+ height *0.26f,
@@ -43,11 +43,11 @@ public class Fury extends PhysicShip{
         });
         //getWeapons()[0]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBody(),new Vector2(-0.1f,0.2f),world);
         //getWeapons()[1]=new WeaponPoint(new Machinegun(textureAtlas,x,y,world),getBody(),new Vector2(0.1f,0.2f),world);
-        getWeapons()[0]=new WeaponPoint(new Machinegun(x,y),new Vector2(-0.1f,0.2f));
-        getWeapons()[1]=new WeaponPoint(new Machinegun(x,y),new Vector2(0.1f,0.2f));
-        getEngines()[0]=new EnginePoint(new IonEngine(x,y),new Vector2(0f,-0.4f));
-        getEngines()[1]=new EnginePoint(new IonEngine(x,y),new Vector2(0.2f,-0.4f));
-        getEngines()[2]=new EnginePoint(new IonEngine(x,y),new Vector2(-0.2f,-0.4f));
-        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(x,y),new Vector2(0f,0.f));
+        getWeapons()[0]=new WeaponPoint(new Machinegun(x,y,rotation),new Vector2(-0.1f,0.2f));
+        getWeapons()[1]=new WeaponPoint(new Machinegun(x,y,rotation),new Vector2(0.1f,0.2f));
+        getEngines()[0]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(0f,-0.4f));
+        getEngines()[1]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(0.2f,-0.4f));
+        getEngines()[2]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(-0.2f,-0.4f));
+        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(x,y,rotation),new Vector2(0f,0.f));
     }
 }

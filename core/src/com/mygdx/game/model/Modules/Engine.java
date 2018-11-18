@@ -18,8 +18,8 @@ public class Engine extends Module {
     private Type type;
 
     private float energyConsumption;
-    public Engine(String spriteName, float x, float y, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type) {
-        super(spriteName, x, y, size, ModuleType.Engine, density);
+    public Engine(String spriteName, float x, float y,float rotation, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type) {
+        super(spriteName, x, y,rotation, size, ModuleType.Engine, density);
         this.power=power;
         this.angularPower=angularPower;
         this.maxSpeed=maxSpeed;

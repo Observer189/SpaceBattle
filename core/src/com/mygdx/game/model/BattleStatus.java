@@ -1,6 +1,6 @@
 package com.mygdx.game.model;
 
-import com.mygdx.game.ServModels.ServShip;
+import com.mygdx.game.ServModels.OldServShip;
 
 /**
  * Created by Sash on 03.05.2018.
@@ -10,14 +10,14 @@ public class BattleStatus { //класс необходимый для расп�
     Integer number;
     String status;
     String name;
-    ServShip ship;
+    OldServShip ship;
     Integer queueSize;//размер очереди
     Integer positionNumber; //номер позиции игрока на карте
     public BattleStatus()
     {
 
     }
-    public BattleStatus(Integer number,Integer queueSize,String name,ServShip ship,String status,Integer positionNumber)
+    public BattleStatus(Integer number, Integer queueSize, String name, OldServShip ship, String status, Integer positionNumber)
     {
         this.number=number;
         this.queueSize=queueSize;
@@ -81,11 +81,11 @@ public class BattleStatus { //класс необходимый для расп�
         this.name = name;
     }
 
-    public void setShip(ServShip ship) {
+    public void setShip(OldServShip ship) {
         this.ship = ship;
     }
 
-    public ServShip getShip() {
+    public OldServShip getShip() {
         return ship;
     }
 }

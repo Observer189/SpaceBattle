@@ -39,6 +39,7 @@ public class Helm {
         sprite.setPosition(camera.position.x+offsetX,camera.position.y+offsetY);
         sprite.setSize(camera.viewportWidth*widthCoeff,camera.viewportHeight*heightCoeff);
         sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
+        sprite.setRotation(ship.getRotation());
         this.ship=ship;
     }
     public void draw()
@@ -61,7 +62,7 @@ public class Helm {
         //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
 
          //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
-         shipRotation=(int) Math.toDegrees(ship.getRotation());
+         shipRotation=(int) ship.getRotation();
 
          while (shipRotation>=360) {                 //
              shipRotation -= 360;                    //

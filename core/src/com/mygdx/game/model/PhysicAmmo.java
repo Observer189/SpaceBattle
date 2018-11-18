@@ -11,8 +11,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PhysicAmmo extends PhysicObject {
     private float damage;
 
-    public PhysicAmmo(String spriteName, float x, float y, float width, float height, float density, int bodiesNumber, float[][] shape,float damage) {
-        super(spriteName, x, y, width, height, density, bodiesNumber, shape);
+    public PhysicAmmo(String spriteName, float x, float y,float rotation, float width, float height, float density, int bodiesNumber, float[][] shape,float damage) {
+        super(spriteName, x, y,rotation, width, height, density, bodiesNumber, shape);
         this.damage=damage;
 
     }

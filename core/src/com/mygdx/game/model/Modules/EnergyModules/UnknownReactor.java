@@ -10,7 +10,7 @@ import com.mygdx.game.utils.Size;
  */
 
 public class UnknownReactor extends EnergyModule {
-    public UnknownReactor( float x, float y) {
-        super("Reactor", x, y, Size.Small, 1,1000,10);
+    public UnknownReactor( float x, float y,float rotation) {
+        super("Reactor", x, y,rotation, Size.Small, 1,1000,10);
     }
 }

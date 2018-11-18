@@ -1,7 +1,7 @@
 package com.mygdx.game.requests;
 
 import com.mygdx.game.ServModels.ServPlayer;
-import com.mygdx.game.ServModels.ServShip;
+import com.mygdx.game.ServModels.OldServShip;
 import com.mygdx.game.model.BattleStatus;
 import com.mygdx.game.model.Coord;
 
@@ -21,7 +21,7 @@ public interface servApi {
     /*@GET("battle")
     Call<BattleStatus> getBattleNumber(@Query("name")String name,@Query("shipName") String shipName,@Query("status") String status,@Query("requestTime") long requestTime);*/
     @POST("battle")
-    Call<BattleStatus> getBattleNumber(@Query("name")String name, @Query("ship") ServShip ship, @Query("status") String status);
+    Call<BattleStatus> getBattleNumber(@Query("name")String name, @Query("ship") OldServShip ship, @Query("status") String status);
 
     @POST("battle/{battleNumber}")
     Call<Coord> get(@Path("battleNumber") Integer number,@Query("name")String name,@Query("enemyName")String enemyName,@Query("x") Float x, @Query("y") Float y,@Query("rotation") Float rotation);

@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.ServModels.ServShip;
 import com.mygdx.game.model.Modules.Engine;
+import com.mygdx.game.model.PhysicShips.Fury;
+import com.mygdx.game.model.PhysicShips.StarFighter;
 
 /**
  * Created by Sash on 15.06.2018.
@@ -16,7 +19,7 @@ public class PhysicShip extends PhysicObject {
     private float rotationSpeed;
     private float linearDamping;//не ниже 0.01
     private int rotationDirection;//-1-влево 1-вправо 0-без вращения
-    private float enginePower;
+    //private float enginePower;
     private WeaponPoint[] weapons;
     private EnginePoint[] engines;
     private EnergyPoint[] energyPoints;
@@ -37,13 +40,13 @@ public class PhysicShip extends PhysicObject {
     private boolean isShooting;
 
 
-    public PhysicShip(String spriteName, float x, float y, float width, float height,
+    public PhysicShip(String spriteName, float x, float y, float rotation,float width, float height,
                       float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float maxHP,
                       float[][] shape) {
-        super(spriteName, x, y, width, height,density,bodyNumber,shape);
+        super(spriteName, x, y,rotation, width, height,density,bodyNumber,shape);
         this.rotationSpeed=0;
         movementPosition=0;
-        enginePower=50;
+        //enginePower=0;
         movementVector = new Vector2(0, 0);
         tempVelocity=new Vector2(0,0);
         speed=0;
@@ -101,11 +104,11 @@ public class PhysicShip extends PhysicObject {
             movementVector.set(0,0);
         else if(movementPosition==1)
         {
-            movementVector.set((float)(-Math.sin(getRotation())),(float)(Math.cos(getRotation())));
+            movementVector.set((float)(-Math.sin(body.getAngle())),(float)(Math.cos(body.getAngle())));
         }
         else if(movementPosition==-1)
         {
-            movementVector.set((float)(Math.sin(getRotation()))*0.15f,(float)(-Math.cos(getRotation()))*0.15f);
+            movementVector.set((float)(Math.sin(body.getAngle()))*0.15f,(float)(-Math.cos(body.getAngle()))*0.15f);
         }
         if(isShooting) {
             shot();
@@ -324,5 +327,33 @@ public class PhysicShip extends PhysicObject {
 
     public float getHp() {
         return hp;
+    }
+
+    public static PhysicShip fromServ(ServShip servShip)
+    {
+        if (servShip.getName().equals("Dashing"))
+        {
+            return new Fury(servShip.getX(),servShip.getY(),servShip.getRotation());
+        }
+        else if(servShip.getName().equals("StarFighter"))
+        {
+            return new StarFighter(servShip.getX(),servShip.getY(),servShip.getRotation());
+        }
+        else {
+            System.out.println("Корабль с данным именем не существует");
+            return  null;
+        }
+
+    }
+    public ServShip toServ()
+    {
+        ServShip servShip=new ServShip();
+        servShip.setName(spriteName);
+        servShip.setX(getX());
+        servShip.setY(getY());
+        servShip.setWidth(getWidth());
+        servShip.setHeight(getHeight());
+        servShip.setRotation(getRotation());
+        return servShip;
     }
 }

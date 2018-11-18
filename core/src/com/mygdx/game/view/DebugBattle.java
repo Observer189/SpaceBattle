@@ -36,6 +36,7 @@ import com.mygdx.game.model.PhysicShip;
 import com.mygdx.game.model.Player;
 import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.WeaponPoint;
+import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
 import com.mygdx.game.utils.BattleInfoPanel;
 import com.mygdx.game.utils.ButtonForProcessor;
@@ -130,13 +131,23 @@ public class DebugBattle implements Screen {
                 HostStartInfo hsi=(HostStartInfo)p;
                 //asteroidField=hsi.getAsteroidField();
                 ServAsteroidField sAstF=new ServAsteroidField(hsi.getField());
+                //ship=PhysicShip.fromServ(hsi.getEnemyShip());
+                //enemyShip=PhysicShip.fromServ(hsi.getShip());
                 asteroidField=new AsteroidField();
                 for (int i=0;i<sAstF.getAsteroids().length;i++) {
-                    asteroidField.getAsteroids().add(new Asteroid1(sAstF.getAsteroids()[i].getX(), sAstF.getAsteroids()[i].getY(),
+                    asteroidField.getAsteroids().add(new Asteroid1(sAstF.getAsteroids()[i].getX(), sAstF.getAsteroids()[i].getY(),sAstF.getAsteroids()[i].getRotation(),
                             sAstF.getAsteroids()[i].getWidth(), sAstF.getAsteroids()[i].getHeight(), new Vector2(0, 0), sAstF.getAsteroids()[i].getHp()));
                 }
 
                 isStartInfoReceived=true;
+            }
+            else if(p instanceof ClientStartInfo)
+            {
+                ClientStartInfo csi=(ClientStartInfo)p;
+                System.out.println("Мы получили начальные данные от клиента");
+                enemyShip=PhysicShip.fromServ(csi.getShip());
+                isStartInfoReceived=true;
+
             }
             }
         });
@@ -176,18 +187,28 @@ public class DebugBattle implements Screen {
         //asteroidField=enemy.getAsteroidField();
         if(isHost)
         {
+            ship=new Fury(50,30,180);
             HostStartInfo hostStartInfo=new HostStartInfo(enemyID);
-
+            System.out.println("Мы создали корабль");
             asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
             asteroidField.generate();
+
             //hostStartInfo.AsteroidField(asteroidField);
 
             hostStartInfo.setField(asteroidField.toServ());
             client.sendTCP(hostStartInfo);
-            isStartInfoReceived=true;
+
         }
-        ship = new StarFighter( 50, 30);
-        enemyShip=new StarFighter(55,30);
+        else if(!isHost)
+        {
+            ship=new StarFighter(55,30,0);
+            enemyShip=new Fury(50,30,0);
+            ClientStartInfo csi=new ClientStartInfo(enemyID);
+            csi.setShip(ship.toServ());
+            client.sendTCP(csi);
+        }
+        //ship = new StarFighter( 50, 30,180);
+
        // asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
         //asteroidField.generate();
         while (!isStartInfoReceived)

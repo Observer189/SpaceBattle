@@ -65,7 +65,8 @@ public class AsteroidField {
     {
         for(int i=0;i<size;i++)
         {
-            asteroids.add(new Asteroid1( mapWidth*(float) Math.random(),mapHeight*(float)Math.random(),0.5f+(float)(Math.random()*2),0.5f+(float)Math.random()*2,
+            asteroids.add(new Asteroid1( mapWidth*(float) Math.random(),mapHeight*(float)Math.random(),360*(float)Math.random(),
+                    0.5f+(float)(Math.random()*2),0.5f+(float)Math.random()*2,
             new Vector2(0,0),10+(float)(Math.random()*100)));
         }
     }

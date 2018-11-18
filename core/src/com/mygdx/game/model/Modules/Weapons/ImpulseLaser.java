@@ -15,8 +15,8 @@ public class ImpulseLaser extends WeaponModule {
 
 
     long lastShotTime;
-    public ImpulseLaser( float x, float y) {
-        super("BlueImpulseLaser", x, y, Size.Small, 10,15,75,0.2f);
+    public ImpulseLaser( float x, float y,float rotation) {
+        super("BlueImpulseLaser", x, y,rotation, Size.Small, 10,15,75,0.2f);
 
 
         lastShotTime=0;

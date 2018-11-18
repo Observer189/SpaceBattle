@@ -17,8 +17,8 @@ public class Machinegun extends WeaponModule {
 
 
     long lastShotTime;
-    public Machinegun( float x, float y) {
-        super("Machinegun", x, y, Size.Small, 10,10,0,0.5f);
+    public Machinegun( float x, float y,float rotation) {
+        super("Machinegun", x, y,rotation, Size.Small, 10,10,0,0.5f);
 
         lastShotTime=0;
     }
@@ -27,8 +27,8 @@ public class Machinegun extends WeaponModule {
     public boolean shot(float l, Vector2 speedVector) {
         if(System.currentTimeMillis()-lastShotTime>getReloadTime()*1000) {
 
-            getAmmos().add(new Bullet( getBody().getPosition().x - (float) Math.sin(getBody().getAngle())*l-(float) Math.sin(getBody().getAngle())*0.05f,
-                    getBody().getPosition().y + (float) Math.cos(getBody().getAngle())*l+(float) Math.cos(getBody().getAngle())*0.125f,
+            getAmmos().add(new Bullet( getBody().getPosition().x - (float) Math.sin(getBody().getAngle())*l*1.2f-(float) Math.sin(getBody().getAngle())*0.125f,
+                    getBody().getPosition().y + (float) Math.cos(getBody().getAngle())*l*1.2f+(float) Math.cos(getBody().getAngle())*0.125f,
                     getBody().getAngle(), 0.1f, 0.25f,
                     10,speedVector, getDamage()));
             getAmmos().get(getAmmos().size-1).create(getTextureAtlas(),getWorld());

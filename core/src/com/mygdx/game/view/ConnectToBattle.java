@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.esotericsoftware.kryonet.Client;
-import com.mygdx.game.ServModels.ServShip;
+import com.mygdx.game.ServModels.OldServShip;
 import com.mygdx.game.control.ConnectToBattleProcessor;
 import com.mygdx.game.model.BattleStatus;
 import com.mygdx.game.model.OldPlayer;
@@ -46,7 +46,7 @@ public class ConnectToBattle implements Screen {
     servApi request;
     BattleStatus battleStatus;
     OldPlayer oldPlayer;
-    ServShip servShip;
+    OldServShip servShip;
     TextManager textManager;
     int counter;
     boolean getBattleIsFinished;
@@ -73,7 +73,7 @@ public class ConnectToBattle implements Screen {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(servApi.class);
-        servShip=new ServShip(oldPlayer.getCurrentShip().toServ());
+        servShip=new OldServShip(oldPlayer.getCurrentShip().toServ());
         processor=new ConnectToBattleProcessor();
         //Gdx.input.setInputProcessor(processor);
         textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -188,7 +188,7 @@ public class ConnectToBattle implements Screen {
             }
         });
     }
-    public Ship setShipByServ(ServShip ship)
+    public Ship setShipByServ(OldServShip ship)
     {
         Ship shipFromServ;
         System.out.println("!"+ship.getName()+"!");

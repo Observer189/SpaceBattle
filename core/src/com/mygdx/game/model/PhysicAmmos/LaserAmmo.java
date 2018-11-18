@@ -18,7 +18,7 @@ public class LaserAmmo extends PhysicAmmo {
     float speed;
     Vector2 shipSpeedVector;
     public LaserAmmo( float x, float y,float startAngle, float width, float height, float speed, Vector2 shipSpeedVector, float damage) {
-        super("BlueLaserAmmo", x, y, width, height, 0.00001f, 1, new float[][]{{
+        super("BlueLaserAmmo", x, y,startAngle, width, height, 0.00001f, 1, new float[][]{{
                     -width/2,-height/2,
                     width/2,-height/2,
                     width/2,height/2,
@@ -35,7 +35,7 @@ public class LaserAmmo extends PhysicAmmo {
     public void create(TextureAtlas textureAtlas, World world) {
         super.create(textureAtlas, world);
         getBody().setTransform(x,y,startAngle);
-        getBody().setLinearVelocity((float)(-Math.sin(getRotation()))*speed+shipSpeedVector.x,(float)(Math.cos(getRotation()))*speed+shipSpeedVector.y);
+        getBody().setLinearVelocity((float)(-Math.sin(getBody().getAngle()))*speed+shipSpeedVector.x,(float)(Math.cos(getBody().getAngle()))*speed+shipSpeedVector.y);
     }
 
     @Override

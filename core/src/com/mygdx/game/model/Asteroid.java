@@ -16,8 +16,8 @@ public class Asteroid extends PhysicObject {
     private float hp;
     int bodiesNumber;
     Vector2 startVelocity;
-    public Asteroid(String spriteName, float x, float y, float width, float height, float density, int bodiesNumber, float[][] shape, Vector2 startVelocity,float maxHp) {
-        super(spriteName, x, y, width, height, density, bodiesNumber, shape);
+    public Asteroid(String spriteName, float x, float y,float rotation, float width, float height, float density, int bodiesNumber, float[][] shape, Vector2 startVelocity,float maxHp) {
+        super(spriteName, x, y,rotation, width, height, density, bodiesNumber, shape);
         this.maxHp=maxHp;
         hp=maxHp;
         this.bodiesNumber=bodiesNumber;

@@ -18,8 +18,8 @@ import com.mygdx.game.model.WeaponPoint;
 public class StarFighter extends PhysicShip {
     static final float width=0.6f;
     static final float height=0.8f;
-    public StarFighter( float x, float y) {
-        super("StarFighter", x, y, width, height, 2500,3, 2, 3, 1, 0.05f, 50,
+    public StarFighter( float x, float y,float rotation) {
+        super("StarFighter", x, y,rotation, width, height, 2500,3, 2, 3, 1, 0.05f, 50,
                 new float[][]
                         {
                                 {
@@ -54,11 +54,11 @@ public class StarFighter extends PhysicShip {
                                 }
 
                         });
-        getWeapons()[0]=new WeaponPoint(new ImpulseLaser(x,y),new Vector2(-0.1f,0.2f));
-        getWeapons()[1]=new WeaponPoint(new ImpulseLaser(x,y),new Vector2(0.1f,0.2f));
-        getEngines()[0]=new EnginePoint(new IonEngine(x,y),new Vector2(0f,-0.4f));
-        getEngines()[1]=new EnginePoint(new IonEngine(x,y),new Vector2(0.2f,-0.4f));
-        getEngines()[2]=new EnginePoint(new IonEngine(x,y),new Vector2(-0.2f,-0.4f));
-        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(x,y),new Vector2(0f,0.f));
+        getWeapons()[0]=new WeaponPoint(new ImpulseLaser(x,y,rotation),new Vector2(-0.1f,0.2f));
+        getWeapons()[1]=new WeaponPoint(new ImpulseLaser(x,y,rotation),new Vector2(0.1f,0.2f));
+        getEngines()[0]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(0f,-0.4f));
+        getEngines()[1]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(0.2f,-0.4f));
+        getEngines()[2]=new EnginePoint(new IonEngine(x,y,rotation),new Vector2(-0.2f,-0.4f));
+        getEnergyPoints()[0]=new EnergyPoint(new UnknownReactor(x,y,rotation),new Vector2(0f,0.f));
     }
 }

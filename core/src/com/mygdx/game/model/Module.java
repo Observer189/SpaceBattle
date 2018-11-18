@@ -34,7 +34,7 @@ public class Module {
     Sprite sprite;
     String spriteName;
 
-    public Module(String spriteName,float x, float y, Size size,ModuleType type, float density)
+    public Module(String spriteName,float x, float y,float rotation, Size size,ModuleType type, float density)
     {
         this.size=size;
         this.spriteName=spriteName;
@@ -60,6 +60,7 @@ public class Module {
         fDef= new FixtureDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
+        bDef.angle=(float) Math.toRadians(rotation);
 
         shape= new PolygonShape();
         shape.setAsBox(width/2,height/2);

@@ -2,6 +2,7 @@ package com.mygdx.game.requests;
 
 import com.mygdx.game.ServModels.ServAsteroid;
 import com.mygdx.game.ServModels.ServAsteroidField;
+import com.mygdx.game.ServModels.ServShip;
 import com.mygdx.game.model.AsteroidField;
 
 /**
@@ -10,6 +11,8 @@ import com.mygdx.game.model.AsteroidField;
 
 public class HostStartInfo {
     int enemyConID;
+    ServShip ship;
+    ServShip enemyShip;
     ServAsteroidField field;
     public HostStartInfo()
     {
@@ -34,5 +37,21 @@ public class HostStartInfo {
 
     public void setField(ServAsteroidField field) {
         this.field = field;
+    }
+
+    public void setShip(ServShip ship) {
+        this.ship = ship;
+    }
+
+    public void setEnemyShip(ServShip enemyShip) {
+        this.enemyShip = enemyShip;
+    }
+
+    public ServShip getShip() {
+        return ship;
+    }
+
+    public ServShip getEnemyShip() {
+        return enemyShip;
     }
 }

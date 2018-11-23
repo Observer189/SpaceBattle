@@ -64,6 +64,14 @@ public class EnginePoint {
         joint=world.createJoint(jointDef);
         this.world=world;
     }
+    public void create(World world,Body shipBody)
+    {
+        engine.create(world);
+        jointDef.bodyA = shipBody;
+        jointDef.bodyB = engine.getBody();
+        joint=world.createJoint(jointDef);
+        this.world=world;
+    }
     public void move(Vector2 movementVector)
     {
         if(engine!=null) {

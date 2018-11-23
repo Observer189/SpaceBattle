@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.ServModels.ServAsteroid;
 import com.mygdx.game.ServModels.ServObject;
+import com.mygdx.game.model.Asteroids.Asteroid1;
 
 /**
  * Created by Sash on 24.10.2018.
@@ -23,6 +24,7 @@ public class Asteroid extends PhysicObject {
         this.bodiesNumber=bodiesNumber;
         this.startVelocity=startVelocity;
     }
+
     public Asteroid()
     {
 
@@ -67,5 +69,17 @@ public class Asteroid extends PhysicObject {
         ast.setHp(hp);
         return ast;
     }
-
+    public static Asteroid fromAsteroid(Asteroid asteroid)
+    {
+        Asteroid ast;
+        if(asteroid instanceof Asteroid1)
+        {
+            ast=new Asteroid1(asteroid.getX(),asteroid.getY(),asteroid.getRotation(),asteroid.getWidth(),asteroid.getHeight(),new Vector2(0,0),asteroid.getHp());
+        }
+        else
+        {
+            ast=new Asteroid();
+        }
+        return ast;
+    }
 }

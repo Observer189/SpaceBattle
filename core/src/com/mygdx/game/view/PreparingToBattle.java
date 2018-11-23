@@ -23,17 +23,21 @@ import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.ServModels.ServAsteroid;
 import com.mygdx.game.ServModels.ServAsteroidField;
 import com.mygdx.game.ServModels.ServObject;
+import com.mygdx.game.ServModels.ServPlayer;
 import com.mygdx.game.ServModels.ServShip;
 import com.mygdx.game.control.ConnectToBattleProcessor;
 import com.mygdx.game.control.ServerListener;
 import com.mygdx.game.model.Asteroid;
 import com.mygdx.game.model.AsteroidField;
 import com.mygdx.game.model.Asteroids.Asteroid1;
+import com.mygdx.game.model.PhysicShip;
+import com.mygdx.game.model.PhysicShips.StarFighter;
 import com.mygdx.game.requests.BattleInfo;
 import com.mygdx.game.model.PhysicObject;
 import com.mygdx.game.model.Player;
 import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
+import com.mygdx.game.requests.ServStartInfo;
 import com.mygdx.game.utils.TextManager;
 
 import java.io.IOException;
@@ -47,6 +51,7 @@ import static java.lang.Thread.sleep;
 public class PreparingToBattle implements Screen {
     SpriteBatch batch;
     Game game;
+    DebugBattle debugBattle;
     TextureAtlas textureAtlas;
     BitmapFont blueFont;
     TextManager textManager;
@@ -55,11 +60,14 @@ public class PreparingToBattle implements Screen {
     static String ip = "192.168.0.56";
     //Порт к которому мы будем подключатся
     static int tcpPort = 27960, udpPort = 27960;
-    public static boolean messageReceived = false;
+    public boolean messageReceived = false;
     ServerListener listener;
 
     BattleInfo battleInfo;
     Player player;
+    PhysicShip ship;
+    ServPlayer servPlayer;
+
     boolean isInQueue;
     long lastRequestTime;
 
@@ -74,13 +82,23 @@ public class PreparingToBattle implements Screen {
     }
     @Override
     public void show() {
-
-        world=new World(new Vector2(0,0),false);
         Gdx.input.setInputProcessor(new ConnectToBattleProcessor());
+        world=new World(new Vector2(0,0),false);
+        //asteroidField=new AsteroidField(15,30,190,114);
+
+        //asteroidField.generate();
+
+
+
+        //game.setScreen(new TestWindow());
+
+
         player=new Player();
         player.generateName();
-        field=new AsteroidField(15,30,50,40);
-        field.generate();
+        ship=new StarFighter(0,0,0);
+        player.setCurrentShip(ship);
+        servPlayer=player.toServ();
+
 
         battleInfo=new BattleInfo();
         battleInfo.setPlayer(player);
@@ -101,6 +119,8 @@ public class PreparingToBattle implements Screen {
         kryo.register(ServAsteroid[].class);
         kryo.register(ServShip.class);
         kryo.register(ClientStartInfo.class);
+        kryo.register(ServPlayer.class);
+        kryo.register(ServStartInfo.class);
         client.start();
 
 
@@ -108,8 +128,9 @@ public class PreparingToBattle implements Screen {
         {
             public void connected(Connection c)
             {
-                battleInfo.setRequestType(BattleInfo.RequestType.Adding);
-                c.sendTCP(battleInfo);
+                //battleInfo.setRequestType(BattleInfo.RequestType.Adding);
+                //c.sendTCP(battleInfo);
+                c.sendTCP(servPlayer);
                 System.out.println("Отправляем запрос на добавление в очередь");
             }
             public void received(Connection c, Object p) {
@@ -121,6 +142,20 @@ public class PreparingToBattle implements Screen {
                        lastRequestTime=System.currentTimeMillis();
                    }
                }
+               else if(p instanceof ServStartInfo) {
+                   ServStartInfo csi = (ServStartInfo) p;
+                   System.out.println("Мы получили начальные данные от сервера");
+                   ServAsteroidField sAstF = new ServAsteroidField(csi.getAsteroidField());
+                   asteroidField = new AsteroidField();
+                   for (int i = 0; i < sAstF.getAsteroids().length; i++) {
+                       asteroidField.getAsteroids().add(new Asteroid1(sAstF.getAsteroids()[i].getX(), sAstF.getAsteroids()[i].getY(), sAstF.getAsteroids()[i].getRotation(),
+                               sAstF.getAsteroids()[i].getWidth(), sAstF.getAsteroids()[i].getHeight(), new Vector2(0, 0), sAstF.getAsteroids()[i].getHp()));
+                   }
+                   //game.setScreen(new DebugBattle(batch,game,textureAtlas,client,battleInfo.isHost(),battleInfo.getEnemyId(),battleInfo.getPlayer(),battleInfo.getEnemy()));
+                   //game.setScreen(debugBattle);
+                   System.out.println("Size"+asteroidField.getAsteroids().size);
+                   messageReceived=true;
+               }
 
             }
         });
@@ -131,9 +166,10 @@ public class PreparingToBattle implements Screen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         //System.out.println("Клиент покидает сервер");
 
-
+        //game.setScreen(new DebugBattle(batch,game,textureAtlas,client,battleInfo.isHost(),battleInfo.getEnemyId(),battleInfo.getPlayer(),battleInfo.getEnemy()));
     }
 
     @Override
@@ -145,26 +181,12 @@ public class PreparingToBattle implements Screen {
             battleInfo.setRequestType(BattleInfo.RequestType.Info);
             client.sendTCP(battleInfo);
         }
-        if((battleInfo.getStatus()!=null)&&(battleInfo.getStatus().equals("inQueue")))
+
+
+        if(messageReceived)
         {
-            textManager.displayMessage(batch,blueFont,"You are in Queue",300,320);
-            textManager.displayMessage(batch,blueFont,"Players in queue:"+battleInfo.getQueueSize(),300,280);
-        }
-
-
-        if((battleInfo.getStatus()!=null)&&(battleInfo.getStatus().equals("inBattle")))
-        {
-            textManager.displayMessage(batch,blueFont,"Battle starts",300,500);
-            textManager.displayMessage(batch,blueFont,"Your enemy id:"+battleInfo.getEnemyId(),300,400);
-            if(battleInfo.isHost())
-            {
-                textManager.displayMessage(batch,blueFont,"You are host",300,300);
-            }
-
-
-
-
-            game.setScreen(new DebugBattle(batch,game,textureAtlas,client,battleInfo.isHost(),battleInfo.getEnemyId(),battleInfo.getPlayer(),battleInfo.getEnemy()));
+            debugBattle=new DebugBattle(batch,game,textureAtlas,client,new Player(),new Player(),asteroidField);
+            game.setScreen(debugBattle);
         }
     }
 

@@ -67,7 +67,7 @@ public class ConnectToBattle implements Screen {
 
         //oldPlayer = new OldPlayer("oldPlayer", new Sudden(textureAtlas,0,0));
         //oldPlayer.generateName();
-        game.setScreen(new DebugBattle(batch,game,textureAtlas,new Client(),true,1,new Player(),new Player()));
+        //game.setScreen(new DebugBattle(batch,game,textureAtlas,new Client(),true,1,new Player(),new Player()));
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())

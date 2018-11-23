@@ -112,6 +112,16 @@ public class PhysicObject {
 
         mustDestroyed=false;
     }
+    public void create(World world)
+    {
+        this.world = world;
+        body = world.createBody(bDef);
+        for (int i = 0; i < fixturesNumber; i++) {
+            fixtures[i]=body.createFixture(fDefs[i]);
+        }
+
+        mustDestroyed=false;
+    }
     public void draw(SpriteBatch batch)
     {
         x=body.getPosition().x;

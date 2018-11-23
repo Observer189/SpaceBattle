@@ -96,6 +96,33 @@ public class PhysicShip extends PhysicObject {
         consumptionReload=100;
         body.setUserData(this);
     }
+    public void create(World world)
+    {
+        super.create(world);
+        for(WeaponPoint i:weapons)
+        {
+            i.create(world,getBody());
+        }
+        for(EnginePoint i:engines)
+        {
+            i.create(world,getBody());
+        }
+        for(EnergyPoint i:energyPoints)
+        {
+            i.create(world,getBody());
+        }
+        rotationSpeed=findRotationSpeed();
+        maxEnergy=0;
+        for(int i=0;i<energyPoints.length;i++)
+        {
+            maxEnergy+=energyPoints[i].getEnergyModule().getEnergyStorage();
+        }
+
+        energy=maxEnergy;
+        energyConsLastTime=System.currentTimeMillis();
+        consumptionReload=100;
+        body.setUserData(this);
+    }
 
     public void move()
     {

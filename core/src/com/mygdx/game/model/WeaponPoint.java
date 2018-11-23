@@ -64,6 +64,14 @@ public class WeaponPoint {
         joint=world.createJoint(jointDef);
         this.world=world;
     }
+    public void create(World world,Body shipBody)
+    {
+        weapon.create(world);
+        jointDef.bodyA = shipBody;
+        jointDef.bodyB = weapon.getBody();
+        joint=world.createJoint(jointDef);
+        this.world=world;
+    }
     public boolean shot(float l,Vector2 speedVector)
     {
         return weapon.shot(l,speedVector);

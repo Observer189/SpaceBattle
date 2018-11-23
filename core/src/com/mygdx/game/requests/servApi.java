@@ -1,6 +1,6 @@
 package com.mygdx.game.requests;
 
-import com.mygdx.game.ServModels.ServPlayer;
+import com.mygdx.game.ServModels.OldServPlayer;
 import com.mygdx.game.ServModels.OldServShip;
 import com.mygdx.game.model.BattleStatus;
 import com.mygdx.game.model.Coord;
@@ -33,6 +33,6 @@ public interface servApi {
     Call<Integer> updateMoney(@Query("name")String name,@Query("money") int money);
 
     @GET("players/getPlayer")
-    Call<ServPlayer> getPlayer(@Query("name") String name);
+    Call<OldServPlayer> getPlayer(@Query("name") String name);
 
 }

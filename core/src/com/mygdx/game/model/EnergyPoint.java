@@ -59,6 +59,14 @@ public class EnergyPoint {
         joint=world.createJoint(jointDef);
         this.world=world;
     }
+    public void create(World world,Body shipBody)
+    {
+        energyModule.create(world);
+        jointDef.bodyA = shipBody;
+        jointDef.bodyB = energyModule.getBody();
+        joint=world.createJoint(jointDef);
+        this.world=world;
+    }
     public void destroy()
     {
         //world.destroyJoint(joint);

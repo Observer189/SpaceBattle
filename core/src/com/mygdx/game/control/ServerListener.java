@@ -15,12 +15,6 @@ public class ServerListener extends Listener {
 
     }
     public void received(Connection c, Object p) {
-        if(p instanceof BattleInfo)
-        {
-            BattleInfo info=(BattleInfo) p;
-            System.out.println("Ответ от сервера:"+info.getMessage());
 
-            PreparingToBattle.messageReceived=true;
-        }
     }
 }

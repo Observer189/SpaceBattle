@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -38,6 +39,7 @@ import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.WeaponPoint;
 import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
+import com.mygdx.game.requests.ServStartInfo;
 import com.mygdx.game.utils.BattleInfoPanel;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
@@ -88,27 +90,27 @@ public class DebugBattle implements Screen {
     //ButtonForProcessor turnLeft;
     //ButtonForProcessor turnRight;
 
-    WeldJointDef joint;
-    Joint j;
-    WeaponPoint point;
+
     float endMapCoef;
 
     Client client;
-    boolean isHost;
-    int enemyID;
+
+
     Player player;
     Player enemy;
 
     boolean isStartInfoReceived;
     boolean isReady;
-    public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Client client,boolean isHost,int enemyID,Player player,Player enemy)
+    public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Client client,Player player,Player enemy,AsteroidField asteroidField)
     {
+        System.out.println("Заходим в бой");
         this.batch = batch;
         this.game = game;
+
         this.textureAtlas = textureAtlas;
         this.client=client;
-        this.isHost=isHost;
-        this.enemyID=enemyID;
+
+
         this.player=player;
         this.enemy=enemy;
         isStartInfoReceived=false;
@@ -119,6 +121,10 @@ public class DebugBattle implements Screen {
         width =1.5f;
         height =2;
         endMapCoef=0.05f;
+        System.out.println("Size"+asteroidField.getAsteroids().size);
+        this.asteroidField = new AsteroidField(asteroidField);
+        System.out.println("Size"+this.asteroidField.getAsteroids().size);
+        isStartInfoReceived=true;
     }
     @Override
     public void show() {
@@ -126,22 +132,8 @@ public class DebugBattle implements Screen {
         client.addListener(new Listener()
         {
             public void received(Connection c, Object p) {
-            if(p instanceof HostStartInfo)
-            {
-                HostStartInfo hsi=(HostStartInfo)p;
-                //asteroidField=hsi.getAsteroidField();
-                ServAsteroidField sAstF=new ServAsteroidField(hsi.getField());
-                //ship=PhysicShip.fromServ(hsi.getEnemyShip());
-                //enemyShip=PhysicShip.fromServ(hsi.getShip());
-                asteroidField=new AsteroidField();
-                for (int i=0;i<sAstF.getAsteroids().length;i++) {
-                    asteroidField.getAsteroids().add(new Asteroid1(sAstF.getAsteroids()[i].getX(), sAstF.getAsteroids()[i].getY(),sAstF.getAsteroids()[i].getRotation(),
-                            sAstF.getAsteroids()[i].getWidth(), sAstF.getAsteroids()[i].getHeight(), new Vector2(0, 0), sAstF.getAsteroids()[i].getHp()));
-                }
 
-                isStartInfoReceived=true;
-            }
-            else if(p instanceof ClientStartInfo)
+            if(p instanceof ClientStartInfo)
             {
                 ClientStartInfo csi=(ClientStartInfo)p;
                 System.out.println("Мы получили начальные данные от клиента");
@@ -149,84 +141,33 @@ public class DebugBattle implements Screen {
                 isStartInfoReceived=true;
 
             }
+
             }
         });
         world=new World(new Vector2(0,0),false);
 
         map=Map.generateMap(batch,textureAtlas);
-        /*ship=new PhysicShip(textureAtlas.findRegion("Dashing"),50,30,width,height,0.05f,
-                new float[]{-width/2,-height/2+height*0.26f,
-                -width/2,-height/2+height*0.135f,
-                -width/2+width*0.18f,-height/2,
-                        -width/2+width*0.81f,-height/2,
-                        width/2,-height/2+height*0.135f,
-                        width/2,-height/2+height*0.26f,
-                        -width/2+width*0.83f,-height/2+height*0.41f,
-                        -width/2+width*0.157f,-height/2+height*0.41f
-                        },world);*/
 
-        /*ship2=new PhysicShip(textureAtlas.findRegion("Dashing"),50f,30,
-                width,height,0.05f,new float[]{
-                -width/2+width*0.1f,-height/2+height*0.567f,
-                -width/2+width*0.83f,-height/2+height*0.41f,
-                -width/2+width*0.157f,-height/2+height*0.41f,
-                -width/2+width*0.89f,-height/2+height*0.567f,
-                -width/2+width*0.67f,height/2,
-                -width/2+width*0.33f,height/2},world);*/
-        //ship= new Fury(textureAtlas,50,30,world);
-        //ship.create();
 
-        /*if(!isHost)
-        {
-            ship = new Fury( 50, 30);
-        }
-        if(isHost) {
+        ship = new StarFighter( 50, 30,180);
+        enemyShip=new Fury(55,30,0);
 
-            ship = new StarFighter( 50, 30);
-        }*/
-        //asteroidField=enemy.getAsteroidField();
-        if(isHost)
-        {
-            ship=new Fury(50,30,180);
-            HostStartInfo hostStartInfo=new HostStartInfo(enemyID);
-            System.out.println("Мы создали корабль");
-            asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
-            asteroidField.generate();
-
-            //hostStartInfo.AsteroidField(asteroidField);
-
-            hostStartInfo.setField(asteroidField.toServ());
-            client.sendTCP(hostStartInfo);
-
-        }
-        else if(!isHost)
-        {
-            ship=new StarFighter(55,30,0);
-            enemyShip=new Fury(50,30,0);
-            ClientStartInfo csi=new ClientStartInfo(enemyID);
-            csi.setShip(ship.toServ());
-            client.sendTCP(csi);
-        }
-        //ship = new StarFighter( 50, 30,180);
-
-       // asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
+        //asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
         //asteroidField.generate();
-        while (!isStartInfoReceived)
+        /*while (!isStartInfoReceived)
         {
             try {
                 sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+        ship.create(textureAtlas, world);
+        enemyShip.create(textureAtlas, world);
 
-            ship.create(textureAtlas, world);
-            enemyShip.create(textureAtlas, world);
-            //asteroid.create(textureAtlas,world);
-            asteroidField.create(textureAtlas, world);
+        asteroidField.create(textureAtlas, world);
 
-        //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition(), (float) Math.toRadians(0));
-        //ship.getBodies()[1].setTransform(ship.getBodies()[0].getPosition(), (float) Math.toRadians(0));
+
         camera=new OrthographicCamera(widthCamera,heightCamera);
         camera.position.set(new Vector3(500,500,0));
         camX =camera.position.x;
@@ -235,34 +176,24 @@ public class DebugBattle implements Screen {
         gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
         helm=new Helm(textureAtlas,batch,camera,-6.5f,-7.5f,0.15f,0.15f*AspectRatio, ship);
         fireButton=new ButtonForProcessor(batch,camera,6.5f,-7.5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
-        //energyBar=new ProgressBar(batch,textureAtlas.findRegion("HProgressBar"),textureAtlas.findRegion("HPLine"),
-          //      -0.45f,0.45f,0.3f,0.05f,ship.getMaxEnergy(),camera);
+
         battleInfoPanel=new BattleInfoPanel(batch,textureAtlas,-0.45f,0.4f,0.3f,0.1f, ship.getMaxHP(), ship.getMaxEnergy(),camera);
-        //turnLeft=new ButtonForProcessor(batch,camX+widthCamera/5,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnLeft"));
-        //turnRight=new ButtonForProcessor(batch,camX+widthCamera/5+widthCamera/9,camY,widthCamera/11,heightCamera/11,textureAtlas.findRegion("TurnRight"));
+
         battleContactListener=new BattleContactListener();
         processor=new DebugBattleProcessor(gasRegulator,helm,fireButton, ship);
         Gdx.input.setInputProcessor(processor);
 
 
-        //point=new WeaponPoint(new WeaponModule(textureAtlas.findRegion("Machinegun"),50,30, Size.Small,10,world),ship.getBodies()[0],world);
-        //point.installModule(new WeaponModule(textureAtlas.findRegion("Machinegun"),51,31, Size.Small,10,world),ship.getBodies()[0]);
-        /*joint = new WeldJointDef();
-        joint.collideConnected=false;
-        joint.bodyA=ship.getBodies()[0];
-        joint.bodyB=ship.getBodies()[1];
 
-        joint.initialize(ship.getBodies()[0],ship.getBodies()[1],new Vector2(50,30));
-        j=world.createJoint(joint);*/
-
-        /*for(int i=0;i<=10;i++)
-        {
-            createRect();
-        }*/
         createRectJoint();
         createWall();
         world.setContactListener(battleContactListener);
-
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Size"+asteroidField.getAsteroids().size);
     }
 
     @Override
@@ -277,13 +208,9 @@ public class DebugBattle implements Screen {
             camY = camera.position.y;
             gasRegulator.setX(camX - widthCamera * 0.45f);
             gasRegulator.setY(camY - heightCamera * 0.45f);
-            //energyBar.update();
+
             battleInfoPanel.update();
-            //обновление позиции кнопок вращения
-            //turnLeft.setX(camX+widthCamera/5);
-            //turnLeft.setY(camY-heightCamera/3);
-            //turnRight.setX(camX+widthCamera/5+widthCamera/9);
-            //turnRight.setY(camY-heightCamera/3);
+
             //////////////////////////////////
 
             camera.update();
@@ -447,4 +374,7 @@ public class DebugBattle implements Screen {
         Asteroid[] asteroids=new Asteroid[10];
     }
 
+    public void setAsteroidField(AsteroidField asteroidField) {
+        this.asteroidField = new AsteroidField(asteroidField);
+    }
 }

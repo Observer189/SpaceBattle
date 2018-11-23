@@ -38,6 +38,10 @@ public class WeaponModule extends Module {
         super.create(textureAtlas, world);
         this.world=world;
     }
+    public void create(World world) {
+        super.create(world);
+        this.world=world;
+    }
 
     public boolean shot(float l, Vector2 speedVector) //l - это расстояние от центра пушки до конца корабля
     {

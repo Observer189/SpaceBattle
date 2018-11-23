@@ -78,6 +78,14 @@ public class Module {
         sprite.setOrigin(width/2,height/2);
         sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
     }
+    public void create(World world)
+    {
+        this.world=world;
+        this.textureAtlas=textureAtlas;
+        body=world.createBody(bDef);
+        fixture=body.createFixture(fDef);
+
+    }
 
     public void draw(SpriteBatch batch)
     {

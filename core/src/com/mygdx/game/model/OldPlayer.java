@@ -2,7 +2,7 @@ package com.mygdx.game.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.mygdx.game.ServModels.ServPlayer;
+import com.mygdx.game.ServModels.OldServPlayer;
 import com.mygdx.game.model.Ships.Dashing;
 import com.mygdx.game.model.Weapons.Machinegun;
 
@@ -32,7 +32,7 @@ public class OldPlayer {
         this.currentShip = currentShip;
         resources.shipList.add(currentShip);
     }
-    public OldPlayer(ServPlayer servPlayer)
+    public OldPlayer(OldServPlayer servPlayer)
     {
         name=servPlayer.getName();
         resources=new Resources();

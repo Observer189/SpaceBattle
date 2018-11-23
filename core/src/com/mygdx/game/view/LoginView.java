@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mygdx.game.ServModels.ServPlayer;
+import com.mygdx.game.ServModels.OldServPlayer;
 import com.mygdx.game.model.Map;
 import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.model.Ships.Axe;
@@ -63,7 +63,7 @@ public class LoginView implements Screen {
     public static StarGen star;
     Boolean isRegistration=false;
     int createResult;
-    ServPlayer signPlayer;
+    OldServPlayer signPlayer;
     servApi request;
     public final String baseURL = "https://star-project-serv.herokuapp.com/";
     Confirmation confirmation;
@@ -401,11 +401,11 @@ public class LoginView implements Screen {
         }
         return result;
     }
-    private ServPlayer getOldPlayer()
+    private OldServPlayer getOldPlayer()
     {
 
-         ServPlayer servPlayer=new ServPlayer();
-        Call<ServPlayer> call=request.getPlayer(textFieldLog.getText());
+         OldServPlayer servPlayer=new OldServPlayer();
+        Call<OldServPlayer> call=request.getPlayer(textFieldLog.getText());
         try {
            servPlayer.setServPlayer(call.execute().body());
            return servPlayer;

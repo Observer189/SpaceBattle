@@ -29,6 +29,16 @@ public class AsteroidField {
         this.mapHeight=mapHeight;
 
     }
+    public AsteroidField(AsteroidField field)
+    {
+        size=field.getSize();
+        mapWidth=field.getMapWidth();
+        mapHeight=field.getMapHeight();
+        asteroids=new Array<Asteroid>();
+        for (int i=0;i<field.getAsteroids().size;i++) {
+        asteroids.add(Asteroid.fromAsteroid(field.getAsteroids().get(i)));
+        }
+    }
     public AsteroidField()
     {
         asteroids=new Array<Asteroid>();
@@ -82,5 +92,17 @@ public class AsteroidField {
             field.getAsteroids()[i]=new ServAsteroid(asteroids.get(i).toServ());
         }
         return field;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public float getMapWidth() {
+        return mapWidth;
+    }
+
+    public float getMapHeight() {
+        return mapHeight;
     }
 }

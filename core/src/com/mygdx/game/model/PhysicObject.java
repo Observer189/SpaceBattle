@@ -54,6 +54,7 @@ public class PhysicObject {
         bDef=new BodyDef();
         bDef.type= BodyDef.BodyType.DynamicBody;
         bDef.position.set(x,y);
+
         bDef.angle=(float) Math.toRadians(rotation);
 
         fDefs=new FixtureDef[fixturesNumber];
@@ -133,6 +134,22 @@ public class PhysicObject {
         sprite.draw(batch);
         batch.end();
     }
+    public void setX(float x)
+    {
+        if(body!=null)
+        {
+            body.setTransform(x,body.getPosition().y,body.getAngle());
+        }
+        else bDef.position.x=x;
+    }
+    public void setY(float y)
+    {
+        if(body!=null)
+        {
+            body.setTransform(body.getPosition().x,y,body.getAngle());
+        }
+        else bDef.position.y=y;
+    }
     public float getX()
     {
         if(body!=null)
@@ -145,6 +162,12 @@ public class PhysicObject {
             return body.getPosition().y;
         else return bDef.position.y;
     }
+    public float getAngle()
+    {
+        if(body!=null)
+        return body.getAngle();
+        else return bDef.angle;
+    }
 
     /*public Body getBody() {
         return body;
@@ -153,7 +176,18 @@ public class PhysicObject {
     public Sprite getSprite() {
         return sprite;
     }
-
+    public void setTransform(float x,float y,float rotation)
+    {
+        if(body!=null)
+        {
+            body.setTransform(x,y,(float)Math.toRadians(rotation));
+        }
+        else
+        {
+            bDef.position.set(x,y);
+            bDef.angle=(float)Math.toRadians(rotation);
+        }
+    }
 
 
     public Body getBody() {

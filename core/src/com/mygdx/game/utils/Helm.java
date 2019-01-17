@@ -54,7 +54,7 @@ public class Helm {
        pointAngle=Math.toDegrees(Math.atan2(touchX-(sprite.getX()+sprite.getWidth()/2),touchY-(sprite.getY()+sprite.getHeight()/2)));
        sprite.setRotation(-(float)pointAngle);
        isChanged=true;
-
+        ship.setTargetRotation(sprite.getRotation());
     }
 
     public void updateShip(float angularSpeed)
@@ -62,6 +62,7 @@ public class Helm {
         //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
 
          //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
+        ship.setTargetRotation(sprite.getRotation());
          shipRotation=(int) ship.getRotation();
 
          while (shipRotation>=360) {                 //

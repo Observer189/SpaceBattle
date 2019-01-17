@@ -20,6 +20,7 @@ public class EnginePoint {
     Engine engine;
     World world;
 
+    Vector2 localAnchor;
     public EnginePoint(World world)
     {
         this.world=world;
@@ -28,6 +29,8 @@ public class EnginePoint {
     {
 
         this.engine=engine;
+        engine.setTransform(engine.getX()+localAnchor.x,engine.getY()+localAnchor.y,(float) Math.toDegrees(engine.getAngle()));
+        this.localAnchor=localAnchor;
         jointDef = new WeldJointDef();
 
         jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
@@ -40,6 +43,8 @@ public class EnginePoint {
         if(engine.getType().equals(ModuleType.Engine))
         {
             this.engine=engine;
+            engine.setTransform(engine.getX()+localAnchor.x,engine.getY()+localAnchor.y,(float) Math.toDegrees(engine.getAngle()));
+            this.localAnchor=localAnchor;
             jointDef = new WeldJointDef();
             jointDef.bodyA = shipBody;
             jointDef.bodyB = engine.getBody();
@@ -89,6 +94,11 @@ public class EnginePoint {
         {
             engine.draw(batch);
         }
+    }
+    public void toShip(float x,float y,float rotation)//телепортирует тело к кораблю на расстояние нормального смещения
+    {//на вход передаются координаты корабля
+        engine.setTransform(x+localAnchor.x*(float)(Math.cos(Math.toRadians(rotation)))-localAnchor.y*(float)(Math.sin(Math.toRadians(rotation))),
+                y+localAnchor.y*(float)(Math.cos(Math.toRadians(rotation)))+localAnchor.x*(float)(Math.sin(Math.toRadians(rotation))),rotation);
     }
     public float getAngularPower()
     {

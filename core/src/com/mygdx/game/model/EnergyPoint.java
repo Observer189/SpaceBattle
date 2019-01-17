@@ -19,7 +19,7 @@ public class EnergyPoint {
     Joint joint;
     EnergyModule energyModule;
     World world;
-
+    Vector2 localAnchor;
     public EnergyPoint(World world)
     {
         this.world=world;
@@ -28,6 +28,8 @@ public class EnergyPoint {
     {
 
         this.energyModule=energyModule;
+        energyModule.setTransform(energyModule.getX()+localAnchor.x,energyModule.getY()+localAnchor.y,(float) Math.toDegrees(energyModule.getAngle()));
+        this.localAnchor=localAnchor;
         jointDef = new WeldJointDef();
 
         jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
@@ -40,6 +42,8 @@ public class EnergyPoint {
         if(energyModule.getType().equals(ModuleType.EnergyModule))
         {
             this.energyModule=energyModule;
+            energyModule.setTransform(energyModule.getX()+localAnchor.x,energyModule.getY()+localAnchor.y,(float) Math.toDegrees(energyModule.getAngle()));
+            this.localAnchor=localAnchor;
             jointDef = new WeldJointDef();
             jointDef.bodyA = shipBody;
             jointDef.bodyB = energyModule.getBody();
@@ -78,6 +82,11 @@ public class EnergyPoint {
         {
             energyModule.draw(batch);
         }
+    }
+    public void toShip(float x,float y,float rotation)//телепортирует тело к кораблю на расстояние нормального смещения
+    {//на вход передаются координаты корабля
+        energyModule.setTransform(x+localAnchor.x*(float)(Math.cos(Math.toRadians(rotation)))-localAnchor.y*(float)(Math.sin(Math.toRadians(rotation))),
+                y+localAnchor.y*(float)(Math.cos(Math.toRadians(rotation)))+localAnchor.x*(float)(Math.sin(Math.toRadians(rotation))),rotation);
     }
 
     public EnergyModule getEnergyModule() {

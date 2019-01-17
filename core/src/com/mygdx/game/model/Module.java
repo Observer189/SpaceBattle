@@ -95,6 +95,36 @@ public class Module {
         sprite.draw(batch);
         batch.end();
     }
+    public void setTransform(float x,float y,float rotation)
+    {
+        if(body!=null)
+        {
+            body.setTransform(x,y,(float)Math.toRadians(rotation));
+        }
+        else
+        {
+            bDef.position.set(x,y);
+            bDef.angle=(float)Math.toRadians(rotation);
+        }
+    }
+    public float getX()
+    {
+        if(body!=null)
+            return body.getPosition().x;
+        else return bDef.position.x;
+    }
+    public float getY()
+    {
+        if(body!=null)
+            return body.getPosition().y;
+        else return bDef.position.y;
+    }
+    public float getAngle()
+    {
+        if(body!=null)
+            return body.getAngle();
+        else return bDef.angle;
+    }
     public void destroy()
     {
         world.destroyBody(body);

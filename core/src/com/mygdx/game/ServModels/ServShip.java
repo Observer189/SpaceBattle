@@ -5,6 +5,7 @@ package com.mygdx.game.ServModels;
  */
 
 public class ServShip extends ServObject {
+    private int id;
     public ServShip()
     {
         super();
@@ -17,5 +18,14 @@ public class ServShip extends ServObject {
         setWidth(ship.getWidth());
         setHeight(ship.getHeight());
         setRotation(ship.getRotation());
+        setId(ship.getId());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

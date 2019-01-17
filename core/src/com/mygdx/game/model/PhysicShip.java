@@ -17,6 +17,7 @@ import com.mygdx.game.model.PhysicShips.StarFighter;
 public class PhysicShip extends PhysicObject {
     private int movementPosition;
     private float rotationSpeed;
+    private float targetRotation;
     private float linearDamping;//не ниже 0.01
     private int rotationDirection;//-1-влево 1-вправо 0-без вращения
     //private float enginePower;
@@ -39,6 +40,7 @@ public class PhysicShip extends PhysicObject {
     private int consumptionReload;
     private boolean isShooting;
 
+    private int id;
 
     public PhysicShip(String spriteName, float x, float y, float rotation,float width, float height,
                       float density,int bodyNumber,int weaponNumbers,int engineNumbers,int energyNumbers,float linearDamping,float maxHP,
@@ -60,7 +62,7 @@ public class PhysicShip extends PhysicObject {
         this.hp=maxHP;
 
         this.linearDamping=linearDamping;
-
+        targetRotation=rotation;
 
         /*for (Body i:bodies)
         {
@@ -126,6 +128,7 @@ public class PhysicShip extends PhysicObject {
 
     public void move()
     {
+        findRotDir();
         maxSpeed=findMaxSpeed();
         if(movementPosition==0)
             movementVector.set(0,0);
@@ -144,7 +147,7 @@ public class PhysicShip extends PhysicObject {
             for (int i = 0; i < engines.length; i++) {
                 if (!(speed >= maxSpeed)) {
                     //for (int j = 0; i < bodies.length; i++) {
-                        //bodies[j].setLinearDamping(0.f);
+                    //bodies[j].setLinearDamping(0.f);
                     //}
                     //bodies[i].applyForceToCenter(new Vector2(enginePower * movementVector.x, enginePower * movementVector.y), true);
                     engines[i].move(movementVector);
@@ -154,47 +157,47 @@ public class PhysicShip extends PhysicObject {
                     tempVelocity.x*=maxSpeed*0.99f;
                     tempVelocity.y*=maxSpeed*0.99f;
 
-                        //bodies[j].setLinearDamping(0.1f);
-                        body.setLinearVelocity(tempVelocity);
+                    //bodies[j].setLinearDamping(0.1f);
+                    body.setLinearVelocity(tempVelocity);
 
                     //bodies[i].setLinearVelocity((float)-Math.sin(getRotation())*maxSpeed*0.98f,(float)Math.cos(getRotation())*maxSpeed*0.98f);
                 }
             }
 
-                    if (rotationDirection == -1)
+            if (rotationDirection == -1)
 
-                        //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
-                        body.setAngularVelocity(-rotationSpeed);
-                    else if (rotationDirection == 1) {
-                        //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
-                        body.setAngularVelocity(rotationSpeed);
-                        //body.setAngularVelocity(2);
-                    }
-                    else if (rotationDirection == 0) {
-                        body.setAngularVelocity(0);
+                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() + rotationSpeed);
+                body.setAngularVelocity(-rotationSpeed);
+            else if (rotationDirection == 1) {
+                //bodies[i].setTransform(bodies[i].getPosition().x, bodies[i].getPosition().y, bodies[i].getAngle() - rotationSpeed);
+                body.setAngularVelocity(rotationSpeed);
+                //body.setAngularVelocity(2);
+            }
+            else if (rotationDirection == 0) {
+                body.setAngularVelocity(0);
 
 
-                }
+            }
 
         }
-            speed = body.getLinearVelocity().len();
-       if(System.currentTimeMillis()-energyConsLastTime>consumptionReload) {
-           for (int i = 0; i < engines.length; i++) {
-               if(engines[i].getEngine()!=null) {
-                   energy -= engines[i].getEngine().getEnergyConsumption();
-               }
+        speed = body.getLinearVelocity().len();
+        if(System.currentTimeMillis()-energyConsLastTime>consumptionReload) {
+            for (int i = 0; i < engines.length; i++) {
+                if(engines[i].getEngine()!=null) {
+                    energy -= engines[i].getEngine().getEnergyConsumption();
+                }
 
-           }
-           for (int i = 0; i < energyPoints.length; i++) {
-               energy += energyPoints[i].getEnergyModule().getEnergyGeneration();
+            }
+            for (int i = 0; i < energyPoints.length; i++) {
+                energy += energyPoints[i].getEnergyModule().getEnergyGeneration();
 
-           }
-           energyConsLastTime=System.currentTimeMillis();
-       }
+            }
+            energyConsLastTime=System.currentTimeMillis();
+        }
         if(energy<0)
             energy=0;
-       else if(energy>maxEnergy)
-           energy=maxEnergy;
+        else if(energy>maxEnergy)
+            energy=maxEnergy;
 
         //System.out.println(body.getFixtureList().size);
         //System.out.println(Gdx.graphics.getFramesPerSecond());
@@ -202,6 +205,93 @@ public class PhysicShip extends PhysicObject {
         {
             i.destroyAmmo();
         }
+    }
+    public void findRotDir()
+    {
+        //ship.getBodies()[0].setTransform(ship.getBodies()[0].getPosition().x,ship.getBodies()[0].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
+
+        //ship.getBodies()[1].setTransform(ship.getBodies()[1].getPosition().x,ship.getBodies()[1].getPosition().y,(float)Math.toRadians(sprite.getRotation()));
+
+        int shipRotation=(int) getRotation();
+
+        while (shipRotation>=360) {                 //
+            shipRotation -= 360;                    //
+        }                                            //Установление градусной меры корабля в рамки 0 до 360
+        while (shipRotation<=0) {                     //
+            shipRotation += 360;                      //
+        }                                            //
+        int spriteRotation=(int)targetRotation;   // Обрезаем значение до целого с помощью преобразование до Int
+        while (spriteRotation>=360) {
+            spriteRotation -= 360;
+        }
+        while (spriteRotation<=0) {
+            spriteRotation += 360;
+        }
+        //shipRotation=(Math.toDegrees(ship.getRotation())>360)?(float)Math.toDegrees(ship.getRotation())-360:(float)Math.toDegrees(ship.getRotation());
+        //spriteRotation=(sprite.getRotation()>360)?sprite.getRotation()-360:sprite.getRotation();
+        int internalArc=Math.abs(shipRotation-spriteRotation);     //Находим внешнее и внутренне растояние в градусах между
+        int externalArc=360-internalArc;                           // фазой корабля и штурвала
+         /*if(internalArc<externalArc)
+         {
+             ship.setRotationDirection(1);
+         }
+         else if(internalArc>externalArc)
+         {
+             ship.setRotationDirection(-1);
+         }
+         else ship.setRotationDirection(0);*/
+        int tempShip=(shipRotation<180)?shipRotation+360:shipRotation;// Увеличиваем половину градусной окружности на 360 для того чтобы избежать проблемы при вычитании перехода через 0
+        int tempSprite=(spriteRotation<180)?spriteRotation+360:spriteRotation;
+
+        if(Math.abs(tempShip-tempSprite)>rotationSpeed) {
+            if (internalArc < externalArc) {
+                if (shipRotation > spriteRotation) {
+                    setRotationDirection(-1);
+
+                    //ship.getBodies()[0].setAngularVelocity(-2f);
+                    //ship.getBodies()[1].setAngularVelocity(-2f);
+                } else if (shipRotation < spriteRotation) {
+                    setRotationDirection(1);
+
+                    //ship.getBodies()[0].setAngularVelocity(2f);
+                    //ship.getBodies()[1].setAngularVelocity(2f);
+                } else {
+                    setRotationDirection(0);
+
+                    //ship.getBodies()[0].setAngularVelocity(0f);
+                    //ship.getBodies()[1].setAngularVelocity(0f);
+
+                }
+
+            } else {
+                if (shipRotation > spriteRotation) {
+                    setRotationDirection(1);
+
+                    //ship.getBodies()[0].setAngularVelocity(2f);
+                    //ship.getBodies()[1].setAngularVelocity(2f);
+                } else if (shipRotation < spriteRotation) {
+                    setRotationDirection(-1);
+
+                    //ship.getBodies()[0].setAngularVelocity(-2f);
+                    //ship.getBodies()[1].setAngularVelocity(-2f);
+                } else {
+                    setRotationDirection(0);
+
+                    //ship.getBodies()[0].setAngularVelocity(0f);
+                    //ship.getBodies()[1].setAngularVelocity(0f);
+
+                }
+            }
+        }
+        else
+        {
+            setRotationDirection(0);
+            setAngularVelocity(0f);
+            setAngle((float) Math.toRadians(targetRotation));
+
+        }
+
+
     }
     public void shot()
     {
@@ -247,7 +337,7 @@ public class PhysicShip extends PhysicObject {
         }
         for (int i=0;i<energyPoints.length;i++) {
             if(energyPoints[i]!=null)
-            energyPoints[i].draw(batch);
+                energyPoints[i].draw(batch);
         }
 
     }
@@ -302,14 +392,33 @@ public class PhysicShip extends PhysicObject {
     }
     public void setAngle(float angle)
     {
-
-            body.setTransform(body.getPosition().x,body.getPosition().y,angle);
+        if(body!=null) {
+            body.setTransform(body.getPosition().x, body.getPosition().y, angle);
+        }
+        else bDef.angle=angle;
 
     }
     public void setAngularVelocity(float angularVelocity)
     {
 
-            body.setAngularVelocity(angularVelocity);
+        body.setAngularVelocity(angularVelocity);
+
+    }
+
+    @Override
+    public void setTransform(float x, float y, float rotation) {
+        super.setTransform(x, y, rotation);
+        for (int i=0;i<engines.length;i++) {
+            engines[i].toShip(getX(),getY(),getRotation());
+        }
+
+        for (int i=0;i<weapons.length;i++) {
+            weapons[i].toShip(getX(),getY(),getRotation());
+        }
+        for (int i=0;i<energyPoints.length;i++) {
+            if(energyPoints[i]!=null)
+                energyPoints[i].toShip(getX(),getY(),getRotation());
+        }
 
     }
 
@@ -356,20 +465,34 @@ public class PhysicShip extends PhysicObject {
         return hp;
     }
 
+    public float getTargetRotation() {
+        return targetRotation;
+    }
+
+    public void setTargetRotation(float targetRotation) {
+        this.targetRotation = targetRotation;
+    }
+
     public static PhysicShip fromServ(ServShip servShip)
     {
+        PhysicShip ship;
         if (servShip.getName().equals("Dashing"))
         {
-            return new Fury(servShip.getX(),servShip.getY(),servShip.getRotation());
+            ship=new Fury(servShip.getX(),servShip.getY(),servShip.getRotation());
         }
         else if(servShip.getName().equals("StarFighter"))
         {
-            return new StarFighter(servShip.getX(),servShip.getY(),servShip.getRotation());
+            ship=new  StarFighter(servShip.getX(),servShip.getY(),servShip.getRotation());
         }
-        else {
+        else{
             System.out.println("Корабль с данным именем не существует");
-            return  null;
+            return null;
         }
+
+        ship.setId(servShip.getId());
+
+        return  ship;
+
 
     }
     public ServShip toServ()
@@ -381,6 +504,20 @@ public class PhysicShip extends PhysicObject {
         servShip.setWidth(getWidth());
         servShip.setHeight(getHeight());
         servShip.setRotation(getRotation());
+        servShip.setId(getId());
         return servShip;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setEnergy(float energy) {
+        this.energy = energy;
+    }
+
 }

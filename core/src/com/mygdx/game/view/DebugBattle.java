@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Joint;
+
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
@@ -39,12 +38,15 @@ import com.mygdx.game.model.Ships.Rock;
 import com.mygdx.game.model.WeaponPoint;
 import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
+import com.mygdx.game.requests.PlayerActions;
+import com.mygdx.game.requests.ServBattleInfo;
 import com.mygdx.game.requests.ServStartInfo;
 import com.mygdx.game.utils.BattleInfoPanel;
 import com.mygdx.game.utils.ButtonForProcessor;
 import com.mygdx.game.utils.GasRegulator;
 import com.mygdx.game.utils.Helm;
 import com.mygdx.game.utils.ProgressBar;
+
 
 import sun.management.HotspotInternal;
 
@@ -56,6 +58,7 @@ import static java.lang.Thread.sleep;
 
 public class DebugBattle implements Screen {
     SpriteBatch batch;
+
     Game game;
     TextureAtlas textureAtlas;
     OrthographicCamera camera;
@@ -73,9 +76,10 @@ public class DebugBattle implements Screen {
     PhysicShip ship;
     PhysicShip enemyShip;
 
+
     Map map;
     AsteroidField asteroidField;
-    //Asteroid1 asteroid;
+
 
     World world;
     Box2DDebugRenderer rend;
@@ -99,9 +103,12 @@ public class DebugBattle implements Screen {
     Player player;
     Player enemy;
 
+    int battleID;
     boolean isStartInfoReceived;
     boolean isReady;
-    public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Client client,Player player,Player enemy,AsteroidField asteroidField)
+    long lrt;
+    long lastInfoTime;//время получения последнего пакета ServBattleInfo
+    public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Client client,Player player,Player enemy,AsteroidField asteroidField,int battleID)
     {
         System.out.println("Заходим в бой");
         this.batch = batch;
@@ -112,6 +119,7 @@ public class DebugBattle implements Screen {
 
 
         this.player=player;
+        ship=player.getCurrentShip();
         this.enemy=enemy;
         isStartInfoReceived=false;
         isReady=false;
@@ -125,6 +133,10 @@ public class DebugBattle implements Screen {
         this.asteroidField = new AsteroidField(asteroidField);
         System.out.println("Size"+this.asteroidField.getAsteroids().size);
         isStartInfoReceived=true;
+        this.battleID=battleID;
+        System.out.println("battleId: "+battleID);
+        lrt=0;
+        lastInfoTime=0;
     }
     @Override
     public void show() {
@@ -141,16 +153,33 @@ public class DebugBattle implements Screen {
                 isStartInfoReceived=true;
 
             }
+            else if(p instanceof ServBattleInfo)
+            {
+                ServBattleInfo sbi=(ServBattleInfo)p;
+                if(lastInfoTime<sbi.getTime()) {
+                    ship.setTransform(sbi.getX(), sbi.getY(), sbi.getRotation());
+                    for(int i=0;i<sbi.getSaf().getAsteroids().length;i++)
+                    {
+                        asteroidField.getAsteroids().get(i).setTransform(sbi.getSaf().getAsteroids()[i].getX(),sbi.getSaf().getAsteroids()[i].getY(),sbi.getSaf().getAsteroids()[i].getRotation());
+                    }
+                    lastInfoTime=sbi.getTime();
+                }
+
+            }
 
             }
         });
+        String str = new String();
+        str="Ready";
+        client.sendTCP(str);
+
         world=new World(new Vector2(0,0),false);
 
         map=Map.generateMap(batch,textureAtlas);
 
 
-        ship = new StarFighter( 50, 30,180);
-        enemyShip=new Fury(55,30,0);
+        //ship = new StarFighter( 50, 30,180);
+        enemyShip=enemy.getCurrentShip();
 
         //asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
         //asteroidField.generate();
@@ -162,6 +191,7 @@ public class DebugBattle implements Screen {
                 e.printStackTrace();
             }
         }*/
+
         ship.create(textureAtlas, world);
         enemyShip.create(textureAtlas, world);
 
@@ -194,6 +224,7 @@ public class DebugBattle implements Screen {
             e.printStackTrace();
         }
         System.out.println("Size"+asteroidField.getAsteroids().size);
+
     }
 
     @Override
@@ -219,15 +250,13 @@ public class DebugBattle implements Screen {
             //Отрисовка карты
             map.draw();
             ////////////////////////////////////
-            //ship.draw(batch);
-            //ship2.draw(batch);
+
             ship.draw(batch);
             if (enemyShip != null)
                 enemyShip.draw(batch);
             //asteroid.draw(batch);
             asteroidField.draw(batch);
-            //asteroid.draw(batch);
-            //point.draw(batch);
+
             //
             gasRegulator.draw();
             helm.draw();
@@ -235,26 +264,35 @@ public class DebugBattle implements Screen {
             //energyBar.draw(ship.getEnergy());
             battleInfoPanel.draw(ship.getHp(), ship.getEnergy());
             /////////////////////////////
-            //Отрисовка кнопок вращения
-            //turnLeft.draw();
-            //turnRight.draw();
-            rend.render(world, camera.combined);
-            world.step(1 / 60f, 4, 4);
+
+            //rend.render(world, camera.combined);
             //ship.move();
-            //ship2.move();
-            helm.updateShip(ship.findRotationSpeed());
-            ship.move();
-            //asteroid.update();
-            asteroidField.update();
+            //world.step(1 / 60f, 4, 4);
+
+
+
+            //asteroidField.update();
             if (enemyShip != null) {
                 if (enemyShip.getHp() < 0) {
                     enemyShip.destroy();
                     enemyShip = null;
                 }
             }
+        if(lrt+10<System.currentTimeMillis()) {
+            System.out.println("x: " + ship.getBody().getPosition().x
+                    + " y: " + ship.getBody().getPosition().y
+                    + "r: " + Math.toDegrees(ship.getBody().getAngle()));
+            lrt=System.currentTimeMillis();
+            PlayerActions acts=new PlayerActions();
+            acts.setBattleID(battleID);
+            acts.setMovementPosition(ship.getMovementPosition());
+            acts.setTargetRotation(ship.getTargetRotation());
+            acts.setShipID(ship.getId());
+            client.sendTCP(acts);
         }
-        //ury.setRotationDirection(1);
-        //System.out.println(battleInfoPanel.getHPBar().getX()-camera.position.x);
+
+        }
+
 
 
     @Override

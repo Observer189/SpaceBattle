@@ -37,6 +37,8 @@ import com.mygdx.game.model.PhysicObject;
 import com.mygdx.game.model.Player;
 import com.mygdx.game.requests.ClientStartInfo;
 import com.mygdx.game.requests.HostStartInfo;
+import com.mygdx.game.requests.PlayerActions;
+import com.mygdx.game.requests.ServBattleInfo;
 import com.mygdx.game.requests.ServStartInfo;
 import com.mygdx.game.utils.TextManager;
 
@@ -65,6 +67,7 @@ public class PreparingToBattle implements Screen {
 
     BattleInfo battleInfo;
     Player player;
+    Player enemy;
     PhysicShip ship;
     ServPlayer servPlayer;
 
@@ -74,6 +77,7 @@ public class PreparingToBattle implements Screen {
     AsteroidField field;
     World world;
     AsteroidField asteroidField;
+    int battleID;
     public PreparingToBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas)
     {
         this.batch = batch;
@@ -97,6 +101,8 @@ public class PreparingToBattle implements Screen {
         player.generateName();
         ship=new StarFighter(0,0,0);
         player.setCurrentShip(ship);
+        //player.getCurrentShip().setId(1);
+
         servPlayer=player.toServ();
 
 
@@ -121,6 +127,9 @@ public class PreparingToBattle implements Screen {
         kryo.register(ClientStartInfo.class);
         kryo.register(ServPlayer.class);
         kryo.register(ServStartInfo.class);
+        kryo.register(ServPlayer[].class);
+        kryo.register(PlayerActions.class);
+        kryo.register(ServBattleInfo.class);
         client.start();
 
 
@@ -143,17 +152,32 @@ public class PreparingToBattle implements Screen {
                    }
                }
                else if(p instanceof ServStartInfo) {
-                   ServStartInfo csi = (ServStartInfo) p;
+                   ServStartInfo ssi = (ServStartInfo) p;
+                   battleID=ssi.getBattleID();
+                   //System.out.println("Id "+ssi.getPlayers()[0].getCurrentShip().getId());
                    System.out.println("Мы получили начальные данные от сервера");
-                   ServAsteroidField sAstF = new ServAsteroidField(csi.getAsteroidField());
+                   ServAsteroidField sAstF = new ServAsteroidField(ssi.getAsteroidField());
+                   for (ServPlayer i:ssi.getPlayers())
+                   {
+                       if(i.getName().equals(player.getName()))  //Отлавливаем игрока по имени
+                       {                                         //
+                           player=Player.fromServ(i);            //
+                       }                                         //
+                       if(i.getName().equals("enemy"))           //Отлавливаем искуственно созданного противника по имени
+                       {                                         //
+                           enemy=Player.fromServ(i);             //
+                       }                                          //
+                   }
+
                    asteroidField = new AsteroidField();
                    for (int i = 0; i < sAstF.getAsteroids().length; i++) {
                        asteroidField.getAsteroids().add(new Asteroid1(sAstF.getAsteroids()[i].getX(), sAstF.getAsteroids()[i].getY(), sAstF.getAsteroids()[i].getRotation(),
                                sAstF.getAsteroids()[i].getWidth(), sAstF.getAsteroids()[i].getHeight(), new Vector2(0, 0), sAstF.getAsteroids()[i].getHp()));
                    }
+                   //System.out.println("Id "+player.getCurrentShip().getId());
                    //game.setScreen(new DebugBattle(batch,game,textureAtlas,client,battleInfo.isHost(),battleInfo.getEnemyId(),battleInfo.getPlayer(),battleInfo.getEnemy()));
                    //game.setScreen(debugBattle);
-                   System.out.println("Size"+asteroidField.getAsteroids().size);
+
                    messageReceived=true;
                }
 
@@ -185,7 +209,8 @@ public class PreparingToBattle implements Screen {
 
         if(messageReceived)
         {
-            debugBattle=new DebugBattle(batch,game,textureAtlas,client,new Player(),new Player(),asteroidField);
+            debugBattle=new DebugBattle(batch,game,textureAtlas,client,player,enemy,asteroidField,battleID);
+            System.out.println("Id "+player.getCurrentShip().getId());
             game.setScreen(debugBattle);
         }
     }

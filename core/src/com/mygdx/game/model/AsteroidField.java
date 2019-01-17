@@ -43,6 +43,15 @@ public class AsteroidField {
     {
         asteroids=new Array<Asteroid>();
     }
+    public void create(World world)
+    {
+        this.world=world;
+
+        for(int i=0;i<asteroids.size;i++)
+        {
+            asteroids.get(i).create(world);
+        }
+    }
     public void create(TextureAtlas textureAtlas,World world)
     {
         this.world=world;

@@ -21,16 +21,16 @@ public interface servApi {
     /*@GET("battle")
     Call<BattleStatus> getBattleNumber(@Query("name")String name,@Query("shipName") String shipName,@Query("status") String status,@Query("requestTime") long requestTime);*/
     @POST("battle")
-    Call<BattleStatus> getBattleNumber(@Query("name")String name, @Query("ship") OldServShip ship, @Query("status") String status);
+    Call<BattleStatus> getBattleNumber(@Query("name") String name, @Query("ship") OldServShip ship, @Query("status") String status);
 
     @POST("battle/{battleNumber}")
-    Call<Coord> get(@Path("battleNumber") Integer number,@Query("name")String name,@Query("enemyName")String enemyName,@Query("x") Float x, @Query("y") Float y,@Query("rotation") Float rotation);
+    Call<Coord> get(@Path("battleNumber") Integer number, @Query("name") String name, @Query("enemyName") String enemyName, @Query("x") Float x, @Query("y") Float y, @Query("rotation") Float rotation);
 
     @PUT("players/create")
-    Call<Integer> createPlayer(@Query("name") String name,@Query("password") String password,@Query("money")int money);
+    Call<Integer> createPlayer(@Query("name") String name, @Query("password") String password, @Query("money") int money);
 
     @POST("players/update")
-    Call<Integer> updateMoney(@Query("name")String name,@Query("money") int money);
+    Call<Integer> updateMoney(@Query("name") String name, @Query("money") int money);
 
     @GET("players/getPlayer")
     Call<OldServPlayer> getPlayer(@Query("name") String name);

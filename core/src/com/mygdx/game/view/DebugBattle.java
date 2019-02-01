@@ -153,7 +153,7 @@ public class DebugBattle implements Screen {
                 isStartInfoReceived=true;
 
             }
-            else if(p instanceof ServBattleInfo)                                 //получение информации от сервера о текущем состоянии мира
+            else if(p instanceof ServBattleInfo)
             {
                 ServBattleInfo sbi=(ServBattleInfo)p;
                 if(lastInfoTime<sbi.getTime()) {
@@ -254,7 +254,7 @@ public class DebugBattle implements Screen {
             ship.draw(batch);
             if (enemyShip != null)
                 enemyShip.draw(batch);
-
+            //asteroid.draw(batch);
             asteroidField.draw(batch);
 
             //

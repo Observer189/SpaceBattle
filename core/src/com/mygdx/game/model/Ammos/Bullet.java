@@ -8,13 +8,15 @@ import com.mygdx.game.model.Ammo;
  */
 
 public class Bullet extends Ammo {
-    public static int counter=0;
+    public static int counter = 0;
+
     /*public Bullet(TextureRegion textureRegion, float x, float y) {
         super(textureRegion, x, y, 0.8f, 2.8f, 3f, 6);
         counter++;
     }*/
-    public Bullet(TextureRegion textureRegion, float x, float y,float rotation) {
-        super(textureRegion, x, y, 0.8f, 2.8f, 3f, 22,300,rotation);
+
+    public Bullet(TextureRegion textureRegion, float x, float y, float rotation) {
+        super(textureRegion, x, y, 0.8f, 2.8f, 3f, 22, 300, rotation);
         counter++;
     }
 }

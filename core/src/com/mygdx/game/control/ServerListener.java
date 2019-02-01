@@ -10,10 +10,10 @@ import com.mygdx.game.view.PreparingToBattle;
  */
 
 public class ServerListener extends Listener {
-    public void connected(Connection c)
-    {
+    public void connected(Connection c) {
 
     }
+
     public void received(Connection c, Object p) {
 
     }

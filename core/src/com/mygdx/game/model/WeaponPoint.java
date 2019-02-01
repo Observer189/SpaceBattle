@@ -15,90 +15,87 @@ import com.mygdx.game.utils.ModuleType;
  */
 
 public class WeaponPoint {
-    WeldJointDef jointDef;
-    Joint joint;
+    private WeldJointDef jointDef;
+    private Joint joint;
     WeaponModule weapon;
-    World world;
-    Vector2 localAnchor;
-    Body shipBody;
-    public WeaponPoint(World world)
-    {
-        this.world=world;
-    }
-    public WeaponPoint(WeaponModule weapon,Vector2 localAnchor)
-    {
+    private World world;
+    private Vector2 localAnchor;
+    private Body shipBody;
 
-        this.weapon=weapon;
-        weapon.setTransform(weapon.getX()+localAnchor.x,weapon.getY()+localAnchor.y,(float) Math.toDegrees(weapon.getAngle()));//смещаем координату тела до нужного положения перед его созданием
+    public WeaponPoint(World world) {
+        this.world = world;
+    }
+
+    public WeaponPoint(WeaponModule weapon, Vector2 localAnchor) {
+
+        this.weapon = weapon;
+        weapon.setTransform(weapon.getX() + localAnchor.x, weapon.getY() + localAnchor.y, (float) Math.toDegrees(weapon.getAngle()));//смещаем координату тела до нужного положения перед его созданием
         //следует также учитывать, что при создании любого корабля мы передаем телу его координаты
-        this.localAnchor=localAnchor;
+        this.localAnchor = localAnchor;
         jointDef = new WeldJointDef();
-        this.shipBody=shipBody;
         jointDef.bodyA = shipBody;
         jointDef.bodyB = weapon.getBody();
-        jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);
-        jointDef.localAnchorB.set(0,0);
+        jointDef.localAnchorA.set(localAnchor.x, localAnchor.y);
+        jointDef.localAnchorB.set(0, 0);
         jointDef.collideConnected = false;
 
     }
-    public boolean installModule(WeaponModule weapon, Body shipBody,Vector2 localAnchor)
-    {
-        if(weapon.getType().equals(ModuleType.Weapon))
-        {
-            this.weapon=weapon;
-            weapon.setTransform(weapon.getX()+localAnchor.x,weapon.getY()+localAnchor.y,(float) Math.toDegrees(weapon.getAngle()));//смещаем координату тела до нужного положения перед его созданием
-            this.localAnchor=localAnchor;
+
+    public boolean installModule(WeaponModule weapon, Body shipBody, Vector2 localAnchor) {
+        if (weapon.getType().equals(ModuleType.Weapon)) {
+            this.weapon = weapon;
+            weapon.setTransform(weapon.getX() + localAnchor.x, weapon.getY() + localAnchor.y, (float) Math.toDegrees(weapon.getAngle()));//смещаем координату тела до нужного положения перед его созданием
+            this.localAnchor = localAnchor;
             jointDef = new WeldJointDef();
             jointDef.bodyA = shipBody;
             jointDef.bodyB = weapon.getBody();
-            jointDef.localAnchorA.set(localAnchor.x,localAnchor.y);//указываем координату точки корабля к которому прекрепляем тело
+            jointDef.localAnchorA.set(localAnchor.x, localAnchor.y);//указываем координату точки корабля к которому прекрепляем тело
             jointDef.collideConnected = false;
-            joint=world.createJoint(jointDef);
+            joint = world.createJoint(jointDef);
 
             return true;
-        }
-        else return false;
+        } else return false;
     }
-    public void create(TextureAtlas textureAtlas,World world,Body shipBody)
-    {
-        weapon.create(textureAtlas,world);
+
+    public void create(TextureAtlas textureAtlas, World world, Body shipBody) {
+        weapon.create(textureAtlas, world);
         jointDef.bodyA = shipBody;
         jointDef.bodyB = weapon.getBody();
-        joint=world.createJoint(jointDef);
-        this.world=world;
+        joint = world.createJoint(jointDef);
+        this.world = world;
     }
-    public void create(World world,Body shipBody)
-    {
+
+    public void create(World world, Body shipBody) {
         weapon.create(world);
         jointDef.bodyA = shipBody;
         jointDef.bodyB = weapon.getBody();
-        joint=world.createJoint(jointDef);
-        this.world=world;
+        joint = world.createJoint(jointDef);
+        this.world = world;
     }
-    public boolean shot(float l,Vector2 speedVector)
-    {
-        return weapon.shot(l,speedVector);
+
+    public boolean shot(float l, Vector2 speedVector) {
+        return weapon.shot(l, speedVector);
     }
-    public void draw(SpriteBatch batch)
-    {
-        if(weapon!=null)
-        {
+
+    public void draw(SpriteBatch batch) {
+        if (weapon != null) {
             weapon.draw(batch);
         }
     }
-    public void destroy()
-    {
+
+    void destroy() {
         //world.destroyJoint(joint);
         destroyAmmo();
         weapon.destroy();
     }
-    public void toShip(float x,float y,float rotation)//телепортирует тело к кораблю на расстояние нормального смещения
+
+    void toShip(float x, float y, float rotation)//телепортирует тело к кораблю на расстояние нормального смещения
     {//на вход передаются координаты корабля
-        weapon.setTransform(x+localAnchor.x*(float)(Math.cos(Math.toRadians(rotation)))-localAnchor.y*(float)(Math.sin(Math.toRadians(rotation))),
-                y+localAnchor.y*(float)(Math.cos(Math.toRadians(rotation)))+localAnchor.x*(float)(Math.sin(Math.toRadians(rotation))),rotation);
+        weapon.setTransform(x + localAnchor.x * (float) (Math.cos(Math.toRadians(rotation))) - localAnchor.y * (float) (Math.sin(Math.toRadians(rotation))),
+                y + localAnchor.y * (float) (Math.cos(Math.toRadians(rotation))) + localAnchor.x * (float) (Math.sin(Math.toRadians(rotation))), rotation);
     }
-    public void destroyAmmo()
-    {
+
+    void destroyAmmo() {
         weapon.destroyAmmo();
     }
 

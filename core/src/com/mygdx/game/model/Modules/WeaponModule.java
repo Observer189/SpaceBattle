@@ -23,24 +23,26 @@ public class WeaponModule extends Module {
 
     private Array<PhysicAmmo> ammos;
 
-    World world;
-    public WeaponModule(String spriteName, float x, float y,float rotation, Size size,  float density,float basicDamage,float energyCost,float reloadTime) {
-        super(spriteName, x, y,rotation, size,ModuleType.Weapon, density);
-        this.basicDamage=basicDamage;
-        this.energyCost=energyCost;
-        this.reloadTime=reloadTime;
-        this.damage=basicDamage;
-        ammos=new Array <PhysicAmmo>();
+    private World world;
+
+    public WeaponModule(String spriteName, float x, float y, float rotation, Size size, float density, float basicDamage, float energyCost, float reloadTime) {
+        super(spriteName, x, y, rotation, size, ModuleType.Weapon, density);
+        this.basicDamage = basicDamage;
+        this.energyCost = energyCost;
+        this.reloadTime = reloadTime;
+        this.damage = basicDamage;
+        ammos = new Array<PhysicAmmo>();
     }
 
     @Override
     public void create(TextureAtlas textureAtlas, World world) {
         super.create(textureAtlas, world);
-        this.world=world;
+        this.world = world;
     }
+
     public void create(World world) {
         super.create(world);
-        this.world=world;
+        this.world = world;
     }
 
     public boolean shot(float l, Vector2 speedVector) //l - это расстояние от центра пушки до конца корабля
@@ -51,16 +53,14 @@ public class WeaponModule extends Module {
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
-        for (PhysicAmmo i:ammos)
-        {
+        for (PhysicAmmo i : ammos) {
             i.draw(batch);
         }
     }
-    public void destroyAmmo()
-    {
-        for(int i=0;i<ammos.size;i++)
-        {
-            if(ammos.get(i).getMustDestroyed()) {
+
+    public void destroyAmmo() {
+        for (int i = 0; i < ammos.size; i++) {
+            if (ammos.get(i).getMustDestroyed()) {
                 ammos.get(i).destroy();
                 ammos.removeIndex(i);
             }

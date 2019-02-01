@@ -9,32 +9,32 @@ import com.mygdx.game.model.Weapon;
  */
 
 public class GreenImpulseLaser extends Weapon {
-    int cost;
-    String name;
-    TextureAtlas textureAtlas;
-    int counter;
+    private int cost;
+    private String name;
+    private TextureAtlas textureAtlas;
+    private int counter;
 
     private float attackSpeed;
-    public GreenImpulseLaser(TextureAtlas textureAtlas, float x, float y) {
-        super(textureAtlas.findRegion("GreenLaser"), x, y, 2f, 7f,25,
-                new GreenLaserAmmo(textureAtlas.findRegion("GreenLaserAmmo"),x+2/2,y+7/2,0));
-        this.textureAtlas=textureAtlas;
-        counter=0;
-        attackSpeed=25;
-        cost=0;
 
-        name="GreenLaser";
+    public GreenImpulseLaser(TextureAtlas textureAtlas, float x, float y) {
+        super(textureAtlas.findRegion("GreenLaser"), x, y, 2f, 7f, 25,
+                new GreenLaserAmmo(textureAtlas.findRegion("GreenLaserAmmo"), x + 2 / 2, y + 7 / 2, 0));
+        this.textureAtlas = textureAtlas;
+        counter = 0;
+        attackSpeed = 25;
+        cost = 0;
+
+        name = "GreenLaser";
         setTextureAtlas(textureAtlas);
     }
 
     @Override
     public void shot() {
         counter++;
-        if(counter==1000/attackSpeed)
-        {
+        if (counter == 1000 / attackSpeed) {
 
             getAmmos().add(new GreenLaserAmmo(textureAtlas.findRegion("GreenLaserAmmo"),
-                    getX() +getHeight(),
+                    getX() + getHeight(),
                     getY() - 1,
                     getRotation()));
 

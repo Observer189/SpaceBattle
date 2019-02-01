@@ -111,7 +111,7 @@ public class PreparingToBattle implements Screen {
         isInQueue=false;
         textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         blueFont=textManager.fontInitialize(Color.BLUE,1);
-        client=new Client(1500,1500);
+        client=new Client(32768,32768);
         listener=new ServerListener();
         Kryo kryo=client.getKryo();
 

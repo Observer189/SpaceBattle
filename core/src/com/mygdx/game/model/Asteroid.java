@@ -15,40 +15,39 @@ import com.mygdx.game.model.Asteroids.Asteroid1;
 public class Asteroid extends PhysicObject {
     private float maxHp;
     private float hp;
-    int bodiesNumber;
-    Vector2 startVelocity;
-    public Asteroid(String spriteName, float x, float y,float rotation, float width, float height, float density, int bodiesNumber, float[][] shape, Vector2 startVelocity,float maxHp) {
-        super(spriteName, x, y,rotation, width, height, density, bodiesNumber, shape);
-        this.maxHp=maxHp;
-        hp=maxHp;
-        this.bodiesNumber=bodiesNumber;
-        this.startVelocity=startVelocity;
+    private int bodiesNumber;
+    private Vector2 startVelocity;
+
+    public Asteroid(String spriteName, float x, float y, float rotation, float width, float height, float density, int bodiesNumber, float[][] shape, Vector2 startVelocity, float maxHp) {
+        super(spriteName, x, y, rotation, width, height, density, bodiesNumber, shape);
+        this.maxHp = maxHp;
+        hp = maxHp;
+        this.bodiesNumber = bodiesNumber;
+        this.startVelocity = startVelocity;
     }
 
-    public Asteroid()
-    {
+    public Asteroid() {
 
     }
 
     @Override
     public void create(TextureAtlas textureAtlas, World world) {
         super.create(textureAtlas, world);
-        for (int i=0;i<bodiesNumber;i++)
-        {
+        for (int i = 0; i < bodiesNumber; i++) {
             getBody().setLinearVelocity(startVelocity);
             getBody().setUserData(this);
         }
     }
 
-    public void update()
-    {
+    public void update() {
 
     }
-    public void hurt(PhysicAmmo ammo)
-    {
-        hp-=ammo.getDamage();
+
+    public void hurt(PhysicAmmo ammo) {
+        hp -= ammo.getDamage();
 
     }
+
     @Override
     public String toString() {
         return "Asteroid";
@@ -60,7 +59,7 @@ public class Asteroid extends PhysicObject {
 
     @Override
     public ServAsteroid toServ() {
-        ServAsteroid ast=new ServAsteroid();
+        ServAsteroid ast = new ServAsteroid();
         ast.setX(getX());
         ast.setY(getY());
         ast.setWidth(getWidth());
@@ -69,16 +68,13 @@ public class Asteroid extends PhysicObject {
         ast.setHp(hp);
         return ast;
     }
-    public static Asteroid fromAsteroid(Asteroid asteroid)
-    {
+
+    static Asteroid fromAsteroid(Asteroid asteroid) {
         Asteroid ast;
-        if(asteroid instanceof Asteroid1)
-        {
-            ast=new Asteroid1(asteroid.getX(),asteroid.getY(),asteroid.getRotation(),asteroid.getWidth(),asteroid.getHeight(),new Vector2(0,0),asteroid.getHp());
-        }
-        else
-        {
-            ast=new Asteroid();
+        if (asteroid instanceof Asteroid1) {
+            ast = new Asteroid1(asteroid.getX(), asteroid.getY(), asteroid.getRotation(), asteroid.getWidth(), asteroid.getHeight(), new Vector2(0, 0), asteroid.getHp());
+        } else {
+            ast = new Asteroid();
         }
         return ast;
     }

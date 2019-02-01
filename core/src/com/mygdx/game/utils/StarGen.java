@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class StarGen {
-    int RandX = GenX();
-    int RandY = GenY();
-    int currentExplosionFrame = 0;
-    int explosionCounter = 4;
-    TextureAtlas textureAtlas;
-    SpriteBatch batch;
-    TextureRegion explosionRegion;
+    private int RandX = GenX();
+    private int RandY = GenY();
+    private int currentExplosionFrame = 0;
+    private int explosionCounter = 4;
+    private TextureAtlas textureAtlas;
+    private SpriteBatch batch;
+    private TextureRegion explosionRegion;
 
     public StarGen(TextureAtlas textureAtlas, SpriteBatch batch) {
         this.textureAtlas = textureAtlas;
@@ -43,11 +43,12 @@ public class StarGen {
     }
 
 
-    public static int GenX(){
-        return  (int) (Math.random()*1080);
+    private static int GenX() {
+        return (int) (Math.random() * 1080);
 
     }
-    public static int GenY(){
-        return  (int) (Math.random()*520);
+
+    private static int GenY() {
+        return (int) (Math.random() * 520);
     }
 }

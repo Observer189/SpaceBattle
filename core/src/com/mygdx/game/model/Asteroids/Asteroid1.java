@@ -13,32 +13,33 @@ import com.mygdx.game.model.Asteroid;
 public class Asteroid1 extends Asteroid {
     //static float width=2f;
     //static float height=2f;
-    public Asteroid1( float x, float y,float rotation, float width, float height, Vector2 startVelocity,float maxHp) {
-        super("Asteroid", x, y,rotation, width, height, 2000, 2, new float[][]
+
+    public Asteroid1(float x, float y, float rotation, float width, float height, Vector2 startVelocity, float maxHp) {
+        super("Asteroid", x, y, rotation, width, height, 2000, 2, new float[][]
                 {
                         {
-                                -width /2,0f,
-                                -width /2+width*0.1f,-height /2+ height *0.156f,
-                                -width /2+ width *0.39f,-height /2,
-                                -width /2+ width *0.68f,-height /2,
-                                -width /2+width*0.875f,-height /2+ height *0.1875f,
-                                width/2,-height /2+ height *0.41f,
-                                width/2,0f
+                                -width / 2, 0f,
+                                -width / 2 + width * 0.1f, -height / 2 + height * 0.156f,
+                                -width / 2 + width * 0.39f, -height / 2,
+                                -width / 2 + width * 0.68f, -height / 2,
+                                -width / 2 + width * 0.875f, -height / 2 + height * 0.1875f,
+                                width / 2, -height / 2 + height * 0.41f,
+                                width / 2, 0f
                         },
                         {
-                                width/2,0f,
-                                -width/2+width*0.97f,-height/2+height*0.67f,
-                                -width/2+width*0.62f,height/2,
-                                -width/2+width*0.41f,height/2,
-                                -width/2+width*0.03f,-height/2+height*0.73f,
-                                -width/2,-height/2+height*0.65f,
-                                -width/2,0f,
+                                width / 2, 0f,
+                                -width / 2 + width * 0.97f, -height / 2 + height * 0.67f,
+                                -width / 2 + width * 0.62f, height / 2,
+                                -width / 2 + width * 0.41f, height / 2,
+                                -width / 2 + width * 0.03f, -height / 2 + height * 0.73f,
+                                -width / 2, -height / 2 + height * 0.65f,
+                                -width / 2, 0f,
                         }
 
-                        }, startVelocity,maxHp);
+                }, startVelocity, maxHp);
     }
-    public Asteroid1()
-    {
+
+    public Asteroid1() {
 
     }
 }

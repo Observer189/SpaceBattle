@@ -7,29 +7,29 @@ import com.mygdx.game.ServModels.OldServShip;
  */
 
 public class BattleStatus { //класс необходимый для распределения игроков по боям
-    Integer number;
-    String status;
-    String name;
-    OldServShip ship;
-    Integer queueSize;//размер очереди
-    Integer positionNumber; //номер позиции игрока на карте
-    public BattleStatus()
-    {
+    private Integer number;
+    private String status;
+    private String name;
+    private OldServShip ship;
+    private Integer queueSize;//размер очереди
+    private Integer positionNumber; //номер позиции игрока на карте
+
+    public BattleStatus() {
 
     }
-    public BattleStatus(Integer number, Integer queueSize, String name, OldServShip ship, String status, Integer positionNumber)
-    {
-        this.number=number;
-        this.queueSize=queueSize;
-        this.name=name;
-        this.ship=ship;
-        this.status=status;
-        this.positionNumber=positionNumber;
+
+    public BattleStatus(Integer number, Integer queueSize, String name, OldServShip ship, String status, Integer positionNumber) {
+        this.number = number;
+        this.queueSize = queueSize;
+        this.name = name;
+        this.ship = ship;
+        this.status = status;
+        this.positionNumber = positionNumber;
     }
-    public BattleStatus(BattleStatus battleStatus)
-    {
-        this.status=battleStatus.getStatus();
-        this.number=battleStatus.getNumber();
+
+    public BattleStatus(BattleStatus battleStatus) {
+        this.status = battleStatus.getStatus();
+        this.number = battleStatus.getNumber();
     }
 
     public void setNumber(Integer battleNumber) {
@@ -47,12 +47,12 @@ public class BattleStatus { //класс необходимый для расп�
     public String getStatus() {
         return status;
     }
-    public void setBattleStatus(BattleStatus battleStatus)
-    {
+
+    public void setBattleStatus(BattleStatus battleStatus) {
         this.setStatus(battleStatus.getStatus());
         this.setQueueSize(battleStatus.getQueueSize());
-        this.name=battleStatus.getName();
-        this.ship=battleStatus.getShip();
+        this.name = battleStatus.getName();
+        this.ship = battleStatus.getShip();
         this.setNumber(battleStatus.getNumber());
         this.setPositionNumber(battleStatus.getPositionNumber());
     }

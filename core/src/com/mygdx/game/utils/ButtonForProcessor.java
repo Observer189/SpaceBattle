@@ -18,30 +18,30 @@ public class ButtonForProcessor {
     private float offsetY;
     private float widthCoeff;
     private float heightCoeff;
-    SpriteBatch batch;
-    TextureRegion vision;
-    public ButtonForProcessor(SpriteBatch batch, OrthographicCamera camera, float offsetX, float offsetY, float widthCoeff, float heightCoeff, TextureRegion vision)
-    {
-        x=camera.position.x+offsetX;
-        y=camera.position.y+offsetY;
-        width=camera.viewportWidth*widthCoeff;
-        height=camera.viewportHeight*heightCoeff;
-        this.camera=camera;
-        this.offsetX=offsetX;
-        this.offsetY=offsetY;
-        this.widthCoeff=widthCoeff;
-        this.heightCoeff=heightCoeff;
-        this.batch=batch;
-        this.vision=vision;
+    private SpriteBatch batch;
+    private TextureRegion vision;
+
+    public ButtonForProcessor(SpriteBatch batch, OrthographicCamera camera, float offsetX, float offsetY, float widthCoeff, float heightCoeff, TextureRegion vision) {
+        x = camera.position.x + offsetX;
+        y = camera.position.y + offsetY;
+        width = camera.viewportWidth * widthCoeff;
+        height = camera.viewportHeight * heightCoeff;
+        this.camera = camera;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.widthCoeff = widthCoeff;
+        this.heightCoeff = heightCoeff;
+        this.batch = batch;
+        this.vision = vision;
     }
-    public void draw()
-    {
-        x=camera.position.x+offsetX;
-        y=camera.position.y+offsetY;
-        width=camera.viewportWidth*widthCoeff;
-        height=camera.viewportHeight*heightCoeff;
+
+    public void draw() {
+        x = camera.position.x + offsetX;
+        y = camera.position.y + offsetY;
+        width = camera.viewportWidth * widthCoeff;
+        height = camera.viewportHeight * heightCoeff;
         batch.begin();
-        batch.draw(vision,x,y,width,height);
+        batch.draw(vision, x, y, width, height);
         batch.end();
     }
 

@@ -8,13 +8,13 @@ public class ServPlayer {
     private int conID;
     private String name;
     private ServShip currentShip;
-    public ServPlayer()
-    {
+
+    public ServPlayer() {
 
     }
-    public ServPlayer(int conID)
-    {
-        this.conID=conID;
+
+    public ServPlayer(int conID) {
+        this.conID = conID;
     }
 
     public void setCurrentShip(ServShip currentShip) {

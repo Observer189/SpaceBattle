@@ -7,11 +7,11 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.mygdx.game.StarGame;
 
 public class AndroidLauncher extends AndroidApplication {
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		initialize(new StarGame(), config);
-	}
+        initialize(new StarGame(), config);
+    }
 }

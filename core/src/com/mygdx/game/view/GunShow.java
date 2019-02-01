@@ -34,44 +34,47 @@ public class GunShow implements Screen {
     SpriteBatch batch;
     Game game;
     TextManager textManager;
-    BitmapFont font,font1;
+    private BitmapFont font, font1;
     public TextureAtlas textureAtlas;
     Skin skin;
     Stage stage;
-    int xt;
-    int yt;
-    int dyt;
-    Boolean MakeToast=false;
-    Boolean MakeToast1=false;
-    Boolean MakeToast2=false;
-    Weapon weapon;
+    private int xt;
+    private int yt;
+    private int dyt;
+    private Boolean MakeToast = false;
+    private Boolean MakeToast1 = false;
+    private Boolean MakeToast2 = false;
+    private Weapon weapon;
+
     //Buttons
-    StageForButton Back, Buy;
-    Button.ButtonStyle BaStyle, BuStyle;
+    private StageForButton Back, Buy;
+    private Button.ButtonStyle BaStyle, BuStyle;
+
     //Sreens
-    Screen ShList;
-    Toast toast,toast1,toast2;
-    MainMenu menu;
+    private Screen ShList;
+    private Toast toast, toast1, toast2;
+    private MainMenu menu;
     OldPlayer oldPlayer;
+
     //for ship's params
-    Image Gunimg;
+    private Image Gunimg;
     String name;
     int cost;
     int maxHp;
-    float width,height;
+    float width, height;
 
     float velocity;
     float maxSpeed;
 
-    servApi request;
-    public final String baseURL = "https://star-project-serv.herokuapp.com/";
+    private servApi request;
+    private final String baseURL = "https://star-project-serv.herokuapp.com/";
 
-    public GunShow(Weapon weapon, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
-        this.width=width;
-        this.height=height;
-        this.weapon=weapon;
-        this.game=game;
-        this.menu=menu;
+    GunShow(Weapon weapon, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
+        this.width = width;
+        this.height = height;
+        this.weapon = weapon;
+        this.game = game;
+        this.menu = menu;
         this.oldPlayer = oldPlayer;
 
     }
@@ -81,24 +84,24 @@ public class GunShow implements Screen {
     public void show() {
         Gdx.input.setCatchBackKey(true);
 
-        textureAtlas=new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
+        textureAtlas = new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
         stage = new Stage();
         skin = new Skin();
         skin.addRegions(textureAtlas);
-       // (float) (Gdx.graphics.getWidth() / 14.3), (float) (Gdx.graphics.getHeight() / 1.96669)
-        String name=weapon.getName();
+        // (float) (Gdx.graphics.getWidth() / 14.3), (float) (Gdx.graphics.getHeight() / 1.96669)
+        String name = weapon.getName();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(servApi.class);
-        if (name.equals("BlueLaser"))name= "BlueImpulseLaser";
+        if (name.equals("BlueLaser")) name = "BlueImpulseLaser";
         Gunimg = new Image(skin.getDrawable(name));
-        Gunimg.setSize(width,height);
-        Gunimg.setPosition((float) ((Gdx.graphics.getWidth() / Gdx.graphics.getWidth())*20), Gdx.graphics.getHeight() / 2 - Gunimg.getHeight() / 2);
+        Gunimg.setSize(width, height);
+        Gunimg.setPosition((float) ((Gdx.graphics.getWidth() / Gdx.graphics.getWidth()) * 20), Gdx.graphics.getHeight() / 2 - Gunimg.getHeight() / 2);
         //used for textManager params
 
-        xt = (int) (Gdx.graphics.getWidth()/3.2);
+        xt = (int) (Gdx.graphics.getWidth() / 3.2);
         yt = (int) ((Gunimg.getY() + Gunimg.getHeight()) * 1.1);
         stage.addActor(Gunimg);
         dyt = Gdx.graphics.getHeight() / 9;
@@ -107,25 +110,25 @@ public class GunShow implements Screen {
         camera = new OrthographicCamera();
 
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ShList=new ShopList2(game,batch,textureAtlas,menu, oldPlayer);
-        if (weapon.getName().equals("BlueImpulseLaser")||weapon.getName().equals("RocketLauncher"))
-        font = textManager.fontInitialize(Color.WHITE, (float) 0.7);
+        ShList = new ShopList2(game, batch, textureAtlas, menu, oldPlayer);
+        if (weapon.getName().equals("BlueImpulseLaser") || weapon.getName().equals("RocketLauncher"))
+            font = textManager.fontInitialize(Color.WHITE, (float) 0.7);
         else
             font = textManager.fontInitialize(Color.WHITE, 1);
         font1 = textManager.fontInitialize(Color.WHITE, 1);
         Toast.ToastFactory toastFactory = new Toast.ToastFactory.Builder()
                 .font(font1)
                 .build();
-        toast = toastFactory.create("Successfully bought" , Toast.Length.LONG);
-        toast1 = toastFactory.create("Already bought" , Toast.Length.LONG);
-        toast2=toastFactory.create("Not enough money!" , Toast.Length.LONG);
+        toast = toastFactory.create("Successfully bought", Toast.Length.LONG);
+        toast1 = toastFactory.create("Already bought", Toast.Length.LONG);
+        toast2 = toastFactory.create("Not enough money!", Toast.Length.LONG);
 
 
         //Buy button
         BuStyle = new Button.ButtonStyle();
         BuStyle.up = skin.getDrawable("Buy-up");
         BuStyle.down = skin.getDrawable("Buy-down");
-        Buy = new StageForButton(BuStyle,(int) ( Gdx.graphics.getWidth()- Gunimg.getHeight()), (int) ((Gdx.graphics.getHeight()) /2- Gunimg.getHeight()/2) , (int) (Gdx.graphics.getHeight()/3.6), (int) (Gdx.graphics.getHeight()/3.6));
+        Buy = new StageForButton(BuStyle, (int) (Gdx.graphics.getWidth() - Gunimg.getHeight()), (int) ((Gdx.graphics.getHeight()) / 2 - Gunimg.getHeight() / 2), (int) (Gdx.graphics.getHeight() / 3.6), (int) (Gdx.graphics.getHeight() / 3.6));
 
         Buy.btn.addListener(new ClickListener() {
             @Override
@@ -133,16 +136,16 @@ public class GunShow implements Screen {
 
                 // ShList=new ShopList(game,batch,textureAtlas,menu,oldPlayer);
                 if (menu.oldPlayer.resources.weaponList.contains(weapon)) {
-                    MakeToast1=true;
+                    MakeToast1 = true;
                 } else {
-                    if (!menu.oldPlayer.resources.weaponList.contains(weapon)&& (menu.oldPlayer.resources.getMoney()>=weapon.getCost())){
-                        MakeToast=true;
-                        int mon=menu.oldPlayer.getMoney()-weapon.getCost();
+                    if (!menu.oldPlayer.resources.weaponList.contains(weapon) && (menu.oldPlayer.resources.getMoney() >= weapon.getCost())) {
+                        MakeToast = true;
+                        int mon = menu.oldPlayer.getMoney() - weapon.getCost();
                         menu.oldPlayer.setMoney(mon);
                         updatePlayerMoney();
                         oldPlayer.resources.weaponList.add(weapon);
 
-                    }else MakeToast2=true;
+                    } else MakeToast2 = true;
 
                 }
 
@@ -153,66 +156,63 @@ public class GunShow implements Screen {
         BaStyle = new Button.ButtonStyle();
         BaStyle.up = skin.getDrawable("Back-up");
         BaStyle.down = skin.getDrawable("Back-down");
-        Back = new StageForButton(BaStyle, (int) Gunimg.getX(), (int) (Gdx.graphics.getHeight()/Gdx.graphics.getHeight()), (int) (Gdx.graphics.getWidth() / 8.8), (int) (Gdx.graphics.getHeight() / 4.96));
+        Back = new StageForButton(BaStyle, (int) Gunimg.getX(), (int) (Gdx.graphics.getHeight() / Gdx.graphics.getHeight()), (int) (Gdx.graphics.getWidth() / 8.8), (int) (Gdx.graphics.getHeight() / 4.96));
         System.out.println("Clicker");
-        Back.btn.addListener(new ClickListener(){
+        Back.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 game.setScreen(ShList);
-                System.out.println( oldPlayer.resources.shipList);
+                System.out.println(oldPlayer.resources.shipList);
 
             }
         });
-        Image[]tube;
-        tube=new Image[6];
-        for (int i=0;i<6;i++){
-            if (i%2!=0){
-            tube[i]=new Image(skin.getDrawable("Tube"));
-            tube[i].setSize((float) (Gdx.graphics.getWidth()/3.2),Gdx.graphics.getHeight()/6);
-            tube[i].setPosition((float) (xt*0.9), (float)  ((yt - dyt * (i+1))));
-            stage.addActor(tube[i]);}
-
+        Image[] tube;
+        tube = new Image[6];
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 != 0) {
+                tube[i] = new Image(skin.getDrawable("Tube"));
+                tube[i].setSize((float) (Gdx.graphics.getWidth() / 3.2), Gdx.graphics.getHeight() / 6);
+                tube[i].setPosition((float) (xt * 0.9), (float) ((yt - dyt * (i + 1))));
+                stage.addActor(tube[i]);
+            }
 
 
         }
 
 
-
-        InputMultiplexer in=new InputMultiplexer();
+        InputMultiplexer in = new InputMultiplexer();
         in.addProcessor(Buy);
         in.addProcessor(Back);
         in.addProcessor(stage);
         Gdx.input.setInputProcessor(in);
 
 
-
-
     }
 
     @Override
     public void render(float delta) {
-        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth()/1.6), (float) (Gdx.graphics.getHeight()/1.5));
+        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth() / 1.6), (float) (Gdx.graphics.getHeight() / 1.5));
         LoginView.textrure.draw();
         LoginView.star.draw();
 
         stage.act(delta);
         stage.draw();
-        textManager.displayMessage(batch, font, "" + weapon.getName(), xt, yt-dyt*1);
-        textManager.displayMessage(batch, font, "Price: " + weapon.getCost(), xt, yt - dyt*3);
+        textManager.displayMessage(batch, font, "" + weapon.getName(), xt, yt - dyt * 1);
+        textManager.displayMessage(batch, font, "Price: " + weapon.getCost(), xt, yt - dyt * 3);
         textManager.displayMessage(batch, font, "Speed: " + weapon.getAttackSpeed(), xt, yt - dyt * 5);
 
 
-        if (MakeToast==true){
+        if (MakeToast) {
             toast.render(Gdx.graphics.getDeltaTime());
 
         }
-        if (MakeToast1==true){
+        if (MakeToast1) {
             toast1.render(Gdx.graphics.getDeltaTime());
 
 
         }
-        if (MakeToast2==true){
+        if (MakeToast2) {
             toast2.render(Gdx.graphics.getDeltaTime());
 
 
@@ -221,8 +221,9 @@ public class GunShow implements Screen {
         Buy.draw();
         Back.act();
         Back.draw();
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            game.setScreen(ShList);  }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            game.setScreen(ShList);
+        }
         batch.begin();
         batch.end();
     }
@@ -240,8 +241,7 @@ public class GunShow implements Screen {
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         menu.music.play();
 
     }
@@ -277,7 +277,7 @@ public class GunShow implements Screen {
         int width;
         int height;
 
-        public StageForButton(Button.ButtonStyle btnstyle, int x, int y, int width, int height) {
+        StageForButton(Button.ButtonStyle btnstyle, int x, int y, int width, int height) {
             this.height = height;
             this.width = width;
             this.y = y;
@@ -289,9 +289,9 @@ public class GunShow implements Screen {
             addActor(btn);
         }
     }
-    private void updatePlayerMoney()
-    {
-        Call<Integer> call=request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
+
+    private void updatePlayerMoney() {
+        Call<Integer> call = request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
         try {
             call.execute();
         } catch (IOException e) {

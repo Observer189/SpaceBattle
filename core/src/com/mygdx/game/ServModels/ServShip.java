@@ -6,12 +6,12 @@ package com.mygdx.game.ServModels;
 
 public class ServShip extends ServObject {
     private int id;
-    public ServShip()
-    {
+
+    public ServShip() {
         super();
     }
-    public ServShip(ServShip ship)
-    {
+
+    public ServShip(ServShip ship) {
         setName(ship.getName());
         setX(ship.getX());
         setY(ship.getY());

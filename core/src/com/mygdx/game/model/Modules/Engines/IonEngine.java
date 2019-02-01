@@ -10,7 +10,7 @@ import com.mygdx.game.utils.Size;
  */
 
 public class IonEngine extends Engine {
-    public IonEngine( float x, float y,float rotation) {
-        super("IonEngine", x, y,rotation, Size.Small, 1f, 5000, 1000f, 10,1f, Type.Cruising);
+    public IonEngine(float x, float y, float rotation) {
+        super("IonEngine", x, y, rotation, Size.Small, 1f, 5000, 1000f, 10, 1f, Type.Cruising);
     }
 }

@@ -39,22 +39,23 @@ import static java.lang.Thread.sleep;
  */
 
 public class ConnectToBattle implements Screen {
-    MainMenu mainMenu;
+    private MainMenu mainMenu;
     SpriteBatch batch;
     Game game;
     TextureAtlas textureAtlas;
-    servApi request;
-    BattleStatus battleStatus;
+    private servApi request;
+    private BattleStatus battleStatus;
     OldPlayer oldPlayer;
-    OldServShip servShip;
+    private OldServShip servShip;
     TextManager textManager;
-    int counter;
-    boolean getBattleIsFinished;
-    InputProcessor processor;
-    BitmapFont blueFont;
-    public final String baseURL = "https://star-project-serv.herokuapp.com/";
-    public ConnectToBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas, OldPlayer oldPlayer, MainMenu mainMenu) {
-        this.mainMenu=mainMenu;
+    private int counter;
+    private boolean getBattleIsFinished;
+    private InputProcessor processor;
+    private BitmapFont blueFont;
+    private final String baseURL = "https://star-project-serv.herokuapp.com/";
+
+    ConnectToBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas, OldPlayer oldPlayer, MainMenu mainMenu) {
+        this.mainMenu = mainMenu;
         this.batch = batch;
         this.game = game;
         this.textureAtlas = textureAtlas;
@@ -62,6 +63,7 @@ public class ConnectToBattle implements Screen {
 
 
     }
+
     @Override
     public void show() {
 
@@ -73,15 +75,15 @@ public class ConnectToBattle implements Screen {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(servApi.class);
-        servShip=new OldServShip(oldPlayer.getCurrentShip().toServ());
-        processor=new ConnectToBattleProcessor();
+        servShip = new OldServShip(oldPlayer.getCurrentShip().toServ());
+        processor = new ConnectToBattleProcessor();
         //Gdx.input.setInputProcessor(processor);
-        textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        blueFont=textManager.fontInitialize(Color.BLUE,1);
-        battleStatus=new BattleStatus(null,null,null,null,"add",null);
+        textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        blueFont = textManager.fontInitialize(Color.BLUE, 1);
+        battleStatus = new BattleStatus(null, null, null, null, "add", null);
 
-        counter=0;
-        getBattleIsFinished=false;
+        counter = 0;
+        getBattleIsFinished = false;
         getBattleNumber();
 
         /*if((battleStatus.getNumber()!=null)&&(battleStatus.getStatus().equals("ready"))) {
@@ -94,35 +96,31 @@ public class ConnectToBattle implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            if((Gdx.input.isKeyPressed(Input.Keys.BACK))&&(!battleStatus.getStatus().equals("ready")))
-        {
+        if ((Gdx.input.isKeyPressed(Input.Keys.BACK)) && (!battleStatus.getStatus().equals("ready"))) {
             game.setScreen(mainMenu);
         }
-        if(counter==100)counter=0;
+        if (counter == 100) counter = 0;
         counter++;
-        if(getBattleIsFinished)
-        {
-            getBattleIsFinished=false;
+        if (getBattleIsFinished) {
+            getBattleIsFinished = false;
             getBattleNumber();
         }
         //System.out.println(battleStatus.getNumber()+" "+battleStatus.getStatus()+"QueueSize:"+battleStatus.getQueueSize());
 
-        if(battleStatus.getStatus().equals("add"))
-        {
-            textManager.displayMessage(batch,blueFont,"Connection to server...",300,300);
+        if (battleStatus.getStatus().equals("add")) {
+            textManager.displayMessage(batch, blueFont, "Connection to server...", 300, 300);
         }
-        if(battleStatus.getStatus().equals("wait"))
-        {
-            textManager.displayMessage(batch,blueFont,"Search enemy...",300,300);
-            textManager.displayMessage(batch,blueFont,"Players in queue:"+" "+battleStatus.getQueueSize(),300,350);
+        if (battleStatus.getStatus().equals("wait")) {
+            textManager.displayMessage(batch, blueFont, "Search enemy...", 300, 300);
+            textManager.displayMessage(batch, blueFont, "Players in queue:" + " " + battleStatus.getQueueSize(), 300, 350);
         }
-        if((battleStatus.getNumber()!=null)&&(battleStatus.getStatus().equals("ready"))&&(battleStatus.getShip()!=null)) {
+        if ((battleStatus.getNumber() != null) && (battleStatus.getStatus().equals("ready")) && (battleStatus.getShip() != null)) {
 
 
-            OldPlayer enemy=new OldPlayer(battleStatus.getName(), setShipByServ(battleStatus.getShip()));
+            OldPlayer enemy = new OldPlayer(battleStatus.getName(), setShipByServ(battleStatus.getShip()));
 
 
-            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus, oldPlayer,enemy,mainMenu));
+            game.setScreen(new Battle(batch, game, textureAtlas, battleStatus, oldPlayer, enemy, mainMenu));
         }
     }
 
@@ -152,6 +150,7 @@ public class ConnectToBattle implements Screen {
         //textureAtlas.dispose();
         //game.dispose();
     }
+
     private void getBattleNumber() {
 
         /*Call<BattleStatus> call = request.getBattleNumber(oldPlayer.getName(),battleStatus.getStatus());
@@ -163,14 +162,13 @@ public class ConnectToBattle implements Screen {
             e.printStackTrace();
         }*/
 
-        Call<BattleStatus> call = request.getBattleNumber(oldPlayer.getName(),servShip,battleStatus.getStatus());
-        System.out.println("!"+servShip+"!");
+        Call<BattleStatus> call = request.getBattleNumber(oldPlayer.getName(), servShip, battleStatus.getStatus());
+        System.out.println("!" + servShip + "!");
         call.enqueue(new Callback<BattleStatus>() {
             @Override
             public void onResponse(Call<BattleStatus> call, Response<BattleStatus> response) {
 
-                    battleStatus.setBattleStatus(response.body());
-
+                battleStatus.setBattleStatus(response.body());
 
 
                 try {
@@ -178,37 +176,37 @@ public class ConnectToBattle implements Screen {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                getBattleIsFinished=true;
+                getBattleIsFinished = true;
             }
 
             @Override
             public void onFailure(Call<BattleStatus> call, Throwable t) {
-                getBattleIsFinished=true;
+                getBattleIsFinished = true;
                 System.out.println("Connection failure");
             }
         });
     }
-    public Ship setShipByServ(OldServShip ship)
-    {
+
+    public Ship setShipByServ(OldServShip ship) {
         Ship shipFromServ;
-        System.out.println("!"+ship.getName()+"!");
-        if(ship.getName().equals("Pulsate"))
+        System.out.println("!" + ship.getName() + "!");
+        if (ship.getName().equals("Pulsate"))
             shipFromServ = new Pulsate(textureAtlas, 0, 0);
-        else if(ship.getName().equals("Dakkar"))
+        else if (ship.getName().equals("Dakkar"))
             shipFromServ = new Dakkar(textureAtlas, 0, 0);
-        else if(ship.getName().equals("Axe"))
+        else if (ship.getName().equals("Axe"))
             shipFromServ = new Axe(textureAtlas, 0, 0);
-        else if(ship.getName().equals("Dashing"))
+        else if (ship.getName().equals("Dashing"))
             shipFromServ = new Dashing(textureAtlas, 0, 0);
-        else if(ship.getName().equals("Rock"))
+        else if (ship.getName().equals("Rock"))
             shipFromServ = new Rock(textureAtlas, 0, 0);
-        else if(ship.getName().equals("Sudden"))
+        else if (ship.getName().equals("Sudden"))
             shipFromServ = new Sudden(textureAtlas, 0, 0);
         else {
             System.out.println("Ship is not exist");
             return null;
         }
-            return shipFromServ;
+        return shipFromServ;
 
     }
 }

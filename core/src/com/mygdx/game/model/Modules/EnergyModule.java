@@ -14,10 +14,10 @@ public class EnergyModule extends Module {
     private float energyStorage;
     private float energyGeneration;
 
-    public EnergyModule(String spriteName, float x, float y,float rotation, Size size, float density,float energyStorage,float energyGeneration) {
-        super(spriteName, x, y,rotation, size, ModuleType.EnergyModule, density);
-        this.energyGeneration=energyGeneration;
-        this.energyStorage=energyStorage;
+    public EnergyModule(String spriteName, float x, float y, float rotation, Size size, float density, float energyStorage, float energyGeneration) {
+        super(spriteName, x, y, rotation, size, ModuleType.EnergyModule, density);
+        this.energyGeneration = energyGeneration;
+        this.energyStorage = energyStorage;
 
     }
 

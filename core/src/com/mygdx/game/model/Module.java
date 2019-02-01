@@ -19,116 +19,106 @@ import com.mygdx.game.utils.Size;
 
 public class Module {
 
-    Size size;
-    ModuleType type;
-    Body body;
-    Fixture fixture;
-    BodyDef bDef;
-    FixtureDef fDef;
-    PolygonShape shape;
+    private Size size;
+    private ModuleType type;
+    private Body body;
+    private Fixture fixture;
+    private BodyDef bDef;
+    private FixtureDef fDef;
+    private PolygonShape shape;
     float width;
     float height;
-    World world;
+    private World world;
     TextureAtlas textureAtlas;
 
-    Sprite sprite;
-    String spriteName;
+    private Sprite sprite;
+    private String spriteName;
 
-    public Module(String spriteName,float x, float y,float rotation, Size size,ModuleType type, float density)
-    {
-        this.size=size;
-        this.spriteName=spriteName;
-        if(size.equals(Size.Small))
-        {
-            width=0.2f;
-            height=0.2f;
-        }
-        else if(size.equals(Size.Medium))
-        {
-            width=0.4f;
-            height=0.4f;
+    public Module(String spriteName, float x, float y, float rotation, Size size, ModuleType type, float density) {
+        this.size = size;
+        this.spriteName = spriteName;
+        if (size.equals(Size.Small)) {
+            width = 0.2f;
+            height = 0.2f;
+        } else if (size.equals(Size.Medium)) {
+            width = 0.4f;
+            height = 0.4f;
 
-        }
-        else if(size.equals(Size.Big))
-        {
-            width=1;
-            height=1;
+        } else if (size.equals(Size.Big)) {
+            width = 1;
+            height = 1;
         }
 
-        this.type=type;
-        bDef=new BodyDef();
-        fDef= new FixtureDef();
-        bDef.type= BodyDef.BodyType.DynamicBody;
-        bDef.position.set(x,y);
-        bDef.angle=(float) Math.toRadians(rotation);
+        this.type = type;
+        bDef = new BodyDef();
+        fDef = new FixtureDef();
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.position.set(x, y);
+        bDef.angle = (float) Math.toRadians(rotation);
 
-        shape= new PolygonShape();
-        shape.setAsBox(width/2,height/2);
-        fDef.shape=this.shape;
-        fDef.density=density;
+        shape = new PolygonShape();
+        shape.setAsBox(width / 2, height / 2);
+        fDef.shape = this.shape;
+        fDef.density = density;
     }
-    public void create(TextureAtlas textureAtlas,World world)
-    {
-        this.world=world;
-        this.textureAtlas=textureAtlas;
-        body=world.createBody(bDef);
-        fixture=body.createFixture(fDef);
-        sprite=new Sprite(textureAtlas.findRegion(spriteName));
-        sprite.setSize(width,height);
-        sprite.setOrigin(width/2,height/2);
-        sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
+
+    public void create(TextureAtlas textureAtlas, World world) {
+        this.world = world;
+        this.textureAtlas = textureAtlas;
+        body = world.createBody(bDef);
+        fixture = body.createFixture(fDef);
+        sprite = new Sprite(textureAtlas.findRegion(spriteName));
+        sprite.setSize(width, height);
+        sprite.setOrigin(width / 2, height / 2);
+        sprite.setPosition(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
     }
-    public void create(World world)
-    {
-        this.world=world;
-        this.textureAtlas=textureAtlas;
-        body=world.createBody(bDef);
-        fixture=body.createFixture(fDef);
+
+    public void create(World world) {
+        this.world = world;
+        body = world.createBody(bDef);
+        fixture = body.createFixture(fDef);
 
     }
 
-    public void draw(SpriteBatch batch)
-    {
-        sprite.setPosition(body.getPosition().x-width/2,body.getPosition().y-height/2);
-        sprite.setRotation((float)Math.toDegrees(body.getAngle()));
+    public void draw(SpriteBatch batch) {
+        sprite.setPosition(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
+        sprite.setRotation((float) Math.toDegrees(body.getAngle()));
         batch.begin();
         sprite.draw(batch);
         batch.end();
     }
-    public void setTransform(float x,float y,float rotation)
-    {
-        if(body!=null)
-        {
-            body.setTransform(x,y,(float)Math.toRadians(rotation));
-        }
-        else
-        {
-            bDef.position.set(x,y);
-            bDef.angle=(float)Math.toRadians(rotation);
+
+    public void setTransform(float x, float y, float rotation) {
+        if (body != null) {
+            body.setTransform(x, y, (float) Math.toRadians(rotation));
+        } else {
+            bDef.position.set(x, y);
+            bDef.angle = (float) Math.toRadians(rotation);
         }
     }
-    public float getX()
-    {
-        if(body!=null)
+
+    public float getX() {
+        if (body != null)
             return body.getPosition().x;
         else return bDef.position.x;
     }
-    public float getY()
-    {
-        if(body!=null)
+
+    public float getY() {
+        if (body != null)
             return body.getPosition().y;
         else return bDef.position.y;
     }
-    public float getAngle()
-    {
-        if(body!=null)
+
+    public float getAngle() {
+        if (body != null)
             return body.getAngle();
         else return bDef.angle;
     }
-    public void destroy()
-    {
+
+    public void destroy() {
         world.destroyBody(body);
     }
+
     public ModuleType getType() {
         return type;
     }

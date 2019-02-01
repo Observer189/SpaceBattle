@@ -13,30 +13,30 @@ import com.mygdx.game.view.MainMenu;
 
 public class StarGame extends Game {
 
-	private Screen menu,log,PTB;
+    private Screen menu, log, PTB;
 
-	private Assets assets;
-	OldPlayer oldPlayer;
-	SpriteBatch batch;
-	@Override
-	public void create () {
-		assets=new Assets();
-		oldPlayer =new OldPlayer("NaN",new Dashing(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")),0,0));
-		menu = new MainMenu(batch,this, oldPlayer);
+    private Assets assets;
+    private OldPlayer oldPlayer;
+    private SpriteBatch batch;
 
-
-		((MainMenu)menu).setTextureAtlas(assets.getManager().get("TexturePack.atlas", TextureAtlas.class));
-		log=new LoginView(batch,this);
-
-		setScreen(log);
-		batch=new SpriteBatch();
-	}
+    @Override
+    public void create() {
+        assets = new Assets();
+        oldPlayer = new OldPlayer("NaN", new Dashing(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")), 0, 0));
+        menu = new MainMenu(batch, this, oldPlayer);
 
 
+        ((MainMenu) menu).setTextureAtlas(assets.getManager().get("TexturePack.atlas", TextureAtlas.class));
+        log = new LoginView(batch, this);
 
-	@Override
-	public void dispose () {
-		menu.dispose();
-		assets.dispose();
-	}
+        setScreen(log);
+        batch = new SpriteBatch();
+    }
+
+
+    @Override
+    public void dispose() {
+        menu.dispose();
+        assets.dispose();
+    }
 }

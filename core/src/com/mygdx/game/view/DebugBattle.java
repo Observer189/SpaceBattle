@@ -72,114 +72,110 @@ public class DebugBattle implements Screen {
     public static float widthCamera;
     public static float heightCamera;
 
-    final public float AspectRatio;
-    PhysicShip ship;
-    PhysicShip enemyShip;
+    private final float AspectRatio;
+    private PhysicShip ship;
+    private PhysicShip enemyShip;
 
 
-    Map map;
-    AsteroidField asteroidField;
+    private Map map;
+    private AsteroidField asteroidField;
 
 
-    World world;
-    Box2DDebugRenderer rend;
-    BattleContactListener battleContactListener;
-    InputProcessor processor;
+    private World world;
+    private Box2DDebugRenderer rend;
+    private BattleContactListener battleContactListener;
+    private InputProcessor processor;
 
-    GasRegulator gasRegulator;
-    Helm helm;
+    private GasRegulator gasRegulator;
+    private Helm helm;
     ProgressBar energyBar;
-    BattleInfoPanel battleInfoPanel;
-    ButtonForProcessor fireButton;
+    private BattleInfoPanel battleInfoPanel;
+    private ButtonForProcessor fireButton;
     //ButtonForProcessor turnLeft;
     //ButtonForProcessor turnRight;
 
 
-    float endMapCoef;
+    private float endMapCoef;
 
-    Client client;
+    private Client client;
 
 
-    Player player;
-    Player enemy;
+    private Player player;
+    private Player enemy;
 
-    int battleID;
-    boolean isStartInfoReceived;
-    boolean isReady;
-    long lrt;
-    long lastInfoTime;//время получения последнего пакета ServBattleInfo
-    public DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas,Client client,Player player,Player enemy,AsteroidField asteroidField,int battleID)
-    {
+    private int battleID;
+    private boolean isStartInfoReceived;
+    private boolean isReady;
+    private long lrt;
+    private long lastInfoTime;//время получения последнего пакета ServBattleInfo
+
+    DebugBattle(SpriteBatch batch, Game game, TextureAtlas textureAtlas, Client client, Player player, Player enemy, AsteroidField asteroidField, int battleID) {
         System.out.println("Заходим в бой");
         this.batch = batch;
         this.game = game;
 
         this.textureAtlas = textureAtlas;
-        this.client=client;
+        this.client = client;
 
 
-        this.player=player;
-        ship=player.getCurrentShip();
-        this.enemy=enemy;
-        isStartInfoReceived=false;
-        isReady=false;
-        AspectRatio=(float) Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-        widthCamera=30;
-        heightCamera=30/AspectRatio;
-        width =1.5f;
-        height =2;
-        endMapCoef=0.05f;
-        System.out.println("Size"+asteroidField.getAsteroids().size);
+        this.player = player;
+        ship = player.getCurrentShip();
+        this.enemy = enemy;
+        isStartInfoReceived = false;
+        isReady = false;
+        AspectRatio = (float) Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
+        widthCamera = 30;
+        heightCamera = 30 / AspectRatio;
+        width = 1.5f;
+        height = 2;
+        endMapCoef = 0.05f;
+        System.out.println("Size" + asteroidField.getAsteroids().size);
         this.asteroidField = new AsteroidField(asteroidField);
-        System.out.println("Size"+this.asteroidField.getAsteroids().size);
-        isStartInfoReceived=true;
-        this.battleID=battleID;
-        System.out.println("battleId: "+battleID);
-        lrt=0;
-        lastInfoTime=0;
+        System.out.println("Size" + this.asteroidField.getAsteroids().size);
+        isStartInfoReceived = true;
+        this.battleID = battleID;
+        System.out.println("battleId: " + battleID);
+        lrt = 0;
+        lastInfoTime = 0;
     }
+
     @Override
     public void show() {
 
-        client.addListener(new Listener()
-        {
+        client.addListener(new Listener() {
             public void received(Connection c, Object p) {
 
-            if(p instanceof ClientStartInfo)
-            {
-                ClientStartInfo csi=(ClientStartInfo)p;
-                System.out.println("Мы получили начальные данные от клиента");
-                enemyShip=PhysicShip.fromServ(csi.getShip());
-                isStartInfoReceived=true;
+                if (p instanceof ClientStartInfo) {
+                    ClientStartInfo csi = (ClientStartInfo) p;
+                    System.out.println("Мы получили начальные данные от клиента");
+                    enemyShip = PhysicShip.fromServ(csi.getShip());
+                    isStartInfoReceived = true;
 
-            }
-            else if(p instanceof ServBattleInfo)
-            {
-                ServBattleInfo sbi=(ServBattleInfo)p;
-                if(lastInfoTime<sbi.getTime()) {
-                    ship.setTransform(sbi.getX(), sbi.getY(), sbi.getRotation());
-                    for(int i=0;i<sbi.getSaf().getAsteroids().length;i++)
-                    {
-                        asteroidField.getAsteroids().get(i).setTransform(sbi.getSaf().getAsteroids()[i].getX(),sbi.getSaf().getAsteroids()[i].getY(),sbi.getSaf().getAsteroids()[i].getRotation());
+                } else if (p instanceof ServBattleInfo) {
+                    ServBattleInfo sbi = (ServBattleInfo) p;
+                    if (lastInfoTime < sbi.getTime()) {
+                        ship.setTransform(sbi.getX(), sbi.getY(), sbi.getRotation());
+                        for (int i = 0; i < sbi.getSaf().getAsteroids().length; i++) {
+                            asteroidField.getAsteroids().get(i).setTransform(sbi.getSaf().getAsteroids()[i].getX(), sbi.getSaf().getAsteroids()[i].getY(), sbi.getSaf().getAsteroids()[i].getRotation());
+                        }
+                        lastInfoTime = sbi.getTime();
                     }
-                    lastInfoTime=sbi.getTime();
+
                 }
 
             }
-
-            }
         });
-        String str = new String();
-        str="Ready";
+        String str;
+        str = "Ready";
         client.sendTCP(str);
 
-        world=new World(new Vector2(0,0),false);
+        world = new World(new Vector2(0, 0), false);
 
-        map=Map.generateMap(batch,textureAtlas);
+        map = Map.generateMap(batch, textureAtlas);
 
 
         //ship = new StarFighter( 50, 30,180);
-        enemyShip=enemy.getCurrentShip();
+        enemyShip = enemy.getCurrentShip();
 
         //asteroidField=new AsteroidField(15,30,map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef));
         //asteroidField.generate();
@@ -198,21 +194,20 @@ public class DebugBattle implements Screen {
         asteroidField.create(textureAtlas, world);
 
 
-        camera=new OrthographicCamera(widthCamera,heightCamera);
-        camera.position.set(new Vector3(500,500,0));
-        camX =camera.position.x;
-        camY =camera.position.y;
-        rend=new Box2DDebugRenderer();
-        gasRegulator=new GasRegulator(batch,camX-widthCamera*0.45f,camY-heightCamera*0.45f,widthCamera*0.15f,heightCamera*0.4f,textureAtlas,new Rock(textureAtlas,0,0));
-        helm=new Helm(textureAtlas,batch,camera,-6.5f,-7.5f,0.15f,0.15f*AspectRatio, ship);
-        fireButton=new ButtonForProcessor(batch,camera,6.5f,-7.5f,0.1f,0.1f*AspectRatio,textureAtlas.findRegion("FireButton"));
+        camera = new OrthographicCamera(widthCamera, heightCamera);
+        camera.position.set(new Vector3(500, 500, 0));
+        camX = camera.position.x;
+        camY = camera.position.y;
+        rend = new Box2DDebugRenderer();
+        gasRegulator = new GasRegulator(batch, camX - widthCamera * 0.45f, camY - heightCamera * 0.45f, widthCamera * 0.15f, heightCamera * 0.4f, textureAtlas, new Rock(textureAtlas, 0, 0));
+        helm = new Helm(textureAtlas, batch, camera, -6.5f, -7.5f, 0.15f, 0.15f * AspectRatio, ship);
+        fireButton = new ButtonForProcessor(batch, camera, 6.5f, -7.5f, 0.1f, 0.1f * AspectRatio, textureAtlas.findRegion("FireButton"));
 
-        battleInfoPanel=new BattleInfoPanel(batch,textureAtlas,-0.45f,0.4f,0.3f,0.1f, ship.getMaxHP(), ship.getMaxEnergy(),camera);
+        battleInfoPanel = new BattleInfoPanel(batch, textureAtlas, -0.45f, 0.4f, 0.3f, 0.1f, ship.getMaxHP(), ship.getMaxEnergy(), camera);
 
-        battleContactListener=new BattleContactListener();
-        processor=new DebugBattleProcessor(gasRegulator,helm,fireButton, ship);
+        battleContactListener = new BattleContactListener();
+        processor = new DebugBattleProcessor(gasRegulator, helm, fireButton, ship);
         Gdx.input.setInputProcessor(processor);
-
 
 
         createRectJoint();
@@ -223,67 +218,66 @@ public class DebugBattle implements Screen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Size"+asteroidField.getAsteroids().size);
+        System.out.println("Size" + asteroidField.getAsteroids().size);
 
     }
 
     @Override
     public void render(float delta) {
 
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            this.delta = delta;
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        DebugBattle.delta = delta;
 
-            camera.position.set(new Vector3(ship.getX(), ship.getY(), 0));
-            camX = camera.position.x;
-            camY = camera.position.y;
-            gasRegulator.setX(camX - widthCamera * 0.45f);
-            gasRegulator.setY(camY - heightCamera * 0.45f);
+        camera.position.set(new Vector3(ship.getX(), ship.getY(), 0));
+        camX = camera.position.x;
+        camY = camera.position.y;
+        gasRegulator.setX(camX - widthCamera * 0.45f);
+        gasRegulator.setY(camY - heightCamera * 0.45f);
 
-            battleInfoPanel.update();
+        battleInfoPanel.update();
 
-            //////////////////////////////////
+        //////////////////////////////////
 
-            camera.update();
+        camera.update();
 
-            batch.setProjectionMatrix(camera.combined);
-            //Отрисовка карты
-            map.draw();
-            ////////////////////////////////////
+        batch.setProjectionMatrix(camera.combined);
+        //Отрисовка карты
+        map.draw();
+        ////////////////////////////////////
 
-            ship.draw(batch);
-            if (enemyShip != null)
-                enemyShip.draw(batch);
-            //asteroid.draw(batch);
-            asteroidField.draw(batch);
+        ship.draw(batch);
+        if (enemyShip != null)
+            enemyShip.draw(batch);
+        //asteroid.draw(batch);
+        asteroidField.draw(batch);
 
-            //
-            gasRegulator.draw();
-            helm.draw();
-            fireButton.draw();
-            //energyBar.draw(ship.getEnergy());
-            battleInfoPanel.draw(ship.getHp(), ship.getEnergy());
-            /////////////////////////////
+        //
+        gasRegulator.draw();
+        helm.draw();
+        fireButton.draw();
+        //energyBar.draw(ship.getEnergy());
+        battleInfoPanel.draw(ship.getHp(), ship.getEnergy());
+        /////////////////////////////
 
-            //rend.render(world, camera.combined);
-            //ship.move();
-            //world.step(1 / 60f, 4, 4);
+        //rend.render(world, camera.combined);
+        //ship.move();
+        //world.step(1 / 60f, 4, 4);
 
 
-
-            //asteroidField.update();
-            if (enemyShip != null) {
-                if (enemyShip.getHp() < 0) {
-                    enemyShip.destroy();
-                    enemyShip = null;
-                }
+        //asteroidField.update();
+        if (enemyShip != null) {
+            if (enemyShip.getHp() < 0) {
+                enemyShip.destroy();
+                enemyShip = null;
             }
-        if(lrt+10<System.currentTimeMillis()) {
+        }
+        if (lrt + 10 < System.currentTimeMillis()) {
             System.out.println("x: " + ship.getBody().getPosition().x
                     + " y: " + ship.getBody().getPosition().y
                     + "r: " + Math.toDegrees(ship.getBody().getAngle()));
-            lrt=System.currentTimeMillis();
-            PlayerActions acts=new PlayerActions();
+            lrt = System.currentTimeMillis();
+            PlayerActions acts = new PlayerActions();
             acts.setBattleID(battleID);
             acts.setMovementPosition(ship.getMovementPosition());
             acts.setTargetRotation(ship.getTargetRotation());
@@ -291,8 +285,7 @@ public class DebugBattle implements Screen {
             client.sendTCP(acts);
         }
 
-        }
-
+    }
 
 
     @Override
@@ -319,97 +312,97 @@ public class DebugBattle implements Screen {
     public void dispose() {
 
     }
-    public void createRect()
-    {
-        BodyDef bDef=new BodyDef();
-        bDef.type= BodyDef.BodyType.DynamicBody;
-        bDef.position.set((float)(Math.random()*150),(float)(Math.random()*100));
-        Body body=world.createBody(bDef);
 
-        FixtureDef fDef=new FixtureDef();
-        PolygonShape shape=new PolygonShape();
-        shape.setAsBox((float)(Math.random()*3),(float)(Math.random()*3));
-        fDef.shape=shape;
-        fDef.density=1000;
-        fDef.friction=0.5f;
-        fDef.restitution=0.2f;
+    public void createRect() {
+        BodyDef bDef = new BodyDef();
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.position.set((float) (Math.random() * 150), (float) (Math.random() * 100));
+        Body body = world.createBody(bDef);
+
+        FixtureDef fDef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox((float) (Math.random() * 3), (float) (Math.random() * 3));
+        fDef.shape = shape;
+        fDef.density = 1000;
+        fDef.friction = 0.5f;
+        fDef.restitution = 0.2f;
         body.createFixture(fDef);
         body.setAngularVelocity(1);
     }
-    public void createRectJoint()
-    {
-        BodyDef bDef1=new BodyDef();
-        bDef1.type= BodyDef.BodyType.DynamicBody;
-        bDef1.position.set(47,30);
-        Body body=world.createBody(bDef1);
 
-        FixtureDef fDef1=new FixtureDef();
-        PolygonShape shape=new PolygonShape();
-        shape.setAsBox(2,2);
-        fDef1.shape=shape;
-        fDef1.density=2000;
-        fDef1.friction=0.5f;
-        fDef1.restitution=0.2f;
+    private void createRectJoint() {
+        BodyDef bDef1 = new BodyDef();
+        bDef1.type = BodyDef.BodyType.DynamicBody;
+        bDef1.position.set(47, 30);
+        Body body = world.createBody(bDef1);
+
+        FixtureDef fDef1 = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(2, 2);
+        fDef1.shape = shape;
+        fDef1.density = 2000;
+        fDef1.friction = 0.5f;
+        fDef1.restitution = 0.2f;
         body.createFixture(fDef1);
         body.setAngularVelocity(0);
 
-        BodyDef bDef2=new BodyDef();
-        bDef2.type= BodyDef.BodyType.DynamicBody;
-        bDef2.position.set(47,30);
-        Body body2=world.createBody(bDef2);
+        BodyDef bDef2 = new BodyDef();
+        bDef2.type = BodyDef.BodyType.DynamicBody;
+        bDef2.position.set(47, 30);
+        Body body2 = world.createBody(bDef2);
 
-        FixtureDef fDef2=new FixtureDef();
-        PolygonShape shape2=new PolygonShape();
-        shape2.set(new float[]{-1f,-1f,1f,-1f,0f,0f});
-        fDef2.shape=shape2;
-        fDef2.density=2000;
-        fDef2.friction=0.5f;
-        fDef2.restitution=0.2f;
+        FixtureDef fDef2 = new FixtureDef();
+        PolygonShape shape2 = new PolygonShape();
+        shape2.set(new float[]{-1f, -1f, 1f, -1f, 0f, 0f});
+        fDef2.shape = shape2;
+        fDef2.density = 2000;
+        fDef2.friction = 0.5f;
+        fDef2.restitution = 0.2f;
         body2.createFixture(fDef2);
-        FixtureDef fDef3=new FixtureDef();
-        PolygonShape shape3=new PolygonShape();
-        shape3.set(new float[]{0.f,0.f,1f,1f,-1f,1f});
-        fDef3.shape=shape3;
-        fDef3.density=2000;
-        fDef3.friction=0.5f;
-        fDef3.restitution=0.2f;
+        FixtureDef fDef3 = new FixtureDef();
+        PolygonShape shape3 = new PolygonShape();
+        shape3.set(new float[]{0.f, 0.f, 1f, 1f, -1f, 1f});
+        fDef3.shape = shape3;
+        fDef3.density = 2000;
+        fDef3.friction = 0.5f;
+        fDef3.restitution = 0.2f;
         body2.createFixture(fDef3);
         body2.setAngularVelocity(0);
 
-        WeldJointDef jointDef=new WeldJointDef();
-        jointDef.bodyA=body;
-        jointDef.bodyB=body2;
-        jointDef.localAnchorA.set(2,2);
-        jointDef.localAnchorB.set(-1,-1);
+        WeldJointDef jointDef = new WeldJointDef();
+        jointDef.bodyA = body;
+        jointDef.bodyB = body2;
+        jointDef.localAnchorA.set(2, 2);
+        jointDef.localAnchorB.set(-1, -1);
         world.createJoint(jointDef);
     }
-    public void createWall()
-    {
-        BodyDef bDef=new BodyDef();
-        bDef.type= BodyDef.BodyType.StaticBody;
-        bDef.position.set(0,0);
-        Body body=world.createBody(bDef);
 
-        FixtureDef fDef=new FixtureDef();
-        ChainShape shape=new ChainShape();
-        shape.createLoop(new float[]{map.getWidth()*endMapCoef,map.getHeight()*endMapCoef,
-                map.getWidth()*(1-endMapCoef),map.getHeight()*endMapCoef,
-                map.getWidth()*(1-endMapCoef),map.getHeight()*(1-endMapCoef),
-                map.getWidth()*endMapCoef,map.getHeight()*(1-endMapCoef)});
-        fDef.shape=shape;
-        fDef.friction=0.2f;
-        fDef.restitution=0.5f;
+    private void createWall() {
+        BodyDef bDef = new BodyDef();
+        bDef.type = BodyDef.BodyType.StaticBody;
+        bDef.position.set(0, 0);
+        Body body = world.createBody(bDef);
+
+        FixtureDef fDef = new FixtureDef();
+        ChainShape shape = new ChainShape();
+        shape.createLoop(new float[]{map.getWidth() * endMapCoef, map.getHeight() * endMapCoef,
+                map.getWidth() * (1 - endMapCoef), map.getHeight() * endMapCoef,
+                map.getWidth() * (1 - endMapCoef), map.getHeight() * (1 - endMapCoef),
+                map.getWidth() * endMapCoef, map.getHeight() * (1 - endMapCoef)});
+        fDef.shape = shape;
+        fDef.friction = 0.2f;
+        fDef.restitution = 0.5f;
         body.createFixture(fDef);
-        body.setUserData(new Object(){
+        body.setUserData(new Object() {
             @Override
             public String toString() {
                 return "EndMap";
             }
         });
     }
-    public void createAsteroid()
-    {
-        Asteroid[] asteroids=new Asteroid[10];
+
+    public void createAsteroid() {
+        Asteroid[] asteroids = new Asteroid[10];
     }
 
     public void setAsteroidField(AsteroidField asteroidField) {

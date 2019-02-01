@@ -43,39 +43,39 @@ public class LoginView implements Screen {
     Game game;
     SpriteBatch batch;
     OldPlayer oldPlayer;
-    BitmapFont font,font1;
+    private BitmapFont font, font1;
     TextManager textManager;
-    TextField.TextFieldStyle txtStyle;
-    TextField textFieldLog,textFieldPass,textFieldConfirm;
+    private TextField.TextFieldStyle txtStyle;
+    private TextField textFieldLog, textFieldPass, textFieldConfirm;
     Stage stage;
-    Boolean KBisActive=false;
+    private Boolean KBisActive = false;
     static Map textrure;
-    TextButton.TextButtonStyle btnstyle,btnstyle1;
-    TextButton SignInBtn,SignUpBtn;
-    Toast toast,alreadyExist,NoConnection;
-    Boolean MakeToast=false;
-    Boolean MakeToastExist=false;
-    Boolean MakeToastConnetion=false;
+    private TextButton.TextButtonStyle btnstyle, btnstyle1;
+    private TextButton SignInBtn, SignUpBtn;
+    private Toast toast, alreadyExist, NoConnection;
+    private Boolean MakeToast = false;
+    private Boolean MakeToastExist = false;
+    private Boolean MakeToastConnetion = false;
     OrthographicCamera camera = new OrthographicCamera();
-    Boolean ShowConfirm=false;
-    Boolean Saved=false;
-    Array<TextureAtlas.AtlasRegion> array;
+    private Boolean ShowConfirm = false;
+    Boolean Saved = false;
+    private Array<TextureAtlas.AtlasRegion> array;
     public static StarGen star;
-    Boolean isRegistration=false;
-    int createResult;
-    OldServPlayer signPlayer;
-    servApi request;
-    public final String baseURL = "https://star-project-serv.herokuapp.com/";
-    Confirmation confirmation;
+    private Boolean isRegistration = false;
+    private int createResult;
+    private OldServPlayer signPlayer;
+    private servApi request;
+    private final String baseURL = "https://star-project-serv.herokuapp.com/";
+    private Confirmation confirmation;
     TextureAtlas textureAtlas;
 
-    public LoginView(SpriteBatch batch, Game game){
-        this.batch=batch;
-        this.game=game;
-
+    public LoginView(SpriteBatch batch, Game game) {
+        this.batch = batch;
+        this.game = game;
 
 
     }
+
     @Override
     public void show() {
         Assets.load();
@@ -84,12 +84,13 @@ public class LoginView implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("MenuMusic.mp3"));
         music.setLooping(true);
         music.play();
-        batch=new SpriteBatch();
-        textureAtlas=new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
-        textrure= Map.generateMap(batch,textureAtlas);
-        textrure.setHeight(Gdx.graphics.getHeight()); textrure.setWidth(Gdx.graphics.getWidth());
+        batch = new SpriteBatch();
+        textureAtlas = new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
+        textrure = Map.generateMap(batch, textureAtlas);
+        textrure.setHeight(Gdx.graphics.getHeight());
+        textrure.setWidth(Gdx.graphics.getWidth());
 
-        stage=new Stage();
+        stage = new Stage();
         Skin skin = new Skin();
         skin.addRegions(textureAtlas);
         Gson gson = new GsonBuilder()
@@ -100,163 +101,154 @@ public class LoginView implements Screen {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         request = retrofit.create(servApi.class);
-        createResult=-1;
+        createResult = -1;
 
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        array=new Array<TextureAtlas.AtlasRegion>();
-       for (int i=0;i<17;i++)
-           array.add(textureAtlas.findRegion("Explosion"+(i+1)));
+        array = new Array<TextureAtlas.AtlasRegion>();
+        for (int i = 0; i < 17; i++)
+            array.add(textureAtlas.findRegion("Explosion" + (i + 1)));
 
 
-
-        font=textManager.fontInitialize(Color.BLACK,1f);
-        font1=textManager.fontInitialize(Color.WHITE,1f);
-        confirmation=new Confirmation(font1,batch);
+        font = textManager.fontInitialize(Color.BLACK, 1f);
+        font1 = textManager.fontInitialize(Color.WHITE, 1f);
+        confirmation = new Confirmation(font1, batch);
         Toast.ToastFactory toastFactory = new Toast.ToastFactory.Builder()
                 .font(font1)
                 .build();
-        toast = toastFactory.create("Can't be empty/more than 3 letter" , Toast.Length.LONG);
-        alreadyExist=toastFactory.create("This name is alredy taken", Toast.Length.LONG);
-        NoConnection=toastFactory.create("Check your connection!", Toast.Length.LONG);
+        toast = toastFactory.create("Can't be empty/more than 3 letter", Toast.Length.LONG);
+        alreadyExist = toastFactory.create("This name is alredy taken", Toast.Length.LONG);
+        NoConnection = toastFactory.create("Check your connection!", Toast.Length.LONG);
 
-        txtStyle=new TextField.TextFieldStyle();
-        txtStyle.font=font;
-        txtStyle.fontColor=Color.BLACK;
-        txtStyle.background=skin.getDrawable("FrameInput");
-        txtStyle.cursor=skin.getDrawable("GreenLaserAmmo");
+        txtStyle = new TextField.TextFieldStyle();
+        txtStyle.font = font;
+        txtStyle.fontColor = Color.BLACK;
+        txtStyle.background = skin.getDrawable("FrameInput");
+        txtStyle.cursor = skin.getDrawable("GreenLaserAmmo");
         txtStyle.background.setLeftWidth(40);
         txtStyle.background.setRightWidth(45);
         txtStyle.background.setBottomHeight(5);
 
 
-
-        textFieldLog =new TextField(Assets.preferences.getString("Log"),txtStyle);
+        textFieldLog = new TextField(Assets.preferences.getString("Log"), txtStyle);
         textFieldLog.setMessageText("Your log-in");
-        textFieldLog.setSize(Gdx.graphics.getWidth()/2,100);
-        textFieldLog.setPosition(Gdx.graphics.getWidth()/2-textFieldLog.getWidth()/2,540);
+        textFieldLog.setSize(Gdx.graphics.getWidth() / 2, 100);
+        textFieldLog.setPosition(Gdx.graphics.getWidth() / 2 - textFieldLog.getWidth() / 2, 540);
 
         stage.addActor(textFieldLog);
-        textFieldLog.addListener(new ClickListener(){
+        textFieldLog.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                KBisActive=true;
+                KBisActive = true;
                 textFieldLog.getOnscreenKeyboard().show(true);
             }
         });
 
-        textFieldPass =new TextField(Assets.preferences.getString("Pass"),txtStyle);
+        textFieldPass = new TextField(Assets.preferences.getString("Pass"), txtStyle);
         textFieldPass.setMessageText("Your password");
-        textFieldPass.setSize(Gdx.graphics.getWidth()/2,100);
-        textFieldPass.setPosition(Gdx.graphics.getWidth()/2-textFieldLog.getWidth()/2,420);
+        textFieldPass.setSize(Gdx.graphics.getWidth() / 2, 100);
+        textFieldPass.setPosition(Gdx.graphics.getWidth() / 2 - textFieldLog.getWidth() / 2, 420);
         textFieldPass.setPasswordMode(true);
         textFieldPass.setPasswordCharacter('*');
 
-        textFieldPass.addListener(new ClickListener(){
+        textFieldPass.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                KBisActive=true;
+                KBisActive = true;
                 textFieldPass.getOnscreenKeyboard().show(true);
 
             }
         });
         stage.addActor(textFieldPass);
-        textFieldConfirm=new TextField("",txtStyle);
+        textFieldConfirm = new TextField("", txtStyle);
         textFieldConfirm.setMessageText("Confirm your pass");
 
-        textFieldConfirm.setSize(textFieldPass.getWidth(),textFieldPass.getHeight());
-        textFieldConfirm.setPosition(textFieldPass.getX(),textFieldPass.getY()-textFieldConfirm.getHeight()-20);
+        textFieldConfirm.setSize(textFieldPass.getWidth(), textFieldPass.getHeight());
+        textFieldConfirm.setPosition(textFieldPass.getX(), textFieldPass.getY() - textFieldConfirm.getHeight() - 20);
         textFieldConfirm.setPasswordMode(true);
         textFieldConfirm.setPasswordCharacter('*');
 
-        textFieldConfirm.addListener(new ClickListener(){
+        textFieldConfirm.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                KBisActive=true;
+                KBisActive = true;
                 textFieldConfirm.getOnscreenKeyboard().show(true);
 
             }
         });
 
-        btnstyle=new TextButton.TextButtonStyle();
-        btnstyle.font=font;
-        btnstyle.up=skin.getDrawable("FrameInput");
+        btnstyle = new TextButton.TextButtonStyle();
+        btnstyle.font = font;
+        btnstyle.up = skin.getDrawable("FrameInput");
 
-        SignInBtn=new TextButton("Sign in",btnstyle);
-        SignInBtn.setPosition(textFieldLog.getX()-20,200);
-        SignInBtn.setSize(300,100);
-        SignInBtn.addListener(new ClickListener(){
+        SignInBtn = new TextButton("Sign in", btnstyle);
+        SignInBtn.setPosition(textFieldLog.getX() - 20, 200);
+        SignInBtn.setSize(300, 100);
+        SignInBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (SignInBtn.getText().toString().equals("Sign in")){
-                     if (!textFieldLog.getText().equals(null)&& !textFieldLog.getText().contains(" ")&& !(textFieldLog.getText().length()<3)&&
-                      !textFieldPass.getText().equals(null)&& !textFieldPass.getText().contains(" ")&& !(textFieldPass.getText().length()<3)
-                        ){
-                             save();
+                if (SignInBtn.getText().toString().equals("Sign in")) {
+                    if (textFieldLog.getText() != null && !textFieldLog.getText().contains(" ") && !(textFieldLog.getText().length() < 3) &&
+                            textFieldPass.getText() != null && !textFieldPass.getText().contains(" ") && !(textFieldPass.getText().length() < 3)
+                    ) {
+                        save();
 
-                             signPlayer= getOldPlayer();
-                             if((signPlayer!=null)&&(signPlayer.getPassword().equals(textFieldPass.getText())))
-                             {
-                             oldPlayer =new OldPlayer(signPlayer);
+                        signPlayer = getOldPlayer();
+                        if ((signPlayer != null) && (signPlayer.getPassword().equals(textFieldPass.getText()))) {
+                            oldPlayer = new OldPlayer(signPlayer);
 
-                             game.setScreen(new MainMenu(batch,game, oldPlayer));
-                             }
-                             else{
-                                 System.out.println("Вы ввели неверное имя пользователя или пароль!");
-                             }
-                     }
-                     else {MakeToast=true;
-                                     }
-
+                            game.setScreen(new MainMenu(batch, game, oldPlayer));
+                        } else {
+                            System.out.println("Вы ввели неверное имя пользователя или пароль!");
+                        }
+                    } else {
+                        MakeToast = true;
                     }
+
+                }
                 if (SignInBtn.getText().toString().equals("Cancel")) {
                     SignInBtn.setText("Sign in");
-                    isRegistration=false;
+                    isRegistration = false;
                     textFieldConfirm.setVisible(false);
 
                 }
             }
         });
         stage.addActor(SignInBtn);
-        btnstyle1=new TextButton.TextButtonStyle();
-        btnstyle1.font=font;
-        btnstyle1.up=skin.getDrawable("FrameInput");
+        btnstyle1 = new TextButton.TextButtonStyle();
+        btnstyle1.font = font;
+        btnstyle1.up = skin.getDrawable("FrameInput");
 
-        SignUpBtn=new TextButton("Sign up",btnstyle1);
-        SignUpBtn.setSize(300,100);
-        SignUpBtn.setPosition(textFieldLog.getX()+textFieldLog.getWidth()-SignUpBtn.getWidth(),200);
-        SignUpBtn.addListener(new ClickListener(){
+        SignUpBtn = new TextButton("Sign up", btnstyle1);
+        SignUpBtn.setSize(300, 100);
+        SignUpBtn.setPosition(textFieldLog.getX() + textFieldLog.getWidth() - SignUpBtn.getWidth(), 200);
+        SignUpBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!isRegistration){
-               ShowConfirm=true;
-                SignInBtn.setText("Cancel");
-                isRegistration=true;
-                }
-                else {
-                    if (!textFieldLog.getText().equals(null)&& !textFieldLog.getText().contains(" ")&& !(textFieldLog.getText().length()<3)&&
-                            !textFieldPass.getText().equals(null)&& !textFieldPass.getText().contains(" ")&& !(textFieldPass.getText().length()<3)&&
-                                 !textFieldConfirm.getText().equals(null)&& !textFieldConfirm.getText().contains(" ")&& !(textFieldConfirm.getText().length()<3)&&
+                if (!isRegistration) {
+                    ShowConfirm = true;
+                    SignInBtn.setText("Cancel");
+                    isRegistration = true;
+                } else {
+                    if (textFieldLog.getText() != null && !textFieldLog.getText().contains(" ") && !(textFieldLog.getText().length() < 3) &&
+                            textFieldPass.getText() != null && !textFieldPass.getText().contains(" ") && !(textFieldPass.getText().length() < 3) &&
+                            textFieldConfirm.getText() != null && !textFieldConfirm.getText().contains(" ") && !(textFieldConfirm.getText().length() < 3) &&
                             textFieldConfirm.getText().toString().equals(textFieldPass.getText().toString())
-                            ) {
+                    ) {
                         save();
-                        createResult=createPlayer();
-                        if (createResult==1) {
+                        createResult = createPlayer();
+                        if (createResult == 1) {
                             oldPlayer = new OldPlayer(textFieldLog.getText(), new Dakkar(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")), 0, 0));
                             game.setScreen(new MainMenu(batch, game, oldPlayer));
-                        }
-                        else if(createResult==0)
-                        {
+                        } else if (createResult == 0) {
                             System.out.println("Игрок с таким именем уже существует");
-                            MakeToastExist=true;
-                        }
-                        else
-                        {
+                            MakeToastExist = true;
+                        } else {
                             System.out.println("Не удалось подключится к серверу");
-                            MakeToastConnetion=true;
+                            MakeToastConnetion = true;
                         }
-                        createResult=-1;
-                    }
-                    else {MakeToast=true;
+                        createResult = -1;
+                    } else {
+                        MakeToast = true;
                     }
 
 
@@ -269,36 +261,33 @@ public class LoginView implements Screen {
         stage.addActor(SignUpBtn);
 
 
-        InputMultiplexer in=new InputMultiplexer();
+        InputMultiplexer in = new InputMultiplexer();
         in.addProcessor(confirmation.stage);
         in.addProcessor(stage);
 
 
-
-
         Gdx.input.setInputProcessor(in);
-        star=new StarGen(textureAtlas,batch);
+        star = new StarGen(textureAtlas, batch);
 
-        oldPlayer=new OldPlayer("sash",new Axe(textureAtlas,0,0));
-        game.setScreen(new MainMenu(batch,game, oldPlayer));
+        oldPlayer = new OldPlayer("sash", new Axe(textureAtlas, 0, 0));
+        game.setScreen(new MainMenu(batch, game, oldPlayer));
     }
 
     @Override
     public void render(float delta) {
 
-        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth()/1.6), (float) (Gdx.graphics.getHeight()/1.5));
+        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth() / 1.6), (float) (Gdx.graphics.getHeight() / 1.5));
         if (ShowConfirm) {
             stage.addActor(textFieldConfirm);
             textFieldConfirm.setVisible(true);
-            ShowConfirm=false;
+            ShowConfirm = false;
         }
-        if (Gdx.input.isTouched()&&KBisActive)
-        {
+        if (Gdx.input.isTouched() && KBisActive) {
             textFieldLog.getOnscreenKeyboard().show(false);
             textFieldPass.getOnscreenKeyboard().show(false);
             textFieldConfirm.getOnscreenKeyboard().show(false);
 
-            KBisActive=false;
+            KBisActive = false;
         }
 
 
@@ -307,35 +296,35 @@ public class LoginView implements Screen {
 
         stage.act(delta);
         stage.draw();
-        if (MakeToast){
+        if (MakeToast) {
 
             toast.render(Gdx.graphics.getDeltaTime());
-            if (toast.timeToLive<=0) {
+            if (toast.timeToLive <= 0) {
                 MakeToast = false;
-                toast.timeToLive= Toast.Length.LONG.duration;
-                toast.opacity=1f;
+                toast.timeToLive = Toast.Length.LONG.duration;
+                toast.opacity = 1f;
             }
         }
-        if (MakeToastExist){
+        if (MakeToastExist) {
             alreadyExist.render(delta);
-            if (alreadyExist.timeToLive<=0) {
+            if (alreadyExist.timeToLive <= 0) {
                 MakeToastExist = false;
-                alreadyExist.timeToLive= Toast.Length.LONG.duration;
-                alreadyExist.opacity=1f;
+                alreadyExist.timeToLive = Toast.Length.LONG.duration;
+                alreadyExist.opacity = 1f;
             }
 
         }
-        if (MakeToastConnetion){
+        if (MakeToastConnetion) {
             NoConnection.render(delta);
-            if ( NoConnection.timeToLive<=0) {
+            if (NoConnection.timeToLive <= 0) {
                 MakeToastConnetion = false;
-                NoConnection.timeToLive= Toast.Length.LONG.duration;
-                NoConnection.opacity=1f;
+                NoConnection.timeToLive = Toast.Length.LONG.duration;
+                NoConnection.opacity = 1f;
             }
 
         }
         confirmation.draw();
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             confirmation.setActive(true);
 
         }
@@ -351,9 +340,7 @@ public class LoginView implements Screen {
         music.pause();
 
 
-
     }
-
 
 
     @Override
@@ -361,8 +348,9 @@ public class LoginView implements Screen {
         music.play();
 
     }
-    public void save(){
-      //  FileHandle fh=new FileHandle("text");
+
+    private void save() {
+        //  FileHandle fh=new FileHandle("text");
 
         /*FileHandle fileHandle = Gdx.files.internal("data/LogPass.xml");
         fileHandle.writeString("",true);
@@ -370,12 +358,11 @@ public class LoginView implements Screen {
         String str= textFieldLog.getText()+" "+textFieldPass.getText();
         fileHandle.writeString(str,true);*/
 
-        Assets.preferences.putString("Log",textFieldLog.getText());
-        Assets.preferences.putString("Pass",textFieldPass.getText());
+        Assets.preferences.putString("Log", textFieldLog.getText());
+        Assets.preferences.putString("Pass", textFieldPass.getText());
         Assets.preferences.flush();
 
     }
-
 
 
     @Override
@@ -387,28 +374,28 @@ public class LoginView implements Screen {
     public void dispose() {
 
     }
-    private int createPlayer()
-    {
+
+    private int createPlayer() {
         int result = -1;
-        Call<Integer> call=request.createPlayer(textFieldLog.getText(),textFieldPass.getText(),1000);
+        Call<Integer> call = request.createPlayer(textFieldLog.getText(), textFieldPass.getText(), 1000);
 
         try {
 
-            result=Integer.valueOf(call.execute().body());
+            result = call.execute().body();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         return result;
     }
-    private OldServPlayer getOldPlayer()
-    {
 
-         OldServPlayer servPlayer=new OldServPlayer();
-        Call<OldServPlayer> call=request.getPlayer(textFieldLog.getText());
+    private OldServPlayer getOldPlayer() {
+
+        OldServPlayer servPlayer = new OldServPlayer();
+        Call<OldServPlayer> call = request.getPlayer(textFieldLog.getText());
         try {
-           servPlayer.setServPlayer(call.execute().body());
-           return servPlayer;
+            servPlayer.setServPlayer(call.execute().body());
+            return servPlayer;
         } catch (IOException e) {
             e.printStackTrace();
         }

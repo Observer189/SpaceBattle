@@ -11,27 +11,27 @@ public class ServObject {
     private float height;
     private float width;
     private float rotation;
-    public ServObject()
-    {
+
+    ServObject() {
 
     }
-    public ServObject(String name,float x,float y,float height,float width,float rotation)
-    {
-        this.name=name;
-        this.x=x;
-        this.y=y;
-        this.width=width;
-        this.height=height;
-        this.rotation=rotation;
+
+    public ServObject(String name, float x, float y, float height, float width, float rotation) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.rotation = rotation;
     }
-    public ServObject(ServObject obj)
-    {
-        this.name=obj.name;
-        this.x=obj.x;
-        this.y=obj.y;
-        this.width=obj.width;
-        this.height=obj.height;
-        this.rotation=obj.rotation;
+
+    ServObject(ServObject obj) {
+        this.name = obj.name;
+        this.x = obj.x;
+        this.y = obj.y;
+        this.width = obj.width;
+        this.height = obj.height;
+        this.rotation = obj.rotation;
     }
 
     public String getName() {

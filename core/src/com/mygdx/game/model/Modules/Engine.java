@@ -18,25 +18,26 @@ public class Engine extends Module {
     private Type type;
 
     private float energyConsumption;
-    public Engine(String spriteName, float x, float y,float rotation, Size size, float density,float power,float angularPower,float maxSpeed,float energyConsumption,Type type) {
-        super(spriteName, x, y,rotation, size, ModuleType.Engine, density);
-        this.power=power;
-        this.angularPower=angularPower;
-        this.maxSpeed=maxSpeed;
-        this.energyConsumption=energyConsumption;
-        this.type=type;
+
+    public Engine(String spriteName, float x, float y, float rotation, Size size, float density, float power, float angularPower, float maxSpeed, float energyConsumption, Type type) {
+        super(spriteName, x, y, rotation, size, ModuleType.Engine, density);
+        this.power = power;
+        this.angularPower = angularPower;
+        this.maxSpeed = maxSpeed;
+        this.energyConsumption = energyConsumption;
+        this.type = type;
 
     }
-    public void move(Vector2 movementVector)
-    {
-        if(type.equals(Type.Cruising)) {
+
+    public void move(Vector2 movementVector) {
+        if (type.equals(Type.Cruising)) {
             getBody().applyForceToCenter(power * movementVector.x, power * movementVector.y, true);
         }
 
 
     }
-    public enum  Type
-    {
+
+    public enum Type {
         Cruising
     }
 

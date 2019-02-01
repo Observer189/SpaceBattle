@@ -6,19 +6,20 @@ package com.mygdx.game.ServModels;
 
 public class ServAsteroid extends ServObject {
     private float hp;
-    public ServAsteroid()
-    {
+
+    public ServAsteroid() {
         super();
     }
-    public ServAsteroid(String name, float x, float y, float height, float width,float rotation,float hp) {
-        super(name, x, y, height, width,rotation);
-        this.hp=hp;
+
+    public ServAsteroid(String name, float x, float y, float height, float width, float rotation, float hp) {
+        super(name, x, y, height, width, rotation);
+        this.hp = hp;
 
     }
-    public ServAsteroid(ServAsteroid ast)
-    {
+
+    public ServAsteroid(ServAsteroid ast) {
         super(ast);
-        this.hp=ast.hp;
+        this.hp = ast.hp;
     }
 
     public float getHp() {

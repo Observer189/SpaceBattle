@@ -11,9 +11,8 @@ public class Player {
     private int conId;
     private PhysicShip currentShip;
 
-    public void generateName()
-    {
-        name="Player"+(int)(Math.random()*10000000);
+    public void generateName() {
+        name = "Player" + (int) (Math.random() * 10000000);
     }
 
     public String getName() {
@@ -39,16 +38,16 @@ public class Player {
     public PhysicShip getCurrentShip() {
         return currentShip;
     }
-    public ServPlayer toServ()
-    {
-        ServPlayer sp=new ServPlayer();
+
+    public ServPlayer toServ() {
+        ServPlayer sp = new ServPlayer();
         sp.setName(name);
         sp.setCurrentShip(currentShip.toServ());
         return sp;
     }
-    public static Player fromServ(ServPlayer servPlayer)
-    {
-        Player player= new Player();
+
+    public static Player fromServ(ServPlayer servPlayer) {
+        Player player = new Player();
         player.setName(servPlayer.getName());
         player.setConId(servPlayer.getConID());
         player.setCurrentShip(PhysicShip.fromServ(servPlayer.getCurrentShip()));

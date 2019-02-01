@@ -6,21 +6,21 @@ package com.mygdx.game.ServModels;
 
 public class OldServShip {
     private String name;
+
     //private String weaponName;
     //private ServFixingPoint[] fixingPoints;
-    public OldServShip()
-    {
+    public OldServShip() {
 
     }
-    public OldServShip(String name/*,String weaponName,ServFixingPoint[] fixingPoints*/)
-    {
-        this.name=name.toString();
+
+    public OldServShip(String name/*,String weaponName,ServFixingPoint[] fixingPoints*/) {
+        this.name = name.toString();
         //this.weaponName=weaponName;
         // this.fixingPoints=fixingPoints;
     }
-    public OldServShip(OldServShip ship)
-    {
-        this.name=ship.getName();
+
+    public OldServShip(OldServShip ship) {
+        this.name = ship.getName();
         //this.weaponName=ship.getWeaponName();
         //this.fixingPoints=ship.getFixingPoints();
     }

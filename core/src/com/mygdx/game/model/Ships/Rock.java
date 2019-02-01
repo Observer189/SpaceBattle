@@ -12,8 +12,8 @@ import com.mygdx.game.model.Weapons.RocketLauncher;
  */
 
 public class Rock extends Ship {
-    public float realw=  (Gdx.graphics.getWidth()/42.6666666f*6);
-    public float realh=  (Gdx.graphics.getHeight()/14.4f*6);
+    public float realw = (Gdx.graphics.getWidth() / 42.6666666f * 6);
+    public float realh = (Gdx.graphics.getHeight() / 14.4f * 6);
 
 
     @Override
@@ -23,7 +23,7 @@ public class Rock extends Ship {
 
     public Rock(TextureAtlas textureAtlas, float x, float y) {
         super(textureAtlas.findRegion("Rock"), x, y, 30, 50, "Rock", 500000, 3500,
-                0.4f, 15,0.3f, new FixingPoint[]{
+                0.4f, 15, 0.3f, new FixingPoint[]{
                         new FixingPoint(x, y, 30, 50, 0, 5, new RocketLauncher(textureAtlas, x, y)),
                         new FixingPoint(x, y, 30, 50, -5f, 0f, new RocketLauncher(textureAtlas, x, y)),
                         new FixingPoint(x, y, 30, 50, 5, 10f, new RocketLauncher(textureAtlas, x, y)),
@@ -39,6 +39,7 @@ public class Rock extends Ship {
     public float getRealw() {
         return realw;
     }
+
     @Override
     public float getRealh() {
         return realh;

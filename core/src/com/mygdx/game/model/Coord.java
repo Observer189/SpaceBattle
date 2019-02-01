@@ -8,29 +8,29 @@ public class Coord {
     private Float x;
     private Float y;
     private Float rotation;
-    public Coord()
-    {
+
+    public Coord() {
 
     }
-    public Coord(Float x,Float y,Float rotation)
-    {
-        this.x=x;
-        this.y=y;
-        this.rotation=rotation;
+
+    public Coord(Float x, Float y, Float rotation) {
+        this.x = x;
+        this.y = y;
+        this.rotation = rotation;
     }
-    public Coord(Coord coord)
-    {
-        x=coord.getX();
-        y=coord.getY();
-        rotation=coord.getRotation();
+
+    public Coord(Coord coord) {
+        x = coord.getX();
+        y = coord.getY();
+        rotation = coord.getRotation();
     }
-    public void setX(float x)
-    {
-        this.x=x;
+
+    public void setX(float x) {
+        this.x = x;
     }
-    public void setY(float y)
-    {
-        this.y=y;
+
+    public void setY(float y) {
+        this.y = y;
     }
 
     public void setRotation(Float rotation) {

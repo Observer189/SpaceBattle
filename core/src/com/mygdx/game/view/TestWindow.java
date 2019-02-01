@@ -18,16 +18,17 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 public class TestWindow implements Screen {
-    World world;
-    Box2DDebugRenderer renderer;
+    private World world;
+    private Box2DDebugRenderer renderer;
     OrthographicCamera camera;
     SpriteBatch batch;
+
     @Override
     public void show() {
-        world= new World(new Vector2(0,0),false);
-        renderer=new Box2DDebugRenderer();
-        camera=new OrthographicCamera(20,20);
-        batch=new SpriteBatch();
+        world = new World(new Vector2(0, 0), false);
+        renderer = new Box2DDebugRenderer();
+        camera = new OrthographicCamera(20, 20);
+        batch = new SpriteBatch();
         createRect();
     }
 
@@ -67,20 +68,20 @@ public class TestWindow implements Screen {
     public void dispose() {
 
     }
-    public void createRect()
-    {
-        BodyDef bDef=new BodyDef();
-        bDef.type= BodyDef.BodyType.DynamicBody;
-        bDef.position.set(0,0);
-        Body body=world.createBody(bDef);
 
-        FixtureDef fDef=new FixtureDef();
-        PolygonShape shape=new PolygonShape();
-        shape.setAsBox((float)(Math.random()*3),(float)(Math.random()*3));
-        fDef.shape=shape;
-        fDef.density=1000;
-        fDef.friction=0.5f;
-        fDef.restitution=0.2f;
+    private void createRect() {
+        BodyDef bDef = new BodyDef();
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.position.set(0, 0);
+        Body body = world.createBody(bDef);
+
+        FixtureDef fDef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox((float) (Math.random() * 3), (float) (Math.random() * 3));
+        fDef.shape = shape;
+        fDef.density = 1000;
+        fDef.friction = 0.5f;
+        fDef.restitution = 0.2f;
         body.createFixture(fDef);
         body.setAngularVelocity(1);
     }

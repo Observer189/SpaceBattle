@@ -12,22 +12,23 @@ import com.mygdx.game.model.PhysicAmmo;
  */
 
 public class Bullet extends PhysicAmmo {
-    float x;
-    float y;
-    float startAngle;
-    float speed;
-    Vector2 shipSpeedVector;
-    public Bullet( float x, float y, float startAngle, float width, float height, float speed, Vector2 shipSpeedVector, float damage) {
-        super("Bullet", x, y,startAngle, width, height, 1000, 1, new float[][]{{
-                -width/2,-height/2,
-                width/2,-height/2,
-                width/2,height/2,
-                -width/2,height/2}}, damage);
-             this.x=x;
-             this.y=y;
-             this.startAngle=startAngle;
-             this.speed=speed;
-             this.shipSpeedVector=shipSpeedVector;
+    private float x;
+    private float y;
+    private float startAngle;
+    private float speed;
+    private Vector2 shipSpeedVector;
+
+    public Bullet(float x, float y, float startAngle, float width, float height, float speed, Vector2 shipSpeedVector, float damage) {
+        super("Bullet", x, y, startAngle, width, height, 1000, 1, new float[][]{{
+                -width / 2, -height / 2,
+                width / 2, -height / 2,
+                width / 2, height / 2,
+                -width / 2, height / 2}}, damage);
+        this.x = x;
+        this.y = y;
+        this.startAngle = startAngle;
+        this.speed = speed;
+        this.shipSpeedVector = shipSpeedVector;
 
 
     }
@@ -35,8 +36,8 @@ public class Bullet extends PhysicAmmo {
     @Override
     public void create(TextureAtlas textureAtlas, World world) {
         super.create(textureAtlas, world);
-        getBody().setTransform(x,y,startAngle);
-        getBody().setLinearVelocity((float)(-Math.sin(getBody().getAngle()))*speed+shipSpeedVector.x,(float)(Math.cos(getBody().getAngle()))*speed+shipSpeedVector.y);
+        getBody().setTransform(x, y, startAngle);
+        getBody().setLinearVelocity((float) (-Math.sin(getBody().getAngle())) * speed + shipSpeedVector.x, (float) (Math.cos(getBody().getAngle())) * speed + shipSpeedVector.y);
     }
 
     @Override

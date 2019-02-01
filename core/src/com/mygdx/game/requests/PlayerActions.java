@@ -10,9 +10,9 @@ public class PlayerActions {
     private int movementPosition;
     private float targetRotation;
     private long time;//время создания запроса
-    public PlayerActions()
-    {
-        time=System.currentTimeMillis();
+
+    public PlayerActions() {
+        time = System.currentTimeMillis();
     }
 
     public void setBattleID(int battleID) {

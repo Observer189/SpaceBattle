@@ -19,46 +19,46 @@ import com.mygdx.game.model.OldPlayer;
 import com.mygdx.game.utils.TextManager;
 
 public class PreShop implements Screen {
-    StageForButton Guns,Ships;
-    Button.ButtonStyle Gstyle,Sstyle;
+    private StageForButton Guns, Ships;
+    private Button.ButtonStyle Gstyle, Sstyle;
     Skin skin;
     TextureAtlas textureAtlas;
     SpriteBatch batch;
     Game game;
-    Screen ShList,ShList2;
+    private Screen ShList, ShList2;
     OrthographicCamera camera;
     TextManager textManager;
     BitmapFont font;
-    MainMenu menu;
+    private MainMenu menu;
     OldPlayer oldPlayer;
-    public PreShop(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, OldPlayer oldPlayer){
-        this.game=game;
-        this.batch = batch;
-        this.textureAtlas=textureAtlas;
-        this.menu=menu;
-        this.oldPlayer = oldPlayer;
 
+    public PreShop(Game game, SpriteBatch batch, TextureAtlas textureAtlas, MainMenu menu, OldPlayer oldPlayer) {
+        this.game = game;
+        this.batch = batch;
+        this.textureAtlas = textureAtlas;
+        this.menu = menu;
+        this.oldPlayer = oldPlayer;
 
 
     }
 
     @Override
     public void show() {
-        textManager=new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        skin=new Skin();
-        batch=new SpriteBatch();
-        font=textManager.fontInitialize(Color.BLACK,1f);
+        textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        skin = new Skin();
+        batch = new SpriteBatch();
+        font = textManager.fontInitialize(Color.BLACK, 1f);
 
         skin.addRegions(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")));
-        ShList=new ShopList(game,batch,textureAtlas,menu, oldPlayer);
-        ShList2=new ShopList2(game,batch,textureAtlas,menu, oldPlayer);
+        ShList = new ShopList(game, batch, textureAtlas, menu, oldPlayer);
+        ShList2 = new ShopList2(game, batch, textureAtlas, menu, oldPlayer);
         //creating button with guns image
         Gstyle = new Button.ButtonStyle();
         Gstyle.up = skin.getDrawable("UnSelectGun");
         Gstyle.down = skin.getDrawable("UnSelectGun");
-        Guns=new StageForButton(Gstyle,0,(int) (Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/14.11764706));
+        Guns = new StageForButton(Gstyle, 0, (int) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 14.11764706));
         //change scene when 'guns' clicked
-        Guns.btn.addListener(new ClickListener(){
+        Guns.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -68,14 +68,13 @@ public class PreShop implements Screen {
         });
 
 
-
         //creating button with ships image
         Sstyle = new Button.ButtonStyle();
         Sstyle.up = skin.getDrawable("UnSelectShip");
         Sstyle.down = skin.getDrawable("UnSelectShip");
-        Ships=new StageForButton(Sstyle,Gdx.graphics.getWidth()/2, (int) (Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/14.11764706));
+        Ships = new StageForButton(Sstyle, Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 14.11764706));
         //change scene when 'ships' clicked
-        Ships.btn.addListener(new ClickListener(){
+        Ships.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
@@ -83,7 +82,7 @@ public class PreShop implements Screen {
 
             }
         });
-        InputMultiplexer in=new InputMultiplexer();
+        InputMultiplexer in = new InputMultiplexer();
 
         in.addProcessor(Ships);
         in.addProcessor(Guns);
@@ -96,11 +95,11 @@ public class PreShop implements Screen {
     @Override
     public void render(float delta) {
 
-        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth()/1.6), (float) (Gdx.graphics.getHeight()/1.5));
+        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth() / 1.6), (float) (Gdx.graphics.getHeight() / 1.5));
         LoginView.textrure.draw();
         LoginView.star.draw();
-        textManager.displayMessage(batch,font,"Guns " , (int) (Gdx.graphics.getWidth()/4.6), Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/12);
-        textManager.displayMessage(batch,font,"Ships" , (Gdx.graphics.getWidth())-(int) (Gdx.graphics.getWidth()/3.4), Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/12);
+        textManager.displayMessage(batch, font, "Guns ", (int) (Gdx.graphics.getWidth() / 4.6), Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 12);
+        textManager.displayMessage(batch, font, "Ships", (Gdx.graphics.getWidth()) - (int) (Gdx.graphics.getWidth() / 3.4), Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 12);
         Guns.act(delta);
         Guns.draw();
         Ships.act(delta);
@@ -109,8 +108,9 @@ public class PreShop implements Screen {
         batch.begin();
         batch.end();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            game.setScreen(menu);}
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            game.setScreen(menu);
+        }
 
     }
 
@@ -127,8 +127,7 @@ public class PreShop implements Screen {
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         menu.music.play();
 
     }
@@ -148,17 +147,15 @@ public class PreShop implements Screen {
         textureAtlas.dispose();
 
 
-
     }
-   class StageForButton extends Stage {
+
+    class StageForButton extends Stage {
         Button btn;
 
-        public StageForButton(Button.ButtonStyle btnstyle, int x, int y) {
+        StageForButton(Button.ButtonStyle btnstyle, int x, int y) {
 
             btn = new Button(btnstyle);
-            btn.setBounds(x, y, Gdx.graphics.getWidth()/2, 50);
-
-
+            btn.setBounds(x, y, Gdx.graphics.getWidth() / 2, 50);
 
 
             addActor(btn);

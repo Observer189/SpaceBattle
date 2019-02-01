@@ -17,40 +17,39 @@ public class GasRegulator {
     private float width;
     private float height;
 
-    SpriteBatch batch;
+    private SpriteBatch batch;
 
-    TextureRegion gasRegion;
-    TextureRegion stopRegion;
-    TextureRegion backRegion;
+    private TextureRegion gasRegion;
+    private TextureRegion stopRegion;
+    private TextureRegion backRegion;
 
-    int movementPosition;//0-стоп 1-газ -1-назад
+    private int movementPosition;//0-стоп 1-газ -1-назад
 
-    Ship playerShip;
-    public GasRegulator(SpriteBatch batch, float x, float y, float width, float height, TextureAtlas textureAtlas,Ship playerShip)
-    {
-        this.x=x;
-        this.y=y;
-        this.width=width;
-        this.height=height;
-        this.batch=batch;
+    private Ship playerShip;
 
-        gasRegion=textureAtlas.findRegion("Gas");
-        stopRegion=textureAtlas.findRegion("Stop");
-        backRegion=textureAtlas.findRegion("Back");
+    public GasRegulator(SpriteBatch batch, float x, float y, float width, float height, TextureAtlas textureAtlas, Ship playerShip) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.batch = batch;
 
-        this.playerShip=playerShip;
-        movementPosition=0;
+        gasRegion = textureAtlas.findRegion("Gas");
+        stopRegion = textureAtlas.findRegion("Stop");
+        backRegion = textureAtlas.findRegion("Back");
+
+        this.playerShip = playerShip;
+        movementPosition = 0;
     }
 
-    public void draw()
-    {
+    public void draw() {
         batch.begin();
-        if(movementPosition==-1)
-            batch.draw(backRegion,x,y,width,height);
-        if(movementPosition==0)
-            batch.draw(stopRegion,x,y,width,height);
-        if(movementPosition==1)
-            batch.draw(gasRegion,x,y,width,height);
+        if (movementPosition == -1)
+            batch.draw(backRegion, x, y, width, height);
+        if (movementPosition == 0)
+            batch.draw(stopRegion, x, y, width, height);
+        if (movementPosition == 1)
+            batch.draw(gasRegion, x, y, width, height);
         batch.end();
     }
 
@@ -82,9 +81,9 @@ public class GasRegulator {
         this.movementPosition = movementPosition;
         playerShip.setMovementPosition(movementPosition);
     }
-    public void setPhysicMovement(int movementPosition, PhysicShip ship)
-    {
-        this.movementPosition=movementPosition;
+
+    public void setPhysicMovement(int movementPosition, PhysicShip ship) {
+        this.movementPosition = movementPosition;
         ship.setMovementPosition(movementPosition);
     }
 

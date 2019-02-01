@@ -15,8 +15,8 @@ import com.mygdx.game.model.Weapons.Shotgun;
  */
 
 public class Dashing extends Ship {
-    public float realw= (Gdx.graphics.getWidth()/182.85714286f*6);
-    public float realh=  (Gdx.graphics.getHeight()/55.38461538f*6);
+    public float realw = (Gdx.graphics.getWidth() / 182.85714286f * 6);
+    public float realh = (Gdx.graphics.getHeight() / 55.38461538f * 6);
 
 
     @Override
@@ -26,17 +26,19 @@ public class Dashing extends Ship {
 
     public Dashing(TextureAtlas textureAtlas, float x, float y) {
         super(textureAtlas.findRegion("Dashing"), x, y, 7, 13, "Dashing", 5000, 700,
-                1.5f, 60,1.2f, new FixingPoint[]{
+                1.5f, 60, 1.2f, new FixingPoint[]{
                         new FixingPoint(x, y, 7, 13, 2, 0, new Machinegun(textureAtlas, x, y)),
                         new FixingPoint(x, y, 7, 13, -2f, 0, new Machinegun(textureAtlas, x, y)),
 
                 });
 
     }
+
     @Override
     public float getRealh() {
         return realh;
     }
+
     @Override
     public float getRealw() {
         return realw;

@@ -16,11 +16,11 @@ public class OldPlayer {
     private String name;
     public Resources resources;
     private Ship currentShip;
-    private TextureAtlas textureAtlas;
-    public OldPlayer()
-    {
+
+    public OldPlayer() {
 
     }
+
     /*public OldPlayer(String name,int money,Ship currentShip) {
         this.name = name;
 
@@ -28,29 +28,28 @@ public class OldPlayer {
     }*/
     public OldPlayer(String name, Ship currentShip) {
         this.name = name;
-        this.resources=new Resources();
+        this.resources = new Resources();
         this.currentShip = currentShip;
         resources.shipList.add(currentShip);
     }
-    public OldPlayer(OldServPlayer servPlayer)
-    {
-        name=servPlayer.getName();
-        resources=new Resources();
+
+    public OldPlayer(OldServPlayer servPlayer) {
+        name = servPlayer.getName();
+        resources = new Resources();
         setMoney(servPlayer.getMoney());
-        textureAtlas=new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
-        currentShip=new Dashing(textureAtlas,0,0);
+        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
+        currentShip = new Dashing(textureAtlas, 0, 0);
 
         resources.shipList.add(currentShip);
-        resources.weaponList.add(new Machinegun(textureAtlas,0,0));
-        for(int i=0;i<currentShip.fixingPoints.length;i++)
-        {
+        resources.weaponList.add(new Machinegun(textureAtlas, 0, 0));
+        for (int i = 0; i < currentShip.fixingPoints.length; i++) {
             currentShip.fixingPoints[i].setWeapon(resources.weaponList.get(0).weaponByName());
         }
     }
-       public void generateName()
-    {
-        Integer number=(int)(Math.random()*89999999+10000000);
-        name="OldPlayer"+number.toString();
+
+    public void generateName() {
+        int number = (int) (Math.random() * 89999999 + 10000000);
+        name = "OldPlayer" + Integer.toString(number);
     }
 
     public int getMoney() {
@@ -80,23 +79,25 @@ public class OldPlayer {
     public ArrayList<Ship> getShipList() {
         return resources.getShipList();
     }
+
     public void setShipList(ArrayList<Ship> shipList) {
         resources.shipList = shipList;
     }
 
-    public class Resources
-    {
+    public class Resources {
         private int money;
         public ArrayList<Ship> shipList;
         public ArrayList<Weapon> weaponList;
 
-        public Resources()
-        {
-            money=50000;
-            shipList=new ArrayList<Ship>();
-            weaponList=new ArrayList<Weapon>();
+        Resources() {
+            money = 50000;
+            shipList = new ArrayList<Ship>();
+            weaponList = new ArrayList<Weapon>();
         }
-        public void ShipAdd(Ship ship){shipList.add(ship);}
+
+        public void ShipAdd(Ship ship) {
+            shipList.add(ship);
+        }
 
         public ArrayList<Ship> getShipList() {
             return shipList;

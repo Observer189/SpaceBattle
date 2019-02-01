@@ -9,16 +9,17 @@ import com.mygdx.game.model.Ship;
  */
 
 public class Rocket extends Ammo {
-    public static int counter=0;
-    float angle;
-    float internalArcLength;
-    float externalArcLength;
+    public static int counter = 0;
+    private float angle;
+    private float internalArcLength;
+    private float externalArcLength;
+
     public Rocket(TextureRegion textureRegion, float x, float y, float rotation) {
-        super(textureRegion, x, y, 2f, 5f, 2f, 75,500,rotation);
+        super(textureRegion, x, y, 2f, 5f, 2f, 75, 500, rotation);
         counter++;
-        angle =0;
-        internalArcLength=0;
-        externalArcLength=0;
+        angle = 0;
+        internalArcLength = 0;
+        externalArcLength = 0;
     }
 
     @Override
@@ -42,13 +43,13 @@ public class Rocket extends Ammo {
         {
             angle=270;
         }*/
-        angle=(float)(Math.toDegrees(Math.atan2(getCenterY()-enemyShip.getCenterY(),getCenterX()-enemyShip.getCenterX())));
+        angle = (float) (Math.toDegrees(Math.atan2(getCenterY() - enemyShip.getCenterY(), getCenterX() - enemyShip.getCenterX())));
         angle = (angle < 0) ? angle + 360 : angle;
-        angle = (angle < 270) ? angle + 90 : angle+90-360;
+        angle = (angle < 270) ? angle + 90 : angle + 90 - 360;
 
-        externalArcLength=Math.abs(angle-getRotation());
-        internalArcLength=360-externalArcLength;
-        if(angle>getRotation()) {
+        externalArcLength = Math.abs(angle - getRotation());
+        internalArcLength = 360 - externalArcLength;
+        if (angle > getRotation()) {
             if (internalArcLength > externalArcLength) {
                 if (getRotation() == 360)
                     setRotation(0);
@@ -60,8 +61,7 @@ public class Rocket extends Ammo {
                 setRotation(getRotation() - 1f);
                 System.out.println("Turn -");
             }
-        }
-        else if(angle<getRotation()) {
+        } else if (angle < getRotation()) {
             if (internalArcLength < externalArcLength) {
                 if (getRotation() == 360)
                     setRotation(0);
@@ -74,11 +74,8 @@ public class Rocket extends Ammo {
                 System.out.println("Turn -");
             }
         }
-        System.out.println("Angle:"+angle+" "+"Rotation:"+getRotation());
-        System.out.println(internalArcLength+" "+externalArcLength);
-
-
-
+        System.out.println("Angle:" + angle + " " + "Rotation:" + getRotation());
+        System.out.println(internalArcLength + " " + externalArcLength);
 
 
     }

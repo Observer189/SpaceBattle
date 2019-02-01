@@ -6,17 +6,17 @@ package com.mygdx.game.ServModels;
 
 public class ServWeapon {
     private String name;
-    public ServWeapon()
-    {
+
+    public ServWeapon() {
 
     }
-    public ServWeapon(String name)
-    {
-        this.name=name;
+
+    public ServWeapon(String name) {
+        this.name = name;
     }
-    public ServWeapon(ServWeapon weapon)
-    {
-        this.name=weapon.getName();
+
+    public ServWeapon(ServWeapon weapon) {
+        this.name = weapon.getName();
     }
 
     public String getName() {

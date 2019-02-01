@@ -24,67 +24,63 @@ public class Weapon extends GameObject {
     //private float centerY;
     private float width;
     private float height;
-    ArrayList<Ammo> ammos;
-    int counter;
-    String name;
-    Ammo ammo;
-    int cost;
-    int recomendedw=100;
-    int recomendedh=200;
+    private ArrayList<Ammo> ammos;
+    private int counter;
+    private String name;
+    private Ammo ammo;
+    private int cost;
+    private int recomendedw = 100;
+    private int recomendedh = 200;
     TextureAtlas textureAtlas;
 
     private float attackSpeed;
 
-    public Weapon(TextureRegion weaponRegion,  float x, float y, float width,float height,float attackSpeed,Ammo ammo)
-    {
+    public Weapon(TextureRegion weaponRegion, float x, float y, float width, float height, float attackSpeed, Ammo ammo) {
         super(weaponRegion, x, y, width, height);
-        this.ammo=new Ammo(ammo);
-        cost=0;
-        this.width=width;
-        this.height=height;
+        this.ammo = new Ammo(ammo);
+        cost = 0;
+        this.width = width;
+        this.height = height;
         //centerX=x+width/2;
         //centerY=y+height/2;
-        ammos=new ArrayList<Ammo>();
-        counter=0;
+        ammos = new ArrayList<Ammo>();
+        counter = 0;
 
         //setRotation(270);
     }
 
 
-    public void shot()
-    {
+    public void shot() {
 
     }
-    public void update(Ship playerShip, Ship enemyShip, Map map)
-    {
-          if(ammos.size()!=0) {
-              for(int i=0;i<ammos.size();i++){
-                  ammos.get(i).move(enemyShip);
 
-                  if ((ammos.get(i).getX() > map.getWidth())||
-                          (ammos.get(i).getX() < 0)||
-                          (ammos.get(i).getY() > map.getHeight())||
-                          (ammos.get(i).getY() < 0)||
-                          (ammos.get(i).getAppliedDistance()>=ammos.get(i).getMaxRange())) {
+    public void update(Ship playerShip, Ship enemyShip, Map map) {
+        if (ammos.size() != 0) {
+            for (int i = 0; i < ammos.size(); i++) {
+                ammos.get(i).move(enemyShip);
 
-                      ammos.remove(i);
-                  }
-                  else if((Intersector.overlapConvexPolygons(ammos.get(i).getBounds(),enemyShip.getBounds()))&&(enemyShip.getCurrentHp()>0))
-                  {
-                      enemyShip.setCurrentHp(enemyShip.getCurrentHp()-ammos.get(i).getDamage());
-                      playerShip.setAppliedDamage(playerShip.getAppliedDamage()+(int)ammos.get(i).getDamage());
-                      ammos.remove(i);
-                  }
+                if ((ammos.get(i).getX() > map.getWidth()) ||
+                        (ammos.get(i).getX() < 0) ||
+                        (ammos.get(i).getY() > map.getHeight()) ||
+                        (ammos.get(i).getY() < 0) ||
+                        (ammos.get(i).getAppliedDistance() >= ammos.get(i).getMaxRange())) {
+
+                    ammos.remove(i);
+                } else if ((Intersector.overlapConvexPolygons(ammos.get(i).getBounds(), enemyShip.getBounds())) && (enemyShip.getCurrentHp() > 0)) {
+                    enemyShip.setCurrentHp(enemyShip.getCurrentHp() - ammos.get(i).getDamage());
+                    playerShip.setAppliedDamage(playerShip.getAppliedDamage() + (int) ammos.get(i).getDamage());
+                    ammos.remove(i);
+                }
 
 
-              }
-          }
+            }
+        }
 
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        if(ammos.size()!=0) {
+        if (ammos.size() != 0) {
             for (int i = 0; i < ammos.size(); i++) {
                 ammos.get(i).draw(batch);
             }
@@ -112,12 +108,12 @@ public class Weapon extends GameObject {
     }
 
 
-
     public String getName() {
         return name;
     }
-    public Drawable getImg(){
-        Skin skin=new Skin();
+
+    public Drawable getImg() {
+        Skin skin = new Skin();
         skin.addRegions(new TextureAtlas(Gdx.files.internal("TexturePack.atlas")));
         return skin.getDrawable(getName());
     }
@@ -153,7 +149,7 @@ public class Weapon extends GameObject {
         this.centerX=centerX;
         this.centerY=centerY;
     }*/
-    public String getRealName(){
+    public String getRealName() {
         if (getName().equals("BlueLaser")) return "BlueImpulseLaser";
         else return getName();
     }
@@ -176,40 +172,36 @@ public class Weapon extends GameObject {
     }
 
 
-    ServWeapon toServ()
-    {
+    ServWeapon toServ() {
 
         return new ServWeapon(name);
     }
-    public Weapon weaponByName()
-    {
-        if(getName().equals("Shotgun"))
-            return new Shotgun(textureAtlas,0,0);
-        else if(getName().equals("RocketLauncher"))
-            return new RocketLauncher(textureAtlas,0,0);
-        else if(getName().equals("Machinegun"))
-            return new Machinegun(textureAtlas,0,0);
-        else if(getName().equals("BlueImpulseLaser"))
-            return new BlueImpulseLaser(textureAtlas,0,0);
-        else
-        {
+
+    public Weapon weaponByName() {
+        if (getName().equals("Shotgun"))
+            return new Shotgun(textureAtlas, 0, 0);
+        else if (getName().equals("RocketLauncher"))
+            return new RocketLauncher(textureAtlas, 0, 0);
+        else if (getName().equals("Machinegun"))
+            return new Machinegun(textureAtlas, 0, 0);
+        else if (getName().equals("BlueImpulseLaser"))
+            return new BlueImpulseLaser(textureAtlas, 0, 0);
+        else {
             System.out.println("Weapon is not exist");
             return null;
         }
     }
 
-    public Weapon weaponByName(String name)
-    {
-        if(name.equals("Shotgun"))
-            return new Shotgun(textureAtlas,0,0);
-        else if(name.equals("RocketLauncher"))
-            return new RocketLauncher(textureAtlas,0,0);
-        else if(name.equals("Machinegun"))
-            return new Machinegun(textureAtlas,0,0);
-        else if(name.equals("BlueImpulseLaser"))
-            return new BlueImpulseLaser(textureAtlas,0,0);
-        else
-            {
+    public Weapon weaponByName(String name) {
+        if (name.equals("Shotgun"))
+            return new Shotgun(textureAtlas, 0, 0);
+        else if (name.equals("RocketLauncher"))
+            return new RocketLauncher(textureAtlas, 0, 0);
+        else if (name.equals("Machinegun"))
+            return new Machinegun(textureAtlas, 0, 0);
+        else if (name.equals("BlueImpulseLaser"))
+            return new BlueImpulseLaser(textureAtlas, 0, 0);
+        else {
             System.out.println("Weapon is not exist");
             return null;
         }

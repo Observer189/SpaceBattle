@@ -12,21 +12,22 @@ import com.mygdx.game.model.Weapons.BlueImpulseLaser;
  */
 
 public class Axe extends Ship {
-    public float realw= ((Gdx.graphics.getWidth()/85.3333333f)*6);
-    public float realh=  ((Gdx.graphics.getHeight()/28.8f)*6);
+    public float realw = ((Gdx.graphics.getWidth() / 85.3333333f) * 6);
+    public float realh = ((Gdx.graphics.getHeight() / 28.8f) * 6);
 
 
     @Override
     public void draw(SpriteBatch batch) {
         super.draw(batch);
     }
+
     public Axe(TextureAtlas textureAtlas, float x, float y) {
         super(textureAtlas.findRegion("Axe"), x, y, 15, 25, "Axe", 75000, 1780,
-                0.7f, 45,1,new FixingPoint[]{
-                        new FixingPoint(x,y,15,25,5.5f,0,new BlueImpulseLaser(textureAtlas,x,y)),
-                        new FixingPoint(x,y,15,25,-5,0,new BlueImpulseLaser(textureAtlas,x,y)),
-                        new FixingPoint(x,y,15,25,0,0,new BlueImpulseLaser(textureAtlas,x,y))
-        });
+                0.7f, 45, 1, new FixingPoint[]{
+                        new FixingPoint(x, y, 15, 25, 5.5f, 0, new BlueImpulseLaser(textureAtlas, x, y)),
+                        new FixingPoint(x, y, 15, 25, -5, 0, new BlueImpulseLaser(textureAtlas, x, y)),
+                        new FixingPoint(x, y, 15, 25, 0, 0, new BlueImpulseLaser(textureAtlas, x, y))
+                });
 
     }
 
@@ -47,6 +48,7 @@ public class Axe extends Ship {
     public float getRealw() {
         return realw;
     }
+
     @Override
     public float getRealh() {
         return realh;

@@ -15,20 +15,20 @@ public class Map {
 
     private float width;
     private float height;
-    TextureRegion texture;
+    private TextureRegion texture;
     SpriteBatch batch;
-    public Map(SpriteBatch batch,TextureRegion texture,float width, float height)
-    {
-        this.batch=batch;
-        this.texture=texture;
-        this.width=width;
-        this.height=height;
+
+    public Map(SpriteBatch batch, TextureRegion texture, float width, float height) {
+        this.batch = batch;
+        this.texture = texture;
+        this.width = width;
+        this.height = height;
 
     }
-    public void draw()
-    {
+
+    public void draw() {
         batch.begin();
-        batch.draw(texture,0f,0f,width,height);
+        batch.draw(texture, 0f, 0f, width, height);
         batch.end();
     }
 
@@ -47,6 +47,7 @@ public class Map {
     public void setHeight(float height) {
         this.height = height;
     }
+
     public static Map generateMap(SpriteBatch batch, TextureAtlas textureAtlas) {
         int rand = (int) (Math.random() * 3 + 1);
         switch (rand) {
@@ -55,11 +56,12 @@ public class Map {
             case 2:
                 return new GalaxyCenter(batch, textureAtlas);
             case 3:
-                return new YellowSpace(batch,textureAtlas);
+                return new YellowSpace(batch, textureAtlas);
             default:
                 return null;
         }
     }
+
     public static Map generateMap(SpriteBatch batch, TextureAtlas textureAtlas, int rand)//функция с заданной картой для отладки
     {
 
@@ -67,12 +69,12 @@ public class Map {
             case 1:
                 return new ClassicSpace(batch, textureAtlas);
             case 2:
-                return new GalaxyCenter(batch,textureAtlas);
+                return new GalaxyCenter(batch, textureAtlas);
             case 3:
-                return new YellowSpace(batch,textureAtlas);
-            default:return null;
+                return new YellowSpace(batch, textureAtlas);
+            default:
+                return null;
         }
-
 
 
     }

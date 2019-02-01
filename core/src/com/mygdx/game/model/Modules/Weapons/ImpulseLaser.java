@@ -14,28 +14,28 @@ import com.mygdx.game.utils.Size;
 public class ImpulseLaser extends WeaponModule {
 
 
-    long lastShotTime;
-    public ImpulseLaser( float x, float y,float rotation) {
-        super("BlueImpulseLaser", x, y,rotation, Size.Small, 10,15,75,0.2f);
+    private long lastShotTime;
+
+    public ImpulseLaser(float x, float y, float rotation) {
+        super("BlueImpulseLaser", x, y, rotation, Size.Small, 10, 15, 75, 0.2f);
 
 
-        lastShotTime=0;
+        lastShotTime = 0;
     }
 
     @Override
     public boolean shot(float l, Vector2 speedVector) {
-        if(System.currentTimeMillis()-lastShotTime>getReloadTime()*1000) {
+        if (System.currentTimeMillis() - lastShotTime > getReloadTime() * 1000) {
 
-            getAmmos().add(new LaserAmmo( getBody().getPosition().x - (float) Math.sin(getBody().getAngle())*l*1.2f-(float) Math.sin(getBody().getAngle())*0.35f,
-                    getBody().getPosition().y + (float) Math.cos(getBody().getAngle())*l*1.2f+(float) Math.cos(getBody().getAngle())*0.35f,
+            getAmmos().add(new LaserAmmo(getBody().getPosition().x - (float) Math.sin(getBody().getAngle()) * l * 1.2f - (float) Math.sin(getBody().getAngle()) * 0.35f,
+                    getBody().getPosition().y + (float) Math.cos(getBody().getAngle()) * l * 1.2f + (float) Math.cos(getBody().getAngle()) * 0.35f,
                     getBody().getAngle(), 0.05f, 0.7f,
-                    25,speedVector, getDamage()));
-            getAmmos().get(getAmmos().size-1).create(getTextureAtlas(),getWorld());
-            lastShotTime=System.currentTimeMillis();
+                    25, speedVector, getDamage()));
+            getAmmos().get(getAmmos().size - 1).create(getTextureAtlas(), getWorld());
+            lastShotTime = System.currentTimeMillis();
             return true;
-        }
-        else
-            super.shot(l,speedVector);
+        } else
+            super.shot(l, speedVector);
         return false;
     }
 }

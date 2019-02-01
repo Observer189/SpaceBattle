@@ -34,45 +34,46 @@ public class ShipShow implements Screen {
     SpriteBatch batch;
     Game game;
     TextManager textManager;
-    BitmapFont font,font1;
+    private BitmapFont font, font1;
     public TextureAtlas textureAtlas;
     Skin skin;
     Stage stage;
-    int xt;
-    int yt;
-    int dyt;
-    Boolean MakeToast=false;
-    Boolean MakeToast1=false;
-    Boolean MakeToast2=false;
-    Ship ship;
+    private int xt;
+    private int yt;
+    private int dyt;
+    private Boolean MakeToast = false;
+    private Boolean MakeToast1 = false;
+    private Boolean MakeToast2 = false;
+    private Ship ship;
     //Buttons
-    StageForButton Back, Buy;
-    Button.ButtonStyle BaStyle, BuStyle;
+    private StageForButton Back, Buy;
+    private Button.ButtonStyle BaStyle, BuStyle;
     //Sreens
-    Screen ShList;
-    Toast toast,toast1,toast2;
-    MainMenu menu;
+    private Screen ShList;
+    private Toast toast, toast1, toast2;
+    private MainMenu menu;
     OldPlayer oldPlayer;
     //for ship's params
-    Image Shipimg;
-    String name;
+    private Image Shipimg;
+    private String name;
     int cost;
     int maxHp;
-    float width,height;
+    float width, height;
 
     float velocity;
     float maxSpeed;
 
     servApi request;
-    public final String baseURL = "https://star-project-serv.herokuapp.com/";
-    public ShipShow(Ship ship, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
+    private final String baseURL = "https://star-project-serv.herokuapp.com/";
 
-        this.ship=ship;
-        this.game=game;
-        this.menu=menu;
+    ShipShow(Ship ship, Game game, MainMenu menu, OldPlayer oldPlayer, float width, float height) {
+
+        this.ship = ship;
+        this.game = game;
+        this.menu = menu;
         this.oldPlayer = oldPlayer;
-        this.width=width;
-        this.height=height;
+        this.width = width;
+        this.height = height;
     }
 
 
@@ -80,7 +81,7 @@ public class ShipShow implements Screen {
     public void show() {
         Gdx.input.setCatchBackKey(true);
 
-        textureAtlas=new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
+        textureAtlas = new TextureAtlas(Gdx.files.internal("TexturePack.atlas"));
         stage = new Stage();
         skin = new Skin();
         skin.addRegions(textureAtlas);
@@ -91,7 +92,7 @@ public class ShipShow implements Screen {
         request = retrofit.create(servApi.class);
 
         Shipimg = new Image(ship.getImg());
-        Shipimg.setSize((float) (width*2), (float) (height*2));
+        Shipimg.setSize((float) (width * 2), (float) (height * 2));
         Shipimg.setPosition(Gdx.graphics.getWidth() / Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2 - Shipimg.getHeight() / 2);
         //used for textManager params
 
@@ -104,39 +105,39 @@ public class ShipShow implements Screen {
         camera = new OrthographicCamera();
 
         textManager = new TextManager(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ShList=new ShopList(game,batch,textureAtlas,menu, oldPlayer);
+        ShList = new ShopList(game, batch, textureAtlas, menu, oldPlayer);
         font = textManager.fontInitialize(Color.WHITE, 1);
         font1 = textManager.fontInitialize(Color.WHITE, 1);
         Toast.ToastFactory toastFactory = new Toast.ToastFactory.Builder()
                 .font(font1)
                 .build();
-        toast = toastFactory.create("Successfully bought" , Toast.Length.LONG);
-        toast1 = toastFactory.create("Already bought" , Toast.Length.LONG);
-        toast2=toastFactory.create("Not enough money!" , Toast.Length.LONG);
+        toast = toastFactory.create("Successfully bought", Toast.Length.LONG);
+        toast1 = toastFactory.create("Already bought", Toast.Length.LONG);
+        toast2 = toastFactory.create("Not enough money!", Toast.Length.LONG);
 
 
         //Buy button
         BuStyle = new Button.ButtonStyle();
         BuStyle.up = skin.getDrawable("Buy-up");
         BuStyle.down = skin.getDrawable("Buy-down");
-        Buy = new StageForButton(BuStyle,(int) ( Gdx.graphics.getWidth()-Shipimg.getHeight()), (int) ((Gdx.graphics.getHeight()) /2-Shipimg.getHeight()/2) , (int) (Gdx.graphics.getHeight()/3.6), (int) (Gdx.graphics.getHeight()/3.6));
+        Buy = new StageForButton(BuStyle, (int) (Gdx.graphics.getWidth() - Shipimg.getHeight()), (int) ((Gdx.graphics.getHeight()) / 2 - Shipimg.getHeight() / 2), (int) (Gdx.graphics.getHeight() / 3.6), (int) (Gdx.graphics.getHeight() / 3.6));
 
         Buy.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-               // ShList=new ShopList(game,batch,textureAtlas,menu,oldPlayer);
+                // ShList=new ShopList(game,batch,textureAtlas,menu,oldPlayer);
                 if (oldPlayer.resources.shipList.contains(ship)) {
-                    MakeToast1=true;
+                    MakeToast1 = true;
                 } else {
-                    if (!oldPlayer.resources.shipList.contains(ship)&& (menu.oldPlayer.resources.getMoney()>=ship.getCost())){
-                MakeToast=true;
-                int mon=menu.oldPlayer.getMoney()-ship.getCost();
-                menu.oldPlayer.setMoney(mon);
-                updatePlayerMoney();
-                oldPlayer.resources.shipList.add(ship);
+                    if (!oldPlayer.resources.shipList.contains(ship) && (menu.oldPlayer.resources.getMoney() >= ship.getCost())) {
+                        MakeToast = true;
+                        int mon = menu.oldPlayer.getMoney() - ship.getCost();
+                        menu.oldPlayer.setMoney(mon);
+                        updatePlayerMoney();
+                        oldPlayer.resources.shipList.add(ship);
 
-                    }else MakeToast2=true;
+                    } else MakeToast2 = true;
 
                 }
 
@@ -147,43 +148,40 @@ public class ShipShow implements Screen {
         BaStyle = new Button.ButtonStyle();
         BaStyle.up = skin.getDrawable("Back-up");
         BaStyle.down = skin.getDrawable("Back-down");
-        Back = new StageForButton(BaStyle, (int) Shipimg.getX(), (int) (Gdx.graphics.getHeight()/Gdx.graphics.getHeight()), (int) (Gdx.graphics.getWidth() / 8.8), (int) (Gdx.graphics.getHeight() / 4.96));
+        Back = new StageForButton(BaStyle, (int) Shipimg.getX(), (int) (Gdx.graphics.getHeight() / Gdx.graphics.getHeight()), (int) (Gdx.graphics.getWidth() / 8.8), (int) (Gdx.graphics.getHeight() / 4.96));
         System.out.println("Clicker");
-        Back.btn.addListener(new ClickListener(){
+        Back.btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 game.setScreen(ShList);
-                System.out.println( oldPlayer.resources.shipList);
+                System.out.println(oldPlayer.resources.shipList);
 
             }
         });
-        Image[]tube;
-        tube=new Image[6];
-        for (int i=0;i<6;i++){
-            tube[i]=new Image(skin.getDrawable("Tube"));
-            tube[i].setSize((float) (Gdx.graphics.getWidth()/3.2),Gdx.graphics.getHeight()/6);
-            tube[i].setPosition((float) (xt*0.9), (float)  ((yt - dyt * (i+1))));
+        Image[] tube;
+        tube = new Image[6];
+        for (int i = 0; i < 6; i++) {
+            tube[i] = new Image(skin.getDrawable("Tube"));
+            tube[i].setSize((float) (Gdx.graphics.getWidth() / 3.2), Gdx.graphics.getHeight() / 6);
+            tube[i].setPosition((float) (xt * 0.9), (float) ((yt - dyt * (i + 1))));
             stage.addActor(tube[i]);
 
 
         }
 
 
-
-        InputMultiplexer in=new InputMultiplexer();
+        InputMultiplexer in = new InputMultiplexer();
         in.addProcessor(Buy);
         in.addProcessor(Back);
         Gdx.input.setInputProcessor(in);
-
-
 
 
     }
 
     @Override
     public void render(float delta) {
-        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth()/1.6), (float) (Gdx.graphics.getHeight()/1.5));
+        camera.setToOrtho(false, (float) (Gdx.graphics.getWidth() / 1.6), (float) (Gdx.graphics.getHeight() / 1.5));
         LoginView.textrure.draw();
         LoginView.star.draw();
         if (name == "1") name = "Pulsate";
@@ -194,18 +192,18 @@ public class ShipShow implements Screen {
         textManager.displayMessage(batch, font, "HP: " + ship.getMaxHp(), xt, yt - dyt * 2);
         textManager.displayMessage(batch, font, "Speed: " + ship.getMaxSpeed(), xt, yt - dyt * 3);
         textManager.displayMessage(batch, font, "Velocity: " + ship.getVelocity(), xt, yt - dyt * 4);
-        textManager.displayMessage(batch, font, "Weapons: "+ship.getFixingPointsDigit(), xt, yt - dyt * 5);
+        textManager.displayMessage(batch, font, "Weapons: " + ship.getFixingPointsDigit(), xt, yt - dyt * 5);
 
-        if (MakeToast==true){
+        if (MakeToast) {
             toast.render(Gdx.graphics.getDeltaTime());
 
         }
-        if (MakeToast1==true){
+        if (MakeToast1) {
             toast1.render(Gdx.graphics.getDeltaTime());
 
 
         }
-        if (MakeToast2==true){
+        if (MakeToast2) {
             toast2.render(Gdx.graphics.getDeltaTime());
 
 
@@ -217,8 +215,9 @@ public class ShipShow implements Screen {
 
         batch.begin();
         batch.end();
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            game.setScreen(ShList);}
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            game.setScreen(ShList);
+        }
     }
 
     @Override
@@ -234,8 +233,7 @@ public class ShipShow implements Screen {
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         menu.music.play();
 
     }
@@ -267,7 +265,7 @@ public class ShipShow implements Screen {
         int width;
         int height;
 
-        public StageForButton(Button.ButtonStyle btnstyle, int x, int y, int width, int height) {
+        StageForButton(Button.ButtonStyle btnstyle, int x, int y, int width, int height) {
             this.height = height;
             this.width = width;
             this.y = y;
@@ -279,9 +277,9 @@ public class ShipShow implements Screen {
             addActor(btn);
         }
     }
-    private void updatePlayerMoney()
-    {
-        Call<Integer> call=request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
+
+    private void updatePlayerMoney() {
+        Call<Integer> call = request.updateMoney(oldPlayer.getName(), oldPlayer.getMoney());
         try {
             call.execute();
         } catch (IOException e) {
